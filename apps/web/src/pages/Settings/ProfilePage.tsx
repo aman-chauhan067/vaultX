@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { ArrowLeft, User, Copy, Check, Plus, ExternalLink } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ArrowLeft, User, Copy, Check, Plus, ExternalLink, X, Eye, EyeOff } from 'lucide-react';
 import { useWallet, useSettings } from '../../hooks/index.js';
 import { BackButton } from '../../components/index.js';
 
@@ -14,6 +14,12 @@ export function ProfilePage() {
   const [isSaving, setIsSaving] = useState(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const copyTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [password, setPassword] = useState('');
+  const [isCreating, setIsCreating] = useState(false);
+  const [showPhraseModal, setShowPhraseModal] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const formatAddress = (addr: string) => {
     if (!addr) return '0x0000...0000';
@@ -34,19 +40,39 @@ export function ProfilePage() {
     copyTimeoutRef.current = setTimeout(() => setCopiedId(null), 2000);
   };
 
-  const handleCreateAccount = async () => {
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+    setPassword('');
+  };
+
+  const handleConfirmCreate = async () => {
+    if (!password) {
+      const evt = new CustomEvent('toast', {
+        detail: { type: 'error', message: 'Password required' }
+      });
+      window.dispatchEvent(evt);
+      return;
+    }
     try {
+      setIsCreating(true);
       await deriveAccount(`Account ${wallets.length + 1}`);
       const evt = new CustomEvent('toast', {
         detail: { type: 'success', message: 'New account created successfully' }
       });
       window.dispatchEvent(evt);
+      setIsModalOpen(false);
+      setShowPhraseModal(true);
     } catch (e: any) {
       console.error(e);
       const evt = new CustomEvent('toast', {
-        detail: { type: 'error', message: e.message || 'Failed to create account' }
+        detail: {
+          type: 'error',
+          message: e.message || 'Failed to create account. Incorrect password?'
+        }
       });
       window.dispatchEvent(evt);
+    } finally {
+      setIsCreating(false);
     }
   };
 
@@ -341,7 +367,7 @@ export function ProfilePage() {
             </div>
 
             <button
-              onClick={handleCreateAccount}
+              onClick={handleOpenModal}
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -418,6 +444,288 @@ export function ProfilePage() {
           </button>
         </motion.div>
       </div>
+
+      {/* Password Modal */}
+      <AnimatePresence>
+        {isModalOpen && (
+          <div
+            style={{
+              position: 'fixed',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              backgroundColor: 'rgba(0,0,0,0.6)',
+              backdropFilter: 'blur(4px)',
+              zIndex: 100,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '1rem'
+            }}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              style={{
+                background: '#18181b',
+                border: '1px solid rgba(255,255,255,0.1)',
+                borderRadius: '16px',
+                padding: '2rem',
+                width: '100%',
+                maxWidth: '400px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '1.5rem'
+              }}
+            >
+              <div
+                style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+              >
+                <h2 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 500 }}>
+                  Create New Account
+                </h2>
+                <button
+                  onClick={() => setIsModalOpen(false)}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    color: '#8A8A93',
+                    cursor: 'pointer'
+                  }}
+                >
+                  <X size={20} />
+                </button>
+              </div>
+
+              <div
+                style={{
+                  background: 'rgba(59, 130, 246, 0.1)',
+                  border: '1px solid rgba(59, 130, 246, 0.2)',
+                  padding: '1rem',
+                  borderRadius: '8px'
+                }}
+              >
+                <p style={{ margin: 0, fontSize: '0.85rem', color: '#93C5FD', lineHeight: 1.5 }}>
+                  This will generate a new account address derived from your existing Secret
+                  Recovery Phrase. <strong>You do not need a new phrase.</strong>
+                </p>
+              </div>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                <label style={{ fontSize: '0.85rem', color: '#A1A1AA' }}>
+                  Enter Password to Confirm
+                </label>
+                <div style={{ position: 'relative' }}>
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    style={{
+                      width: '100%',
+                      background: 'rgba(255,255,255,0.05)',
+                      border: '1px solid rgba(255,255,255,0.1)',
+                      borderRadius: '8px',
+                      padding: '0.75rem 1rem',
+                      color: 'white',
+                      fontSize: '1rem',
+                      outline: 'none',
+                      boxSizing: 'border-box'
+                    }}
+                  />
+                  <button
+                    onClick={() => setShowPassword(!showPassword)}
+                    style={{
+                      position: 'absolute',
+                      right: '12px',
+                      top: '50%',
+                      transform: 'translateY(-50%)',
+                      background: 'none',
+                      border: 'none',
+                      color: '#8A8A93',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </button>
+                </div>
+              </div>
+
+              <div style={{ display: 'flex', gap: '1rem', marginTop: '0.5rem' }}>
+                <button
+                  onClick={() => setIsModalOpen(false)}
+                  style={{
+                    flex: 1,
+                    padding: '0.875rem',
+                    background: 'rgba(255,255,255,0.05)',
+                    border: 'none',
+                    borderRadius: '8px',
+                    color: 'white',
+                    fontWeight: 500,
+                    cursor: 'pointer'
+                  }}
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleConfirmCreate}
+                  disabled={isCreating || !password}
+                  style={{
+                    flex: 1,
+                    padding: '0.875rem',
+                    background: '#3B82F6',
+                    border: 'none',
+                    borderRadius: '8px',
+                    color: 'white',
+                    fontWeight: 600,
+                    cursor: isCreating || !password ? 'not-allowed' : 'pointer',
+                    opacity: isCreating || !password ? 0.5 : 1
+                  }}
+                >
+                  {isCreating ? 'Creating...' : 'Confirm'}
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+
+        {/* Phrase Modal */}
+        {showPhraseModal && (
+          <div
+            style={{
+              position: 'fixed',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              backgroundColor: 'rgba(0,0,0,0.6)',
+              backdropFilter: 'blur(4px)',
+              zIndex: 100,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '1rem'
+            }}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              style={{
+                background: '#18181b',
+                border: '1px solid rgba(255,255,255,0.1)',
+                borderRadius: '16px',
+                padding: '2rem',
+                width: '100%',
+                maxWidth: '450px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '1.5rem'
+              }}
+            >
+              <div
+                style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+              >
+                <h2 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 500 }}>
+                  Account Created!
+                </h2>
+                <button
+                  onClick={() => setShowPhraseModal(false)}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    color: '#8A8A93',
+                    cursor: 'pointer'
+                  }}
+                >
+                  <X size={20} />
+                </button>
+              </div>
+
+              <p style={{ color: '#A1A1AA', fontSize: '0.95rem', lineHeight: 1.5, margin: 0 }}>
+                Your new account shares the exact same 12-word Secret Recovery Phrase as your main
+                wallet. Here is your phrase again for your records. Please save it securely.
+              </p>
+
+              <div
+                style={{
+                  background: 'rgba(0,0,0,0.3)',
+                  border: '1px solid rgba(255,255,255,0.05)',
+                  padding: '1rem',
+                  borderRadius: '12px',
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(3, 1fr)',
+                  gap: '0.75rem'
+                }}
+              >
+                {(wallets.find((w) => w.mnemonic)?.mnemonic?.phrase || '')
+                  .split(' ')
+                  .map((word, i) => (
+                    <div
+                      key={i}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.5rem',
+                        background: 'rgba(255,255,255,0.05)',
+                        padding: '0.5rem',
+                        borderRadius: '6px'
+                      }}
+                    >
+                      <span style={{ color: '#8A8A93', fontSize: '0.75rem' }}>{i + 1}</span>
+                      <span style={{ color: 'white', fontSize: '0.9rem', fontWeight: 500 }}>
+                        {word}
+                      </span>
+                    </div>
+                  ))}
+              </div>
+
+              <button
+                onClick={() => {
+                  const phrase = wallets.find((w) => w.mnemonic)?.mnemonic?.phrase || '';
+                  navigator.clipboard.writeText(phrase);
+                  const evt = new CustomEvent('toast', {
+                    detail: { type: 'success', message: 'Phrase copied to clipboard' }
+                  });
+                  window.dispatchEvent(evt);
+                }}
+                style={{
+                  padding: '0.875rem',
+                  background: 'rgba(255,255,255,0.05)',
+                  border: '1px solid rgba(255,255,255,0.1)',
+                  borderRadius: '8px',
+                  color: 'white',
+                  fontWeight: 500,
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '0.5rem'
+                }}
+              >
+                <Copy size={16} />
+                Copy to Clipboard
+              </button>
+
+              <button
+                onClick={() => setShowPhraseModal(false)}
+                style={{
+                  padding: '0.875rem',
+                  background: '#3B82F6',
+                  border: 'none',
+                  borderRadius: '8px',
+                  color: 'white',
+                  fontWeight: 600,
+                  cursor: 'pointer'
+                }}
+              >
+                Done
+              </button>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
