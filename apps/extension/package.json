@@ -1,0 +1,39 @@
+{
+  "name": "@vaultx/extension",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build:injected": "esbuild src/injected/index.ts --bundle --outfile=public/injected.js --format=iife --minify",
+    "build": "pnpm build:injected && vite build",
+    "dev": "pnpm build:injected && vite",
+    "typecheck": "tsc -b --pretty false"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5.0.0",
+    "@vaultx/account-manager": "workspace:*",
+    "@vaultx/blockchain-core": "workspace:*",
+    "@vaultx/network-engine": "workspace:*",
+    "@vaultx/transaction-engine": "workspace:*",
+    "@vaultx/wallet-engine": "workspace:*",
+    "@vaultx/web": "workspace:*",
+    "@walletconnect/keyvaluestorage": "^1.1.1",
+    "clsx": "^2.1.1",
+    "ethers": "^6.13.5",
+    "lucide-react": "^1.24.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-router-dom": "^7"
+  },
+  "devDependencies": {
+    "@crxjs/vite-plugin": "2.0.0-beta.23",
+    "@types/chrome": "^0.0.268",
+    "@types/react": "^19.0.8",
+    "@types/react-dom": "^19.0.3",
+    "@vitejs/plugin-react": "^4.4.1",
+    "esbuild": "^0.28.1",
+    "typescript": "^5.7.3",
+    "vite": "^6.0.11",
+    "vitest": "^4.1.10"
+  }
+}

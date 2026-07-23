@@ -1,0 +1,30 @@
+# Dependencies and build output
+node_modules/
+dist/
+coverage/
+.turbo/
+.pnpm-store/
+.tooling/
+
+# Hardhat output
+artifacts/
+cache/
+typechain-types/
+
+# Local environment files and secrets
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# Tooling and OS files
+.DS_Store
+Thumbs.db
+*.log
+.eslintcache
+*.tsbuildinfo
+
+# IDEs
+.idea/
+.vscode/*
+!.vscode/extensions.json

@@ -1,0 +1,33 @@
+/* MOBILE FIRST APPSHELL */
+.shell {
+  display: flex;
+  flex-direction: column; /* Default for mobile/extension */
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  background: transparent;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+  position: relative;
+}
+
+.content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Tablet & Desktop */
+@media (min-width: 769px) {
+  .shell {
+    flex-direction: row; /* Desktop is horizontal */
+  }
+}

@@ -1,0 +1,158 @@
+/* MOBILE FIRST HEADER */
+.header {
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--space-4);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(17, 11, 56, 0.6);
+  backdrop-filter: blur(24px);
+  z-index: var(--z-index-sticky);
+}
+
+.mobileBrand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.mobileLogo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+}
+
+.mobileBrandName {
+  font-family: var(--font-brand);
+  font-size: var(--text-md);
+  color: var(--color-text-primary);
+  letter-spacing: 0.05em;
+}
+
+.left {
+  display: none; /* Hide breadcrumbs on mobile */
+}
+
+.breadcrumbs {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: 16px;
+}
+
+.crumb {
+  color: var(--color-text-secondary);
+  font-weight: 500;
+}
+
+.separator {
+  color: var(--color-border-secondary);
+}
+
+.crumbActive {
+  color: var(--color-text-primary);
+  font-weight: 600;
+  font-size: 18px; /* Slightly larger active crumb */
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.networkSelector {
+  display: none; /* Hide on mobile to save space */
+}
+
+.accountPill {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: var(--radius-pill);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  cursor: pointer;
+  transition: all var(--motion-duration-fast) var(--motion-curve-default);
+}
+
+.accountPill:hover {
+  background: rgba(255, 255, 255, 0.06);
+  transform: translateY(-1px);
+}
+
+.iconBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: all var(--motion-duration-fast) var(--motion-curve-default);
+}
+
+.iconBtn:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--color-text-primary);
+  transform: translateY(-1px);
+}
+
+/* Tablet & Desktop */
+@media (min-width: 769px) {
+  .header {
+    height: 100px; /* Taller header for premium feel */
+    padding: 0 var(--space-10);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    background: transparent; /* Assuming AppShell sets a nice background */
+    backdrop-filter: none;
+  }
+
+  .mobileBrand {
+    display: none;
+  }
+
+  .left {
+    display: flex;
+    align-items: center;
+  }
+
+  .right {
+    gap: var(--space-4);
+  }
+
+  .networkSelector {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    padding: 8px 16px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: var(--radius-pill);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--color-success);
+    box-shadow: 0 0 8px var(--color-success);
+  }
+
+  .networkName {
+    font-weight: 600;
+  }
+}

@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Mock dApp</title>
+  </head>
+  <body>
+    <h1>dApp E2E Test</h1>
+    <button id="connect">Connect Wallet</button>
+    <div id="status">Not Connected</div>
+    <div id="chainId"></div>
+    <div id="accounts"></div>
+
+    <script>
+      document.getElementById('connect').addEventListener('click', async () => {
+        try {
+          console.log('Connect clicked');
+          if (!window.ethereum) {
+            document.getElementById('status').innerText = 'No provider found';
+            return;
+          }
+          document.getElementById('status').innerText = 'Connecting...';
+
+          console.log('Calling eth_requestAccounts...');
+          const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+          console.log('Got accounts:', accounts);
+          document.getElementById('accounts').innerText = accounts.join(', ');
+
+          console.log('Calling eth_chainId...');
+          const chainId = await window.ethereum.request({ method: 'eth_chainId' });
+          console.log('Got chainId:', chainId);
+          document.getElementById('chainId').innerText = chainId;
+
+          document.getElementById('status').innerText = 'Connected';
+        } catch (err) {
+          console.error('Error during connection:', err);
+          document.getElementById('status').innerText = 'Error: ' + err.message;
+        }
+      });
+
+      if (window.ethereum) {
+        window.ethereum.on('accountsChanged', (accounts) => {
+          document.getElementById('accounts').innerText = accounts.join(', ');
+        });
+        window.ethereum.on('chainChanged', (chainId) => {
+          document.getElementById('chainId').innerText = chainId;
+        });
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,118 @@
+.toastContainer {
+  position: fixed;
+  bottom: var(--space-6);
+  right: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  z-index: 2000;
+  pointer-events: none;
+}
+
+.toast {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  background: rgba(10, 10, 15, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: var(--space-3) var(--space-4);
+  border-radius: 50px;
+  box-shadow:
+    0 4px 30px rgba(0, 0, 0, 0.5),
+    inset 0 0 20px rgba(255, 255, 255, 0.05);
+  min-width: 250px;
+  max-width: 400px;
+  backdrop-filter: blur(12px);
+  position: relative;
+  overflow: hidden;
+  animation: glowyPulse 3s infinite alternate;
+}
+
+@keyframes glowyPulse {
+  0% {
+    box-shadow:
+      0 4px 30px rgba(0, 0, 0, 0.5),
+      inset 0 0 10px rgba(255, 255, 255, 0.02);
+  }
+  100% {
+    box-shadow:
+      0 4px 30px rgba(0, 0, 0, 0.5),
+      inset 0 0 25px rgba(255, 255, 255, 0.1);
+  }
+}
+
+.success {
+  border-color: var(--color-success-border);
+}
+.error {
+  border-color: var(--color-error-border);
+}
+.warning {
+  border-color: var(--color-warning-border);
+}
+.info {
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
+.iconWrapper {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.successIcon {
+  color: #34c759;
+  filter: drop-shadow(0 0 8px rgba(52, 199, 89, 0.8));
+}
+.errorIcon {
+  color: var(--color-error-text);
+}
+.warningIcon {
+  color: var(--color-warning-text);
+}
+.infoIcon {
+  color: #3b82f6;
+}
+
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.title {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 300;
+  letter-spacing: 0.02em;
+  color: var(--color-text-primary);
+}
+
+.description {
+  margin: 0;
+  font-size: var(--text-caption);
+  color: var(--color-text-secondary);
+}
+
+.closeButton {
+  background: transparent;
+  border: none;
+  color: var(--color-text-tertiary);
+  cursor: pointer;
+  padding: 2px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    background-color var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.closeButton:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--color-text-primary);
+}

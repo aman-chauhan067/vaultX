@@ -1,0 +1,11 @@
+{
+  "extends": "@vaultx/config/tsconfig/base.json",
+  "compilerOptions": {
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "verbatimModuleSyntax": false,
+    "types": ["node", "mocha"]
+  },
+  "include": ["hardhat.config.ts", "test/**/*.ts"]
+}

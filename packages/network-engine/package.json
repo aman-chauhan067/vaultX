@@ -1,0 +1,33 @@
+{
+  "name": "@vaultx/network-engine",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@walletconnect/core": "^2.23.10",
+    "@walletconnect/keyvaluestorage": "^1.1.1",
+    "@walletconnect/types": "^2.23.10",
+    "@walletconnect/web3wallet": "^1.16.1",
+    "ethers": "^6.13.5"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "@vaultx/config": "workspace:*",
+    "typescript": "^5.7.3",
+    "vitest": "^1.6.0"
+  }
+}

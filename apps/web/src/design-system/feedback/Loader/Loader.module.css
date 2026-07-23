@@ -1,0 +1,63 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-8);
+  gap: var(--space-6);
+}
+
+.fullScreen {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-bg-primary);
+  z-index: 2000;
+  gap: var(--space-6);
+}
+
+.logoWrapper {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon {
+  color: var(--color-accent-purple);
+  z-index: 2;
+  position: relative;
+  filter: drop-shadow(0 0 12px rgba(139, 92, 246, 0.5));
+}
+
+.glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle, var(--glow-purple) 0%, transparent 70%);
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: var(--color-accent-blue);
+  border-radius: 50%;
+  bottom: 10px;
+  left: 50%;
+  box-shadow: 0 0 8px var(--glow-blue);
+  z-index: 1;
+}
+
+.text {
+  font-size: var(--text-body);
+  color: var(--color-text-secondary);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: 1px;
+}

@@ -1,0 +1,25 @@
+.skeleton {
+  background: rgba(255, 255, 255, 0.05);
+  display: block;
+}
+
+.text {
+  border-radius: var(--radius-sm);
+  height: 1em;
+  margin-bottom: var(--space-2);
+}
+.text:empty:before {
+  content: '\00a0';
+}
+
+.circular {
+  border-radius: 50%;
+}
+
+.rectangular {
+  border-radius: 0;
+}
+
+.rounded {
+  border-radius: var(--radius-md);
+}

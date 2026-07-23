@@ -1,0 +1,188 @@
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 120px 0;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: var(--space-8);
+}
+
+.title {
+  font-family: var(--font-brand);
+  font-size: clamp(48px, 6vw, 72px);
+  font-weight: normal;
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-2);
+  letter-spacing: -0.04em;
+}
+
+.subtitle {
+  font-size: 22px;
+  line-height: 32px;
+  color: var(--color-text-secondary);
+  font-weight: 400;
+}
+
+.progressContainer {
+  display: flex;
+  gap: var(--space-2);
+  margin-bottom: var(--space-12);
+}
+
+.progressStep {
+  flex: 1;
+  height: 4px;
+  background-color: var(--color-surface);
+  border-radius: var(--radius-pill);
+  transition: background-color var(--motion-duration-normal) var(--motion-curve-default);
+}
+
+.progressStepActive {
+  background-color: var(--color-brand-primary);
+}
+
+.progressStepCompleted {
+  background-color: var(--color-brand-secondary);
+}
+
+.wordGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-4);
+  margin: var(--space-8) 0;
+}
+
+.wordItem {
+  background-color: var(--color-surface);
+  border: var(--border-width-sm) solid var(--color-border-primary);
+  border-radius: var(--radius-sm);
+  padding: var(--space-3) var(--space-4);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-family: var(--font-mono);
+  font-size: 16px;
+}
+
+.wordIndex {
+  color: var(--color-text-muted);
+  font-size: 14px;
+  user-select: none;
+}
+
+.wordText {
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-bold);
+}
+
+.blurred {
+  filter: blur(8px);
+  user-select: none;
+  cursor: pointer;
+  transition: filter var(--motion-duration-normal) var(--motion-curve-default);
+}
+
+.blurred:hover {
+  filter: blur(4px);
+}
+
+.blurOverlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(3, 0, 20, 0.4);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  gap: var(--space-2);
+  color: var(--color-text-primary);
+  backdrop-filter: blur(var(--glass-blur));
+}
+
+.warningBox {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  background-color: var(--color-warning-bg);
+  border: var(--border-width-sm) solid var(--color-warning);
+  border-radius: var(--radius-sm);
+  padding: var(--space-4);
+  margin-bottom: var(--space-6);
+  color: var(--color-warning);
+}
+
+.warningText {
+  font-size: var(--text-sm);
+  line-height: 1.5;
+}
+
+.actionGroup {
+  display: flex;
+  gap: var(--space-4);
+  margin-top: var(--space-10);
+}
+
+.actionGroup > * {
+  flex: 1;
+}
+
+.meterContainer {
+  margin-top: var(--space-2);
+}
+
+.meterBars {
+  display: flex;
+  gap: var(--space-1);
+  margin-bottom: var(--space-1);
+}
+
+.meterBar {
+  flex: 1;
+  height: 4px;
+  background-color: var(--color-surface);
+  border-radius: var(--radius-pill);
+  transition: background-color var(--motion-duration-normal) var(--motion-curve-default);
+}
+
+.meterLabel {
+  font-size: var(--text-xs);
+  color: var(--color-text-secondary);
+  text-align: right;
+}
+
+.successIcon {
+  width: 80px;
+  height: 80px;
+  background-color: var(--color-brand-primary);
+  color: white;
+  border-radius: var(--radius-pill);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto var(--space-6);
+  box-shadow: var(--shadow-glow);
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: var(--space-8) var(--space-4);
+  }
+  .wordGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
