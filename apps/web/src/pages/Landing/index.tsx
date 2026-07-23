@@ -11,6 +11,7 @@ import { StickySection } from './StickySection';
 import { AnimatedStatGrid } from './AnimatedStatGrid';
 import { AnimatedComparisonTable } from './AnimatedComparisonTable';
 import { ManifestoDial } from './ManifestoDial';
+import { HeroZoomIntro } from './HeroZoomIntro';
 import { AuraButton } from './AuraButton';
 
 function LottieAnimation({ path }: { path: string }) {
@@ -309,13 +310,13 @@ const PhysicsUnbreakableText = () => {
         if (footerEl) {
           const containerTop = containerEl.getBoundingClientRect().top + window.scrollY;
           const footerTop = footerEl.getBoundingClientRect().top + window.scrollY;
-          // Coordinates are local to containerRect.
-          groundY = footerTop - containerTop;
+          // Coordinates are local to containerRect. Shift up by 15px so the text baseline rests on the border.
+          groundY = footerTop - containerTop - 15;
         }
 
         const ground = Bodies.rectangle(
           containerRect.width / 2,
-          groundY,
+          groundY + 50, // Matter.js positions from center, so add half the height
           containerRect.width * 3,
           100,
           { isStatic: true }
@@ -477,7 +478,9 @@ export default function Landing() {
           width: '100%',
           height: '100vh',
           zIndex: -1,
-          background: `radial-gradient(circle at 50% 0%, rgba(40, 20, 80, 0.5) 0%, rgba(0, 0, 0, 1) 80%), url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E")`
+          overflow: 'hidden',
+          // Updated the color to a deeper, richer purple (#190528) to match the screenshot exactly.
+          background: `radial-gradient(ellipse at 50% 0%, #190528 0%, #000000 90%), url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E")`
         }}
       >
         <style>{`
@@ -582,258 +585,248 @@ export default function Landing() {
         style={{
           marginTop: '-100vh',
           position: 'relative',
-          zIndex: 1,
           display: 'flex',
           flexDirection: 'column',
           width: '100%'
         }}
       >
-        {/* Hero Section */}
-        <div
-          style={{
-            minHeight: '100vh',
-            display: 'flex',
-            flexDirection: 'column',
-            position: 'relative',
-            backgroundColor: 'transparent'
-          }}
-        >
-          {/* Top Nav */}
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1 }}
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              padding: '2rem 5vw',
-              zIndex: 10
-            }}
-          >
-            <Logo size="md" variant="light" />
-            <div
-              style={{
-                fontSize: '0.75rem',
-                textTransform: 'uppercase',
-                letterSpacing: '0.1em',
-                color: '#8A8A93'
-              }}
-            >
-              Next Generation Self-Custody
-            </div>
-          </motion.div>
-
-          {/* Atmospheric Glow */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 2, ease: 'easeOut' }}
-            style={{
-              position: 'absolute',
-              top: '20%',
-              left: '30%',
-              width: '40vw',
-              height: '40vw',
-              background: 'radial-gradient(circle, rgba(255,255,255,0.03) 0%, transparent 60%)',
-              filter: 'blur(80px)',
-              zIndex: 0
-            }}
-          />
-
+        {/* Intro Animation & Hero Cinematic Entry */}
+        <HeroZoomIntro>
+          {/* Hero Section */}
           <div
             style={{
-              flex: 1,
+              minHeight: '100vh',
               display: 'flex',
               flexDirection: 'column',
-              justifyContent: 'center',
-              padding: '0 5vw',
-              zIndex: 10
+              position: 'relative',
+              backgroundColor: 'transparent',
+              width: '100%'
             }}
           >
+            {/* Top Nav */}
             <motion.div
-              variants={containerVariants}
-              initial="hidden"
-              animate="show"
-              style={{ maxWidth: '1000px' }}
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1 }}
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                padding: '2rem 5vw',
+                zIndex: 10
+              }}
             >
-              {/* Accent Brand Font */}
-              <motion.div
-                variants={itemVariants}
+              <Logo size="md" variant="light" />
+              <div
                 style={{
-                  fontFamily: 'var(--font-brand)',
-                  fontSize: 'clamp(2rem, 4vw, 3rem)',
+                  fontSize: '0.75rem',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.1em',
                   color: '#8A8A93',
-                  marginBottom: '2rem'
+                  whiteSpace: 'normal',
+                  textAlign: 'right'
                 }}
               >
-                Enter the Vault
-              </motion.div>
-
-              {/* Core Helvetica Typography */}
-              <motion.div
-                variants={itemVariants}
-                style={{
-                  fontSize: 'clamp(2.5rem, 8vw, 8rem)',
-                  fontWeight: 500,
-                  lineHeight: 1,
-                  letterSpacing: '-0.04em',
-                  marginBottom: '4rem'
-                }}
-              >
-                Own your wealth.
-                <br />
-                Without compromise.
-              </motion.div>
-
-              <motion.div
-                variants={itemVariants}
-                style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}
-              >
-                {hasVault ? (
-                  <>
-                    <div
-                      onClick={() => navigate('/unlock')}
-                      style={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: '1rem',
-                        padding: '1.25rem 3rem',
-                        borderRadius: '100px',
-                        backgroundColor: '#ffffff',
-                        color: '#000000',
-                        cursor: 'pointer',
-                        fontSize: '0.875rem',
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.1em',
-                        fontWeight: 600,
-                        transition: 'transform 0.3s, background 0.3s'
-                      }}
-                      onMouseOver={(e) => {
-                        e.currentTarget.style.transform = 'translateY(-2px)';
-                        e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.9)';
-                      }}
-                      onMouseOut={(e) => {
-                        e.currentTarget.style.transform = 'translateY(0)';
-                        e.currentTarget.style.backgroundColor = '#ffffff';
-                      }}
-                    >
-                      Unlock Vault <ArrowRight size={18} />
-                    </div>
-                    <div
-                      onClick={() => navigate('/import-wallet')}
-                      style={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: '1rem',
-                        padding: '1.25rem 3rem',
-                        borderRadius: '100px',
-                        backgroundColor: 'transparent',
-                        border: '1px solid rgba(255,255,255,0.2)',
-                        color: 'var(--color-text-primary)',
-                        cursor: 'pointer',
-                        fontSize: '0.875rem',
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.1em',
-                        fontWeight: 600,
-                        transition: 'transform 0.3s, background 0.3s'
-                      }}
-                      onMouseOver={(e) => {
-                        e.currentTarget.style.transform = 'translateY(-2px)';
-                        e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.05)';
-                      }}
-                      onMouseOut={(e) => {
-                        e.currentTarget.style.transform = 'translateY(0)';
-                        e.currentTarget.style.backgroundColor = 'transparent';
-                      }}
-                    >
-                      Restore Backup
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <div
-                      onClick={() => navigate('/create-wallet')}
-                      style={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: '1rem',
-                        padding: '1.25rem 3rem',
-                        borderRadius: '100px',
-                        backgroundColor: '#ffffff',
-                        color: '#000000',
-                        cursor: 'pointer',
-                        fontSize: '0.875rem',
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.1em',
-                        fontWeight: 600,
-                        transition: 'transform 0.3s, background 0.3s'
-                      }}
-                      onMouseOver={(e) => {
-                        e.currentTarget.style.transform = 'translateY(-2px)';
-                        e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.9)';
-                      }}
-                      onMouseOut={(e) => {
-                        e.currentTarget.style.transform = 'translateY(0)';
-                        e.currentTarget.style.backgroundColor = '#ffffff';
-                      }}
-                    >
-                      Create Wallet <ArrowRight size={18} />
-                    </div>
-                    <div
-                      onClick={() => navigate('/import-wallet')}
-                      style={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: '1rem',
-                        padding: '1.25rem 3rem',
-                        borderRadius: '100px',
-                        backgroundColor: 'transparent',
-                        border: '1px solid rgba(255,255,255,0.2)',
-                        color: 'var(--color-text-primary)',
-                        cursor: 'pointer',
-                        fontSize: '0.875rem',
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.1em',
-                        fontWeight: 600,
-                        transition: 'transform 0.3s, background 0.3s'
-                      }}
-                      onMouseOver={(e) => {
-                        e.currentTarget.style.transform = 'translateY(-2px)';
-                        e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.05)';
-                      }}
-                      onMouseOut={(e) => {
-                        e.currentTarget.style.transform = 'translateY(0)';
-                        e.currentTarget.style.backgroundColor = 'transparent';
-                      }}
-                    >
-                      Import Wallet
-                    </div>
-                    <div
-                      onClick={() => {
-                        document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' });
-                      }}
-                      style={{
-                        cursor: 'pointer',
-                        fontSize: '0.875rem',
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.1em',
-                        color: '#8A8A93',
-                        transition: 'color 0.3s',
-                        padding: '1.25rem 0',
-                        marginLeft: '1rem'
-                      }}
-                      onMouseOver={(e) => (e.currentTarget.style.color = '#ffffff')}
-                      onMouseOut={(e) => (e.currentTarget.style.color = '#8A8A93')}
-                    >
-                      Learn More
-                    </div>
-                  </>
-                )}
-              </motion.div>
+                Next Generation Self-Custody
+              </div>
             </motion.div>
+
+            {/* Atmospheric Glow */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 2, ease: 'easeOut' }}
+              style={{
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                x: '-50%',
+                y: '-50%',
+                width: '80vw',
+                height: '80vw',
+                background:
+                  'radial-gradient(circle at 50% 50%, rgba(255,255,255,0.85) 0%, rgba(140, 90, 255, 0.4) 25%, transparent 60%)',
+                filter: 'blur(80px)',
+                zIndex: 0
+              }}
+            />
+
+            <div
+              style={{
+                flex: 1,
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+                padding: '0 5vw',
+                zIndex: 10
+              }}
+            >
+              <motion.div
+                variants={containerVariants}
+                initial="hidden"
+                animate="show"
+                style={{ width: '100%', maxWidth: '1200px' }}
+              >
+                {/* Accent Brand Font */}
+                <motion.div
+                  variants={itemVariants}
+                  style={{
+                    fontFamily: 'var(--font-brand)',
+                    fontSize: 'clamp(2rem, 4vw, 3rem)',
+                    color: '#8A8A93',
+                    marginBottom: '2rem'
+                  }}
+                >
+                  Enter the Vault
+                </motion.div>
+
+                {/* Core Helvetica Typography */}
+                <motion.div
+                  variants={itemVariants}
+                  style={{
+                    fontSize: 'clamp(2.5rem, 8vw, 8rem)',
+                    fontWeight: 500,
+                    lineHeight: 1,
+                    letterSpacing: '-0.04em',
+                    marginBottom: '4rem'
+                  }}
+                >
+                  Own your wealth.
+                  <br />
+                  Without compromise.
+                </motion.div>
+
+                <motion.div
+                  variants={itemVariants}
+                  style={{ display: 'flex', gap: '1.5rem', alignItems: 'center', flexWrap: 'wrap' }}
+                >
+                  {hasVault ? (
+                    <>
+                      <div
+                        onClick={() => navigate('/unlock')}
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '1rem',
+                          padding: '1.25rem 3rem',
+                          borderRadius: '100px',
+                          backgroundColor: '#ffffff',
+                          color: '#000000',
+                          cursor: 'pointer',
+                          fontSize: '0.875rem',
+                          textTransform: 'uppercase',
+                          letterSpacing: '0.1em',
+                          fontWeight: 600,
+                          transition: 'transform 0.3s, background 0.3s'
+                        }}
+                        onMouseOver={(e) => {
+                          e.currentTarget.style.transform = 'translateY(-2px)';
+                          e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.9)';
+                        }}
+                        onMouseOut={(e) => {
+                          e.currentTarget.style.transform = 'translateY(0)';
+                          e.currentTarget.style.backgroundColor = '#ffffff';
+                        }}
+                      >
+                        Unlock Vault <ArrowRight size={18} />
+                      </div>
+                      <div
+                        onClick={() => navigate('/import-wallet')}
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '1rem',
+                          padding: '1.25rem 3rem',
+                          borderRadius: '100px',
+                          backgroundColor: 'transparent',
+                          border: '1px solid rgba(255,255,255,0.2)',
+                          color: 'var(--color-text-primary)',
+                          cursor: 'pointer',
+                          fontSize: '0.875rem',
+                          textTransform: 'uppercase',
+                          letterSpacing: '0.1em',
+                          fontWeight: 600,
+                          transition: 'transform 0.3s, background 0.3s'
+                        }}
+                        onMouseOver={(e) => {
+                          e.currentTarget.style.transform = 'translateY(-2px)';
+                          e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.05)';
+                        }}
+                        onMouseOut={(e) => {
+                          e.currentTarget.style.transform = 'translateY(0)';
+                          e.currentTarget.style.backgroundColor = 'transparent';
+                        }}
+                      >
+                        Restore Backup
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div
+                        onClick={() => navigate('/create-wallet')}
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '1rem',
+                          padding: '1.25rem 3rem',
+                          borderRadius: '100px',
+                          backgroundColor: '#ffffff',
+                          color: '#000000',
+                          cursor: 'pointer',
+                          fontSize: '0.875rem',
+                          textTransform: 'uppercase',
+                          letterSpacing: '0.1em',
+                          fontWeight: 600,
+                          transition: 'transform 0.3s, background 0.3s'
+                        }}
+                        onMouseOver={(e) => {
+                          e.currentTarget.style.transform = 'translateY(-2px)';
+                          e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.9)';
+                        }}
+                        onMouseOut={(e) => {
+                          e.currentTarget.style.transform = 'translateY(0)';
+                          e.currentTarget.style.backgroundColor = '#ffffff';
+                        }}
+                      >
+                        Create Wallet <ArrowRight size={18} />
+                      </div>
+                      <div
+                        onClick={() => navigate('/import-wallet')}
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '1rem',
+                          padding: '1.25rem 3rem',
+                          borderRadius: '100px',
+                          backgroundColor: 'transparent',
+                          border: '1px solid rgba(255,255,255,0.2)',
+                          color: 'var(--color-text-primary)',
+                          cursor: 'pointer',
+                          fontSize: '0.875rem',
+                          textTransform: 'uppercase',
+                          letterSpacing: '0.1em',
+                          fontWeight: 600,
+                          transition: 'transform 0.3s, background 0.3s'
+                        }}
+                        onMouseOver={(e) => {
+                          e.currentTarget.style.transform = 'translateY(-2px)';
+                          e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.05)';
+                        }}
+                        onMouseOut={(e) => {
+                          e.currentTarget.style.transform = 'translateY(0)';
+                          e.currentTarget.style.backgroundColor = 'transparent';
+                        }}
+                      >
+                        Import Wallet
+                      </div>
+                    </>
+                  )}
+                </motion.div>
+              </motion.div>
+            </div>
           </div>
-        </div>
+        </HeroZoomIntro>
 
         {/* ── Section 2: About ── */}
         <StickySection>
@@ -860,7 +853,7 @@ export default function Landing() {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.8 }}
-                style={{ flex: '1 1 500px' }}
+                style={{ flex: '1 1 min(100%, 500px)' }}
               >
                 <div
                   style={{
@@ -903,7 +896,8 @@ export default function Landing() {
                     lineHeight: 1.8,
                     fontSize: '1.125rem',
                     marginBottom: '1.5rem',
-                    maxWidth: '560px'
+                    maxWidth: '100%',
+                    wordWrap: 'break-word'
                   }}
                 >
                   Every day, millions of people trust centralized platforms with their private keys.
@@ -920,7 +914,8 @@ export default function Landing() {
                     lineHeight: 1.8,
                     fontSize: '1.125rem',
                     marginBottom: '1.5rem',
-                    maxWidth: '560px'
+                    maxWidth: '100%',
+                    wordWrap: 'break-word'
                   }}
                 >
                   We believe that financial sovereignty isn't a feature. It's a fundamental right.
@@ -936,7 +931,8 @@ export default function Landing() {
                     color: '#71717A',
                     lineHeight: 1.8,
                     fontSize: '1.125rem',
-                    maxWidth: '560px'
+                    maxWidth: '100%',
+                    wordWrap: 'break-word'
                   }}
                 >
                   VaultX was built for people who understand this. It's not the easiest wallet. It's
@@ -972,7 +968,9 @@ export default function Landing() {
                   color: '#FAFAFA',
                   letterSpacing: '-0.05em',
                   lineHeight: 1.05,
-                  marginBottom: '1.5rem'
+                  marginBottom: '1.5rem',
+                  wordWrap: 'break-word',
+                  overflowWrap: 'break-word'
                 }}
               >
                 Total Ownership.
@@ -991,7 +989,7 @@ export default function Landing() {
             <div
               style={{
                 display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))',
                 gap: '2rem',
                 width: '100%',
                 maxWidth: '960px',
@@ -1126,11 +1124,12 @@ export default function Landing() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.8, delay: 0.2 }}
                 style={{
-                  flex: '1 1 400px',
+                  flex: '1 1 min(100%, 400px)',
                   display: 'flex',
                   justifyContent: 'center',
                   position: 'relative',
-                  minHeight: '400px'
+                  minHeight: '400px',
+                  width: '100%'
                 }}
               >
                 {/* Floating Bubble Logos Placeholder */}
@@ -1138,10 +1137,10 @@ export default function Landing() {
                   className="floating-logo"
                   style={{
                     top: '10%',
-                    left: '15%',
+                    left: '5%',
                     animationDelay: '0s',
-                    width: '140px',
-                    height: '140px'
+                    width: 'clamp(80px, 25vw, 140px)',
+                    height: 'clamp(80px, 25vw, 140px)'
                   }}
                 >
                   <img src="/eth.png" alt="ETH" />
@@ -1150,10 +1149,10 @@ export default function Landing() {
                   className="floating-logo"
                   style={{
                     top: '45%',
-                    left: '70%',
+                    right: '5%',
                     animationDelay: '1.5s',
-                    width: '180px',
-                    height: '180px'
+                    width: 'clamp(100px, 30vw, 180px)',
+                    height: 'clamp(100px, 30vw, 180px)'
                   }}
                 >
                   <img src="/arb.png" alt="ARB" />
@@ -1162,10 +1161,10 @@ export default function Landing() {
                   className="floating-logo"
                   style={{
                     top: '65%',
-                    left: '25%',
+                    left: '10%',
                     animationDelay: '3s',
-                    width: '160px',
-                    height: '160px'
+                    width: 'clamp(90px, 28vw, 160px)',
+                    height: 'clamp(90px, 28vw, 160px)'
                   }}
                 >
                   <img src="/matic.png" alt="POL" />
@@ -1174,10 +1173,10 @@ export default function Landing() {
                   className="floating-logo"
                   style={{
                     top: '20%',
-                    left: '60%',
+                    right: '15%',
                     animationDelay: '4.5s',
-                    width: '120px',
-                    height: '120px'
+                    width: 'clamp(70px, 22vw, 120px)',
+                    height: 'clamp(70px, 22vw, 120px)'
                   }}
                 >
                   <img src="/op.png" alt="OP" />
@@ -1330,9 +1329,12 @@ export default function Landing() {
                 maxWidth: '1000px',
                 width: '100%',
                 marginBottom: '4rem',
-                border: '1px solid rgba(255,255,255,0.06)',
-                borderRadius: '12px',
-                overflow: 'hidden'
+                border: 'none',
+                overflow: 'hidden',
+                WebkitMaskImage:
+                  'linear-gradient(to right, transparent, black 15%, black 85%, transparent)',
+                maskImage:
+                  'linear-gradient(to right, transparent, black 15%, black 85%, transparent)'
               }}
             >
               {[
@@ -1502,11 +1504,6 @@ export default function Landing() {
             </motion.h2>
             <AnimatedComparisonTable />
           </div>
-        </StickySection>
-
-        {/* ── Section 9: Design Principles ── */}
-        <StickySection>
-          <ManifestoDial />
         </StickySection>
 
         {/* ── Section 10: FAQ ── */}

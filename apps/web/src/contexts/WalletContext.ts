@@ -16,6 +16,7 @@ export interface WalletContextActions {
   lock: () => void;
   resetVault: () => Promise<void>;
   createWallet: (mnemonic: string, name: string) => Promise<void>;
+  deriveAccount: (name: string) => Promise<void>;
   importWallet: (privateKey: string, name: string) => Promise<void>;
   generateMnemonic: (length?: 12 | 24) => string;
   validateMnemonic: (mnemonic: string) => boolean;

@@ -40,6 +40,7 @@ export class VaultXService {
 
   private constructor() {
     this.networkEngine = new ProviderManager();
+    this.injectAlchemyProvider();
     this.accountManager = new AccountManager(new LocalStorageAdapter());
     this.assetManager = new AssetManager(this.networkEngine);
     this.walletConnect = new WalletConnectService();
@@ -65,6 +66,38 @@ export class VaultXService {
 
     this.addressBook = new AddressBookController(new LocalStorageAdapter());
     this.addressBook.load().catch(console.error);
+  }
+
+  private injectAlchemyProvider() {
+    const alchemyKey = import.meta.env.VITE_ALCHEMY_KEY;
+    if (alchemyKey) {
+      const alchemyNetworks: Record<number, string> = {
+        1: 'eth-mainnet',
+        11155111: 'eth-sepolia',
+        137: 'polygon-mainnet',
+        80002: 'polygon-amoy',
+        8453: 'base-mainnet',
+        84532: 'base-sepolia',
+        42161: 'arb-mainnet',
+        421614: 'arb-sepolia',
+        10: 'opt-mainnet',
+        11155420: 'opt-sepolia'
+      };
+
+      for (const [chainIdStr, networkPrefix] of Object.entries(alchemyNetworks)) {
+        const chainId = parseInt(chainIdStr, 10);
+        try {
+          const config = this.networkEngine.getChainConfig(chainId);
+          const customConfig = {
+            ...config,
+            rpcUrls: [`https://${networkPrefix}.g.alchemy.com/v2/${alchemyKey}`, ...config.rpcUrls]
+          };
+          this.networkEngine.registerCustomChain(customConfig);
+        } catch (e) {
+          console.warn(`Failed to inject Alchemy for chain ${chainId}`, e);
+        }
+      }
+    }
   }
 
   public async initWalletConnect(projectId: string) {

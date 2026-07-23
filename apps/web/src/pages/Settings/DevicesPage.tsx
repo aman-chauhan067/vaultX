@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { Monitor, Smartphone, Shield, Clock, Lock, Trash2, X } from 'lucide-react';
 import { useSettings } from '../../hooks/index.js';
 import { VaultXService } from '../../services/VaultXService.js';
-import { SessionData } from '@vaultx/account-manager';
+import type { SessionData } from '@vaultx/account-manager';
 
 export function DevicesPage() {
   const navigate = useNavigate();
@@ -40,8 +40,8 @@ export function DevicesPage() {
   const fetchSessions = useCallback(async () => {
     try {
       const activeWallet = accountManager.getActiveWallet();
-      if (!activeWallet) return;
-      const data = await sessionClient.getSessions(activeWallet.metadata.walletId);
+      if (!activeWallet || !currentDeviceId) return;
+      const data = await sessionClient.getSessions(activeWallet.metadata.walletId, currentDeviceId);
       setSessions(data.filter((s) => s.status === 'active'));
     } catch (e) {
       console.error(e);
@@ -57,15 +57,17 @@ export function DevicesPage() {
   }, [fetchSessions]);
 
   const handleRevoke = async (deviceId: string) => {
-    await sessionClient.revokeSession(deviceId);
+    if (!currentDeviceId) return;
+    await sessionClient.revokeSession(currentDeviceId, deviceId);
     setShowRevokeModal(null);
     fetchSessions();
   };
 
   const handleRename = async (deviceId: string) => {
+    if (!currentDeviceId) return;
     const newName = prompt('Enter a new name for this device:');
     if (newName && newName.trim() !== '') {
-      await sessionClient.renameSession(deviceId, newName.trim());
+      await sessionClient.renameSession(currentDeviceId, deviceId, newName.trim());
       fetchSessions();
     }
   };

@@ -167,26 +167,31 @@ export default function ImportWallet() {
             >
               <div
                 style={{
-                  fontSize: 'clamp(3rem, 6vw, 5rem)',
+                  fontSize: 'clamp(2rem, 8vw, 5rem)',
                   fontWeight: 300,
                   lineHeight: 1,
                   letterSpacing: '-0.04em',
-                  marginBottom: '2rem'
+                  marginBottom: '2rem',
+                  wordWrap: 'break-word',
+                  overflowWrap: 'break-word'
                 }}
               >
                 Restore your access
               </div>
               <p
                 style={{
-                  fontSize: '1.125rem',
+                  fontSize: '1rem',
                   color: '#8A8A93',
                   marginBottom: '4rem',
-                  maxWidth: '400px'
+                  maxWidth: '100%',
+                  wordWrap: 'break-word'
                 }}
               >
                 Import an existing wallet using a recovery phrase or a private key.
               </p>
-              <div style={{ display: 'flex', gap: '2rem' }}>
+              <div
+                style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap', justifyContent: 'center' }}
+              >
                 <div
                   onClick={() => setStage('phrase')}
                   style={{
@@ -254,16 +259,26 @@ export default function ImportWallet() {
             >
               <div
                 style={{
-                  fontSize: 'clamp(2.5rem, 5vw, 4rem)',
+                  fontSize: 'clamp(2rem, 8vw, 4rem)',
                   fontWeight: 300,
                   lineHeight: 1,
                   letterSpacing: '-0.04em',
-                  marginBottom: '1rem'
+                  marginBottom: '1rem',
+                  wordWrap: 'break-word',
+                  overflowWrap: 'break-word'
                 }}
               >
                 Recovery Phrase
               </div>
-              <p style={{ fontSize: '1rem', color: '#8A8A93', marginBottom: '4rem' }}>
+              <p
+                style={{
+                  fontSize: '0.9rem',
+                  color: '#8A8A93',
+                  marginBottom: '4rem',
+                  maxWidth: '100%',
+                  wordWrap: 'break-word'
+                }}
+              >
                 Enter your 12-word secret recovery phrase.
               </p>
 
@@ -357,16 +372,26 @@ export default function ImportWallet() {
             >
               <div
                 style={{
-                  fontSize: 'clamp(2.5rem, 5vw, 4rem)',
+                  fontSize: 'clamp(2rem, 8vw, 4rem)',
                   fontWeight: 300,
                   lineHeight: 1,
                   letterSpacing: '-0.04em',
-                  marginBottom: '1rem'
+                  marginBottom: '1rem',
+                  wordWrap: 'break-word',
+                  overflowWrap: 'break-word'
                 }}
               >
                 Private Key
               </div>
-              <p style={{ fontSize: '1rem', color: '#8A8A93', marginBottom: '4rem' }}>
+              <p
+                style={{
+                  fontSize: '0.9rem',
+                  color: '#8A8A93',
+                  marginBottom: '4rem',
+                  maxWidth: '100%',
+                  wordWrap: 'break-word'
+                }}
+              >
                 Enter your 64-character private key.
               </p>
 

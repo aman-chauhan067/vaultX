@@ -1,12 +1,10 @@
 import React, { useEffect, useRef } from 'react';
-import { FirefliesCanvas } from './FirefliesCanvas.js';
 
 export const BackgroundLayer: React.FC = () => {
   const glowRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLHeadingElement>(null);
   const starsRef = useRef<HTMLDivElement>(null);
   const nebulaRef = useRef<HTMLDivElement>(null);
-  const firefliesRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const MAX_GLOW_DRIFT = 25; // px
@@ -124,9 +122,6 @@ export const BackgroundLayer: React.FC = () => {
           willChange: 'transform'
         }}
       />
-
-      {/* 2. Fireflies Canvas (Layer 4) */}
-      <FirefliesCanvas />
 
       {/* 2. Large radial glow (Backlight) */}
       <div

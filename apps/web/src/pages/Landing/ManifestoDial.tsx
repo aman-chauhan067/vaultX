@@ -160,8 +160,9 @@ export function ManifestoDial() {
       <div
         style={{
           position: 'relative',
-          width: '1200px',
-          height: '600px',
+          width: '100%',
+          maxWidth: '1200px',
+          aspectRatio: '2 / 1',
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'flex-end',
@@ -266,8 +267,8 @@ export function ManifestoDial() {
                 <div
                   style={{
                     position: 'absolute',
-                    left: textPos.x,
-                    top: textPos.y,
+                    left: `${(textPos.x / 1200) * 100}%`,
+                    top: `${(textPos.y / 600) * 100}%`,
                     transform,
                     width: '320px',
                     textAlign,

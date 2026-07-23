@@ -98,9 +98,9 @@ function ComparisonRow({
       {/* Feature Column */}
       <div
         style={{
-          padding: '1.5rem 1.5rem',
+          padding: '1rem',
           fontFamily: 'CustomHelvetica, sans-serif',
-          fontSize: isHeader ? '0.75rem' : '0.9rem',
+          fontSize: isHeader ? 'clamp(0.65rem, 2vw, 0.75rem)' : 'clamp(0.75rem, 2.5vw, 0.9rem)',
           fontWeight: isHeader ? 500 : 300,
           letterSpacing: isHeader ? '0.06em' : '0.02em',
           textTransform: isHeader ? 'uppercase' : 'none',
@@ -117,7 +117,7 @@ function ComparisonRow({
       {/* Comparison Column (Stacked) */}
       <div
         style={{
-          padding: '1.5rem 1.5rem',
+          padding: '1rem',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -145,7 +145,7 @@ function ComparisonRow({
           style={{
             position: 'absolute',
             fontFamily: 'CustomHelvetica, sans-serif',
-            fontSize: isHeader ? '0.75rem' : '1.1rem',
+            fontSize: isHeader ? 'clamp(0.65rem, 2vw, 0.75rem)' : 'clamp(0.85rem, 3vw, 1.1rem)',
             fontWeight: 300,
             letterSpacing: isHeader ? '0.06em' : '0.02em',
             textTransform: isHeader ? 'uppercase' : 'none',
@@ -164,7 +164,7 @@ function ComparisonRow({
           style={{
             position: 'absolute',
             fontFamily: 'CustomHelvetica, sans-serif',
-            fontSize: isHeader ? '0.75rem' : '0.9rem',
+            fontSize: isHeader ? 'clamp(0.65rem, 2vw, 0.75rem)' : 'clamp(0.75rem, 2.5vw, 0.9rem)',
             fontWeight: isHeader ? 500 : 300,
             letterSpacing: isHeader ? '0.06em' : '0.02em',
             textTransform: isHeader ? 'uppercase' : 'none',

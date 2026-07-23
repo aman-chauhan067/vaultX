@@ -7,7 +7,7 @@ import { BackButton } from '../../components/index.js';
 
 export function ProfilePage() {
   const navigate = useNavigate();
-  const { wallets, activeWalletId, setActiveWallet, createWallet, generateMnemonic } = useWallet();
+  const { wallets, activeWalletId, setActiveWallet, deriveAccount } = useWallet();
   const { displayName, setDisplayName } = useSettings();
 
   const [localName, setLocalName] = useState(displayName);
@@ -36,14 +36,17 @@ export function ProfilePage() {
 
   const handleCreateAccount = async () => {
     try {
-      const mnemonic = generateMnemonic(12);
-      await createWallet(mnemonic, `Account ${wallets.length + 1}`);
+      await deriveAccount(`Account ${wallets.length + 1}`);
       const evt = new CustomEvent('toast', {
         detail: { type: 'success', message: 'New account created successfully' }
       });
       window.dispatchEvent(evt);
-    } catch (e) {
+    } catch (e: any) {
       console.error(e);
+      const evt = new CustomEvent('toast', {
+        detail: { type: 'error', message: e.message || 'Failed to create account' }
+      });
+      window.dispatchEvent(evt);
     }
   };
 

@@ -24,7 +24,7 @@ export function AuraButton() {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        padding: '100px'
+        padding: 'clamp(2rem, 10vw, 100px)'
       }}
     >
       {/* Background Aura Wrapper (Fades and slides in gradually) */}
@@ -147,6 +147,7 @@ export function AuraButton() {
           textTransform: 'uppercase',
           letterSpacing: '0.1em',
           fontWeight: 700,
+          whiteSpace: 'nowrap',
           transition: 'box-shadow 0.3s',
           zIndex: 10, // Above all effects
           boxShadow: '0 0 40px rgba(255,255,255,0.3), 0 0 15px rgba(255,255,255,0.4) inset'

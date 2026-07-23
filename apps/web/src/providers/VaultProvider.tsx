@@ -140,6 +140,37 @@ export const VaultProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     [accountManager, queryClient]
   );
 
+  const deriveAccount = useCallback(
+    async (name: string) => {
+      try {
+        const currentWallets = Object.values(accountManager.getWallets());
+
+        const rootWallet = currentWallets.find((w) => w.mnemonic);
+        if (!rootWallet || !rootWallet.mnemonic) {
+          throw new Error(
+            'No root seed phrase found. Please create a new wallet or import a seed phrase.'
+          );
+        }
+
+        const hdWallets = currentWallets.filter((w) => w.metadata.walletType === 'HD');
+        const nextIndex =
+          hdWallets.length > 0 ? Math.max(...hdWallets.map((w) => w.metadata.accountIndex)) + 1 : 0;
+
+        const wallet = await accountManager.generateWalletFromMnemonic(
+          rootWallet.mnemonic,
+          nextIndex,
+          name
+        );
+        setActiveWalletId(wallet.metadata.walletId);
+        queryClient.invalidateQueries({ queryKey: ['wallets'] });
+      } catch (err) {
+        setError(err as Error);
+        throw err;
+      }
+    },
+    [accountManager, queryClient]
+  );
+
   const importWallet = useCallback(
     async (privateKey: string, name: string) => {
       try {
@@ -220,6 +251,7 @@ export const VaultProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         lock,
         resetVault,
         createWallet,
+        deriveAccount,
         importWallet,
         generateMnemonic,
         validateMnemonic,

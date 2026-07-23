@@ -173,21 +173,24 @@ export default function CreateWallet() {
             >
               <div
                 style={{
-                  fontSize: 'clamp(3rem, 6vw, 5rem)',
+                  fontSize: 'clamp(2rem, 8vw, 5rem)',
                   fontWeight: 300,
                   lineHeight: 1,
                   letterSpacing: '-0.04em',
-                  marginBottom: '2rem'
+                  marginBottom: '2rem',
+                  wordWrap: 'break-word',
+                  overflowWrap: 'break-word'
                 }}
               >
                 Secure your wealth
               </div>
               <p
                 style={{
-                  fontSize: '1.125rem',
+                  fontSize: '1rem',
                   color: '#8A8A93',
                   marginBottom: '4rem',
-                  maxWidth: '400px'
+                  maxWidth: '100%',
+                  wordWrap: 'break-word'
                 }}
               >
                 You are about to generate a 12-word recovery phrase. This is the only way to recover
@@ -230,16 +233,26 @@ export default function CreateWallet() {
             >
               <div
                 style={{
-                  fontSize: 'clamp(2.5rem, 5vw, 4rem)',
+                  fontSize: 'clamp(2rem, 8vw, 4rem)',
                   fontWeight: 300,
                   lineHeight: 1,
                   letterSpacing: '-0.04em',
-                  marginBottom: '1rem'
+                  marginBottom: '1rem',
+                  wordWrap: 'break-word',
+                  overflowWrap: 'break-word'
                 }}
               >
                 Write this down
               </div>
-              <p style={{ fontSize: '1rem', color: '#8A8A93', marginBottom: '4rem' }}>
+              <p
+                style={{
+                  fontSize: '0.9rem',
+                  color: '#8A8A93',
+                  marginBottom: '4rem',
+                  maxWidth: '100%',
+                  wordWrap: 'break-word'
+                }}
+              >
                 Do not take a screenshot. Write these words on paper and keep them offline.
               </p>
 
@@ -307,16 +320,26 @@ export default function CreateWallet() {
             >
               <div
                 style={{
-                  fontSize: 'clamp(2.5rem, 5vw, 4rem)',
+                  fontSize: 'clamp(2rem, 8vw, 4rem)',
                   fontWeight: 300,
                   lineHeight: 1,
                   letterSpacing: '-0.04em',
-                  marginBottom: '1rem'
+                  marginBottom: '1rem',
+                  wordWrap: 'break-word',
+                  overflowWrap: 'break-word'
                 }}
               >
                 Verify backup
               </div>
-              <p style={{ fontSize: '1rem', color: '#8A8A93', marginBottom: '4rem' }}>
+              <p
+                style={{
+                  fontSize: '0.9rem',
+                  color: '#8A8A93',
+                  marginBottom: '4rem',
+                  maxWidth: '100%',
+                  wordWrap: 'break-word'
+                }}
+              >
                 Enter the missing words to confirm you saved them correctly.
               </p>
 
@@ -404,16 +427,26 @@ export default function CreateWallet() {
             >
               <div
                 style={{
-                  fontSize: 'clamp(2.5rem, 5vw, 4rem)',
+                  fontSize: 'clamp(2rem, 8vw, 4rem)',
                   fontWeight: 300,
                   lineHeight: 1,
                   letterSpacing: '-0.04em',
-                  marginBottom: '1rem'
+                  marginBottom: '1rem',
+                  wordWrap: 'break-word',
+                  overflowWrap: 'break-word'
                 }}
               >
                 Secure access
               </div>
-              <p style={{ fontSize: '1rem', color: '#8A8A93', marginBottom: '4rem' }}>
+              <p
+                style={{
+                  fontSize: '0.9rem',
+                  color: '#8A8A93',
+                  marginBottom: '4rem',
+                  maxWidth: '100%',
+                  wordWrap: 'break-word'
+                }}
+              >
                 Create a password to unlock your wallet on this device.
               </p>
 

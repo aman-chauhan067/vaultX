@@ -8,23 +8,20 @@ export const StickySection = ({
   height?: string;
 }) => {
   return (
-    <div style={{ height, position: 'relative', width: '100%' }}>
-      <div
-        style={{
-          position: 'sticky',
-          top: 0,
-          height: '100vh',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-          padding: '0 5vw',
-          zIndex: 10,
-          backgroundColor: 'transparent'
-        }}
-      >
-        {children}
-      </div>
-    </div>
+    <section
+      style={{
+        minHeight: '100vh',
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: '10vh 5vw',
+        position: 'relative',
+        scrollSnapAlign: 'center'
+      }}
+    >
+      {children}
+    </section>
   );
 };

@@ -31,6 +31,7 @@ describe('Unlock Screen', () => {
       createVault: vi.fn(),
       lock: vi.fn(),
       createWallet: vi.fn(),
+      deriveAccount: vi.fn(),
       importWallet: vi.fn(),
       generateMnemonic: vi.fn(),
       validateMnemonic: vi.fn(),

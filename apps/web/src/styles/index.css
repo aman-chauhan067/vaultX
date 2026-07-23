@@ -32,7 +32,10 @@
   padding: 0;
 }
 
-html,
+html {
+  scroll-snap-type: y proximity;
+}
+
 body {
   font-family: var(--font-sans);
   background-color: var(--color-bg-primary);
@@ -197,6 +200,7 @@ h6 {
   width: 100%;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
+  white-space: nowrap;
 }
 
 .text-flip-back {
@@ -251,25 +255,9 @@ h6 {
   max-width: 100vw;
   padding: 2rem 0;
   position: relative;
-}
-
-.marquee-container::before,
-.marquee-container::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  width: 150px;
-  height: 100%;
-  z-index: 2;
-  pointer-events: none;
-}
-.marquee-container::before {
-  left: 0;
-  background: linear-gradient(to right, #000 0%, transparent 100%);
-}
-.marquee-container::after {
-  right: 0;
-  background: linear-gradient(to left, #000 0%, transparent 100%);
+  /* Use mask-image for a true transparent fade that works on any background color */
+  -webkit-mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+  mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
 }
 
 .marquee-track {
