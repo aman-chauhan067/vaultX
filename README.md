@@ -1,55 +1,17 @@
-<div align="center" style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;">
+<div align="center" style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: #000; color: #fff; padding: 40px 0;">
 
-<br/>
-<br/>
-
-<pre style="font-family: monospace; font-size: 8px; line-height: 1.0; letter-spacing: 1px; color: #52525b; display: inline-block; text-align: center; font-weight: bold;">
-   ,~:=*#$$$$#*!=;:~-,.            ...........            .,-~:;=!*#$$$$#*=:~,  
- .,~;!*#$$$$#*=;:~-,.         ...,,,,-------,,,,...         .,-~:;=*#$$$$#*!;~,.
-.,~;!#$$$$#*!=:~-,.       ...,,--~~~~:::::::~~~~--,,...       .,-~:=!*#$$$$#!;~,
-,~;!#$$$$#*!;:-,.       ..,--~~::;;;=========;;;::~~--,..       .,-:;!*#$$$$#!;~
-~;!#$$$$#*=;~-,.      .,,-~~:;;==!!!!*******!!!!==;;:~~-,,.      .,-~;=*#$$$$#!;
-;!#$$$$#!=:~,.      .,,-~:;;=!!***#############***!!=;;:~-,,.      .,~:=!#$$$$#!
-!*$$$$#!=:~,.     ..,-~:;==!**####$$$$$$$$$$$$$####**!==;:~-,..     .,~:=!#$$$$*
-*#$$$#*=:~,.     .,-~:;;=!**##$$$$$$$$$$$$$$$$$$$$$##**!=;;:~-,.     .,~:=*#$$$#
-#$$$#*=:~,.     .,-~:;=!**##$$$$$$$$$$$$$$$$$$$$$$$$$##**!=;:~-,.     .,~:=*#$$$
-$$$$*!;~-.     .,-~:;=!*##$$$$$$$$$$$$$$$$$$$$$$$$$$$$$##*!=;:~-,.     .-~;!*$$$
-$$$#!;:-.     .,-~:=!**#$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$#**!=:~-,.     .-:;!#$$
-$$#*=:~,.    .,-~:=!**#$$$$$$$$$$$#############$$$$$$$$$$$#**!=:~-,.    .,~:=*#$
-$$#!;~-.    ..-~:;!**#$$$$$$$$$$####*********####$$$$$$$$$$#**!;:~-..    .-~;!#$
-$#*=:-,.    .,-:;=!*#$$$$$$$$$###*****!!!!!*****###$$$$$$$$$#*!=;:-,.    .,-:=*#
-$#!;:-.    .,-~;=!*#$$$$$$$$$##***!!!!!!!!!!!!!***##$$$$$$$$$#*!=;~-,.    .-:;!#
-$*!;~,.    .,-:;=*##$$$$$$$$##***!!!=========!!!***##$$$$$$$$##*=;:-,.    .,~;!*
-$*=:-,     .-~:=!*#$$$$$$$$##**!!!=====;;;=====!!!**##$$$$$$$$#*!=:~-.     ,-:=*
-#*=:-.    .,-~;=!*#$$$$$$$###**!!===;;;;;;;;;===!!**###$$$$$$$#*!=;~-,.    .-:=*
-#!=:-.    .,-:;=*##$$$$$$$##**!!===;;;;;;;;;;;===!!**##$$$$$$$##*=;:-,.    .-:=!
-#!;~-.    .,-:;!*##$$$$$$$##**!!===;;;;;;;;;;;===!!**##$$$$$$$##*!;:-,.    .-~;!
-#!;~-.    .,-:;!*#$$$$$$$$##**!!==;;;;;;;;;;;;;==!!**##$$$$$$$$#*!;:-,.    .-~;!
-#!;~-.    .,-:;!*##$$$$$$$##**!!===;;;;;;;;;;;===!!**##$$$$$$$##*!;:-,.    .-~;!
-#!=:-.    .,-:;=*##$$$$$$$##**!!===;;;;;;;;;;;===!!**##$$$$$$$##*=;:-,.    .-:=!
-#*=:-.    .,-~;=!*#$$$$$$$###**!!===;;;;;;;;;===!!**###$$$$$$$#*!=;~-,.    .-:=*
-$*=:-,     .-~:=!*#$$$$$$$$##**!!!=====;;;=====!!!**##$$$$$$$$#*!=:~-.     ,-:=*
-$*!;~,.    .,-:;=*##$$$$$$$$##***!!!=========!!!***##$$$$$$$$##*=;:-,.    .,~;!*
-$#!;:-.    .,-~;=!*#$$$$$$$$$##***!!!!!!!!!!!!!***##$$$$$$$$$#*!=;~-,.    .-:;!#
-$#*=:-,.    .,-:;=!*#$$$$$$$$$###*****!!!!!*****###$$$$$$$$$#*!=;:-,.    .,-:=*#
-$$#!;~-.    ..-~:;!**#$$$$$$$$$$####*********####$$$$$$$$$$#**!;:~-..    .-~;!#$
-$$#*=:~,.    .,-~:=!**#$$$$$$$$$$$#############$$$$$$$$$$$#**!=:~-,.    .,~:=*#$
-$$$#!;:-.     .,-~:=!**#$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$#**!=:~-,.     .-:;!#$$
-$$$$*!;~-.     .,-~:;=!*##$$$$$$$$$$$$$$$$$$$$$$$$$$$$$##*!=;:~-,.     .-~;!*$$$
-#$$$#*=:~,.     .,-~:;=!**##$$$$$$$$$$$$$$$$$$$$$$$$$##**!=;:~-,.     .,~:=*#$$$
-*#$$$#*=:~,.     .,-~:;;=!**##$$$$$$$$$$$$$$$$$$$$$##**!=;;:~-,.     .,~:=*#$$$#
-!*$$$$#!=:~,.     ..,-~:;==!**####$$$$$$$$$$$$$####**!==;:~-,..     .,~:=!#$$$$*
-;!#$$$$#!=:~,.      .,,-~:;;=!!***#############***!!=;;:~-,,.      .,~:=!#$$$$#!
-~;!#$$$$#*=;~-,.      .,,-~~:;;==!!!!*******!!!!==;;:~~-,,.      .,-~;=*#$$$$#!;
-,~;!#$$$$#*!;:-,.       ..,--~~::;;;=========;;;::~~--,..       .,-:;!*#$$$$#!;~
-.,~;!#$$$$#*!=:~-,.       ...,,--~~~~:::::::~~~~--,,...       .,-~:=!*#$$$$#!;~,
- .,~;!*#$$$$#*=;:~-,.         ...,,,,-------,,,,...         .,-~:;=*#$$$$#*!;~,.
+<pre style="font-family: monospace; font-size: 14px; line-height: 1.1; font-weight: 900; letter-spacing: -1px; text-align: center; display: inline-block;">
+██    ██  █████  ██    ██ ██      ████████ ██   ██ 
+██    ██ ██   ██ ██    ██ ██         ██     ██ ██  
+██    ██ ███████ ██    ██ ██         ██      ███   
+ ██  ██  ██   ██ ██    ██ ██         ██     ██ ██  
+  ████   ██   ██  ██████  ███████    ██    ██   ██ 
 </pre>
 
-<br/>
+<br/><br/>
 
-<h1 style="font-size: 3.5em; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 0;">VaultX</h1>
-<p style="font-size: 1.2em; font-weight: 300; letter-spacing: 1px; color: #888;">A highly-secure, production-ready, multi-chain Web3 wallet foundation.</p>
+<h1 style="font-size: 4em; font-weight: 900; text-transform: uppercase; letter-spacing: -2px; margin: 0; line-height: 0.9;">VAULTX<br/>WALLET</h1>
+<p style="font-size: 1.5em; font-weight: 800; letter-spacing: -1px; text-transform: uppercase; margin-top: 20px;">A highly-secure, production-ready, multi-chain Web3 wallet.</p>
 
 <br/>
 
@@ -58,64 +20,55 @@ $$$$*!;~-.     .,-~:;=!*##$$$$$$$$$$$$$$$$$$$$$$$$$$$$$##*!=;:~-,.     .-~;!*$$$
 [![Ethers.js](https://img.shields.io/badge/Ethers.js-6.x-black.svg?style=for-the-badge)](https://docs.ethers.org/v6/)
 [![Vite](https://img.shields.io/badge/Vite-6.x-black.svg?style=for-the-badge&logo=vite)](https://vitejs.dev/)
 
-<br/>
-<br/>
-
 </div>
 
-<div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;">
+<div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; margin-top: 40px;">
 
----
+<h2 style="font-size: 3em; font-weight: 900; text-transform: uppercase; letter-spacing: -2px; border-bottom: 8px solid #000; padding-bottom: 10px; margin-bottom: 20px;">[ OVERVIEW ]</h2>
 
-<br/>
-
-<h2 style="font-size: 2em; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">/// Overview</h2>
-
+<p style="font-size: 1.2em; font-weight: 500; line-height: 1.5;">
 VaultX is a premium, open-source Web3 wallet built for maximum security, modularity, and aesthetic excellence. It provides a full set of wallet primitives—including a robust Keyring for encryption, a responsive React UI, a Chrome Extension wrapper, and strict EIP-1193 isolation boundaries.
-
+<br/><br/>
 Whether you're looking for a foundation to build the next major crypto wallet or a secure platform for integrating Web3 features, VaultX is engineered to scale.
+</p>
 
-<br/>
+<br/><br/>
 
-<h2 style="font-size: 2em; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">/// Key Features</h2>
+<h2 style="font-size: 3em; font-weight: 900; text-transform: uppercase; letter-spacing: -2px; border-bottom: 8px solid #000; padding-bottom: 10px; margin-bottom: 20px;">[ KEY FEATURES ]</h2>
 
-[+] **Military-Grade Security**<br/>
-Non-custodial by design. Private keys and seed phrases never leave the browser. The vault is encrypted using the native Web Crypto API (AES-GCM) with PBKDF2 key derivation.
+<p style="font-size: 1.2em; font-weight: 800; margin-bottom: 5px;">[+] MILITARY-GRADE SECURITY</p>
+<p style="font-size: 1.1em; font-weight: 500; margin-top: 0; margin-bottom: 20px;">Non-custodial by design. Private keys and seed phrases never leave the browser. The vault is encrypted using the native Web Crypto API (AES-GCM) with PBKDF2 key derivation.</p>
 
-[+] **Multi-Chain Native**<br/>
-Out-of-the-box support for Ethereum, Polygon, Arbitrum, Optimism, Base, and more. Robust fallback RPC systems.
+<p style="font-size: 1.2em; font-weight: 800; margin-bottom: 5px;">[+] MULTI-CHAIN NATIVE</p>
+<p style="font-size: 1.1em; font-weight: 500; margin-top: 0; margin-bottom: 20px;">Out-of-the-box support for Ethereum, Polygon, Arbitrum, Optimism, Base, and more. Robust fallback RPC systems.</p>
 
-[+] **Modular Architecture**<br/>
-Built as a `pnpm` monorepo. Clear separation of concerns between cryptography, networking, transaction building, and the UI layer.
+<p style="font-size: 1.2em; font-weight: 800; margin-bottom: 5px;">[+] MODULAR ARCHITECTURE</p>
+<p style="font-size: 1.1em; font-weight: 500; margin-top: 0; margin-bottom: 20px;">Built as a `pnpm` monorepo. Clear separation of concerns between cryptography, networking, transaction building, and the UI layer.</p>
 
-[+] **Premium Aesthetic**<br/>
-Custom Vanilla CSS design system powered by Framer Motion, dynamic particle backgrounds, and rigorous accessibility standards (ARIA).
+<p style="font-size: 1.2em; font-weight: 800; margin-bottom: 5px;">[+] PREMIUM AESTHETIC</p>
+<p style="font-size: 1.1em; font-weight: 500; margin-top: 0; margin-bottom: 20px;">Custom Vanilla CSS design system powered by Framer Motion, dynamic particle backgrounds, and rigorous accessibility standards (ARIA).</p>
 
-[+] **Chrome Extension Ready**<br/>
-Ships with a fully functional Manifest V3 browser extension wrapper for a native wallet experience.
+<p style="font-size: 1.2em; font-weight: 800; margin-bottom: 5px;">[+] CHROME EXTENSION READY</p>
+<p style="font-size: 1.1em; font-weight: 500; margin-top: 0; margin-bottom: 20px;">Ships with a fully functional Manifest V3 browser extension wrapper for a native wallet experience.</p>
 
-[+] **Zero-Compromise Performance**<br/>
-Topological builds, tree-shaken dependencies, and zero unnecessary React re-renders.
+<br/><br/>
 
-<br/>
-
-<h2 style="font-size: 2em; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">/// Screenshots</h2>
+<h2 style="font-size: 3em; font-weight: 900; text-transform: uppercase; letter-spacing: -2px; border-bottom: 8px solid #000; padding-bottom: 10px; margin-bottom: 20px;">[ SCREENSHOTS ]</h2>
 
 <div align="center">
-  <img src="docs/assets/screenshots/landing.png" width="45%" alt="Landing Page">
-  <img src="docs/assets/screenshots/dashboard.png" width="45%" alt="Dashboard">
+  <img src="docs/assets/screenshots/landing.png" width="48%" style="border: 4px solid #000; margin-bottom: 10px;" alt="Landing Page">
+  <img src="docs/assets/screenshots/dashboard.png" width="48%" style="border: 4px solid #000; margin-bottom: 10px;" alt="Dashboard">
   <br/>
-  <img src="docs/assets/screenshots/portfolio.png" width="45%" alt="Portfolio">
-  <img src="docs/assets/screenshots/networks.png" width="45%" alt="Networks">
+  <img src="docs/assets/screenshots/portfolio.png" width="48%" style="border: 4px solid #000;" alt="Portfolio">
+  <img src="docs/assets/screenshots/networks.png" width="48%" style="border: 4px solid #000;" alt="Networks">
 </div>
+<p style="font-weight: 800; text-transform: uppercase; text-align: center; margin-top: 10px;">> See docs/assets/screenshots for more views.</p>
 
-_See the `docs/assets/screenshots` directory for more views including Send, Receive, Settings, and Extension popup._
+<br/><br/>
 
-<br/>
+<h2 style="font-size: 3em; font-weight: 900; text-transform: uppercase; letter-spacing: -2px; border-bottom: 8px solid #000; padding-bottom: 10px; margin-bottom: 20px;">[ ARCHITECTURE ]</h2>
 
-<h2 style="font-size: 2em; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">/// Architecture & Monorepo Structure</h2>
-
-VaultX utilizes a strict package boundary architecture, enforced via a `pnpm` workspace. This prevents the React UI from ever accessing sensitive cryptographic primitives directly.
+<p style="font-size: 1.1em; font-weight: 500;">VaultX utilizes a strict package boundary architecture, enforced via a `pnpm` workspace. This prevents the React UI from ever accessing sensitive cryptographic primitives directly.</p>
 
 ```text
 vaultx/
@@ -134,82 +87,58 @@ vaultx/
 └── docs/                    [ Deep-dive architecture and design documentation ]
 ```
 
-**For a detailed look at the internal data flows, read the Architecture Documentation in `docs/Architecture.md`.**
+<br/><br/>
 
-<br/>
+<h2 style="font-size: 3em; font-weight: 900; text-transform: uppercase; letter-spacing: -2px; border-bottom: 8px solid #000; padding-bottom: 10px; margin-bottom: 20px;">[ GETTING STARTED ]</h2>
 
-<h2 style="font-size: 2em; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">/// Getting Started</h2>
+<p style="font-size: 1.2em; font-weight: 800; margin-bottom: 5px;">[ 1 ] PREREQUISITES</p>
+<p style="font-size: 1.1em; font-weight: 500; margin-top: 0; margin-bottom: 15px;">Node.js 20.18+ / Corepack enabled</p>
 
-**[ Prerequisites ]**
-
-> Node.js 20.18 or later
-> Corepack (`corepack enable`)
-
-**[ 1 ] Clone the repository:**
-
+<p style="font-size: 1.2em; font-weight: 800; margin-bottom: 5px;">[ 2 ] CLONE</p>
 ```bash
 git clone https://github.com/aman-chauhan067/vaultX.git
 cd vaultx
 ```
 
-**[ 2 ] Install dependencies:**
-
+<p style="font-size: 1.2em; font-weight: 800; margin-bottom: 5px; margin-top: 15px;">[ 3 ] INSTALL</p>
 ```bash
 pnpm install
 ```
 
-**[ 3 ] Configure Environment:**
-
+<p style="font-size: 1.2em; font-weight: 800; margin-bottom: 5px; margin-top: 15px;">[ 4 ] ENVIRONMENT</p>
 ```bash
 cp apps/web/.env.example apps/web/.env.local
 ```
 
-_Only `VITE_` prefixed variables are exposed to the browser. Never put sensitive secrets in this file._
-
-**[ 4 ] Start the Development Server:**
-
+<p style="font-size: 1.2em; font-weight: 800; margin-bottom: 5px; margin-top: 15px;">[ 5 ] RUN SERVER</p>
 ```bash
 pnpm dev
 ```
+<p style="font-size: 1.1em; font-weight: 800; margin-top: 0;">> AVAILABLE AT HTTP://LOCALHOST:5173</p>
 
-The application will be available at `http://localhost:5173`.
+<br/><br/>
 
-<br/>
+<h2 style="font-size: 3em; font-weight: 900; text-transform: uppercase; letter-spacing: -2px; border-bottom: 8px solid #000; padding-bottom: 10px; margin-bottom: 20px;">[ SECURITY ]</h2>
 
-<h2 style="font-size: 2em; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">/// Building & Testing</h2>
+<p style="font-size: 1.2em; font-weight: 800; margin-bottom: 5px; color: #ff0000;">[!] NO PLAINTEXT STORAGE</p>
+<p style="font-size: 1.1em; font-weight: 500; margin-top: 0; margin-bottom: 20px;">The browser application stores no secrets or private keys in plaintext. The vault is encrypted with a user-defined password via the native Web Crypto API (AES-GCM) before resting in IndexedDB.</p>
 
-VaultX enforces strict topological builds.
+<p style="font-size: 1.2em; font-weight: 800; margin-bottom: 5px; color: #ff0000;">[!] ISOLATED BOUNDARY</p>
+<p style="font-size: 1.1em; font-weight: 500; margin-top: 0; margin-bottom: 20px;">Wallet integration is constrained behind a typed EIP-1193 adapter, preventing arbitrary payload execution.</p>
 
-[+] **Build everything:** `pnpm build`<br/>
-[+] **Run strict typechecking:** `pnpm typecheck`<br/>
-[+] **Run the test suite:** `pnpm test`
+<p style="font-size: 1.2em; font-weight: 800; margin-bottom: 5px; color: #ff0000;">[!] STRICT CSP</p>
+<p style="font-size: 1.1em; font-weight: 500; margin-top: 0; margin-bottom: 20px;">The extension enforces rigorous Content Security Policies to mitigate XSS vectors.</p>
 
-<br/>
+<br/><br/>
 
-<h2 style="font-size: 2em; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">/// Security Notes</h2>
+<h2 style="font-size: 3em; font-weight: 900; text-transform: uppercase; letter-spacing: -2px; border-bottom: 8px solid #000; padding-bottom: 10px; margin-bottom: 20px;">[ ROADMAP ]</h2>
 
-VaultX treats user security as its top priority:
-
-[!] **No Plaintext Storage**: The browser application stores no secrets or private keys in plaintext. The vault is encrypted with a user-defined password via the native Web Crypto API (AES-GCM) before resting in IndexedDB.
-
-[!] **Isolated Boundary**: Wallet integration is constrained behind a typed EIP-1193 adapter, preventing arbitrary payload execution.
-
-[!] **Strict CSP**: The extension enforces rigorous Content Security Policies to mitigate XSS vectors.
-
-<br/>
-
-<h2 style="font-size: 2em; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">/// Roadmap</h2>
-
-[ ] Hardware Wallet Integration (Ledger/Trezor)<br/>
-[ ] WalletConnect v2 Support<br/>
-[ ] Account Abstraction (ERC-4337)<br/>
-[ ] Multi-signature vault integrations<br/>
-[ ] In-wallet DEX aggregation
-
-<br/>
-
-<h2 style="font-size: 2em; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">/// License</h2>
-
-This project is licensed under the MIT License - see the `LICENSE` file for details.
+<p style="font-size: 1.2em; font-weight: 800; line-height: 1.6;">
+[ ] HARDWARE WALLET INTEGRATION<br/>
+[ ] WALLETCONNECT V2 SUPPORT<br/>
+[ ] ACCOUNT ABSTRACTION (ERC-4337)<br/>
+[ ] MULTI-SIGNATURE VAULT INTEGRATIONS<br/>
+[ ] IN-WALLET DEX AGGREGATION
+</p>
 
 </div>
