@@ -22,6 +22,7 @@ const Activity = lazy(() => import('../pages/Activity/index.js'));
 const Settings = lazy(() => import('../pages/Settings/index.js'));
 const WalletConnectSettings = lazy(() => import('../pages/WalletConnect/index.js'));
 const Security = lazy(() => import('../pages/Security/index.js'));
+const HiddenAccountsPage = lazy(() => import('../pages/Settings/HiddenAccountsPage.js'));
 const Developer = lazy(() => import('../pages/Developer/index.js'));
 const Networks = lazy(() => import('../pages/Networks/index.js'));
 const NotFound = lazy(() => import('../pages/NotFound/index.js'));
@@ -147,6 +148,7 @@ export const router = createHashRouter([
       { path: '/security', element: <Security /> },
       { path: '/security/password', element: <ChangePasswordPage /> },
       { path: '/security/2fa', element: <TwoFactorPage /> },
+      { path: '/security/hidden-accounts', element: <HiddenAccountsPage /> },
       { path: '/security/recovery', element: <RecoveryPage /> },
       { path: '/security/devices', element: <DevicesPage /> },
       { path: '/developer', element: <Developer /> }

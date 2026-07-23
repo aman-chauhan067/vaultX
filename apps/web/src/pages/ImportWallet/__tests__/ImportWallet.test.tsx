@@ -23,6 +23,9 @@ describe.skip('ImportWallet Component', () => {
   const mockSetActiveAccount = vi.fn();
   const mockGenerateMnemonic = vi.fn();
   const mockLock = vi.fn();
+  const mockHideWallet = vi.fn();
+  const mockRemoveWallet = vi.fn();
+  const mockVerifyPassword = vi.fn();
 
   const renderWithProvider = (hasVault: boolean, isLocked: boolean) => {
     return render(
@@ -40,6 +43,9 @@ describe.skip('ImportWallet Component', () => {
           createWallet: mockCreateWallet,
           deriveAccount: vi.fn(),
           importWallet: vi.fn(),
+          hideWallet: mockHideWallet,
+          removeWallet: mockRemoveWallet,
+          verifyPassword: mockVerifyPassword,
           generateMnemonic: mockGenerateMnemonic,
           validateMnemonic: mockValidateMnemonic,
           resetVault: vi.fn(),

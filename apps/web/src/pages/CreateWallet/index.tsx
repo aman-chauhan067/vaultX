@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Shield,
@@ -21,10 +21,13 @@ type CreateStage = 'intro' | 'backup' | 'confirm' | 'password';
 
 export default function CreateWallet() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const viewOnlyPhrase = location.state?.viewOnlyPhrase as string | undefined;
+
   const { createVault, createWallet } = useWallet();
-  const [stage, setStage] = useState<CreateStage>('intro');
-  const [mnemonic, setMnemonic] = useState('');
-  const [words, setWords] = useState<string[]>([]);
+  const [stage, setStage] = useState<CreateStage>(viewOnlyPhrase ? 'backup' : 'intro');
+  const [mnemonic, setMnemonic] = useState(viewOnlyPhrase || '');
+  const [words, setWords] = useState<string[]>(viewOnlyPhrase ? viewOnlyPhrase.split(' ') : []);
 
   // Confirm stage
   const [confirmIndices, setConfirmIndices] = useState<number[]>([]);
@@ -139,7 +142,7 @@ export default function CreateWallet() {
             color: '#56565C'
           }}
         >
-          Setup
+          {viewOnlyPhrase ? 'Recovery Phrase' : 'Setup'}
         </div>
       </motion.div>
 
@@ -282,29 +285,55 @@ export default function CreateWallet() {
                 ))}
               </div>
 
-              <div
-                onClick={startConfirm}
-                style={{
-                  alignSelf: 'flex-start',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '1rem',
-                  padding: '1.25rem 3rem',
-                  borderRadius: '100px',
-                  backgroundColor: '#ffffff',
-                  color: '#000000',
-                  cursor: 'pointer',
-                  fontSize: '0.875rem',
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.1em',
-                  fontWeight: 600,
-                  transition: 'transform 0.3s'
-                }}
-                onMouseOver={(e) => (e.currentTarget.style.transform = 'translateY(-2px)')}
-                onMouseOut={(e) => (e.currentTarget.style.transform = 'translateY(0)')}
-              >
-                I saved it <ArrowRight size={18} />
-              </div>
+              {viewOnlyPhrase ? (
+                <div
+                  onClick={() => navigate('/settings/profile')}
+                  style={{
+                    alignSelf: 'flex-start',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '1rem',
+                    padding: '1.25rem 3rem',
+                    borderRadius: '100px',
+                    backgroundColor: '#ffffff',
+                    color: '#000000',
+                    cursor: 'pointer',
+                    fontSize: '0.875rem',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.1em',
+                    fontWeight: 600,
+                    transition: 'transform 0.3s'
+                  }}
+                  onMouseOver={(e) => (e.currentTarget.style.transform = 'translateY(-2px)')}
+                  onMouseOut={(e) => (e.currentTarget.style.transform = 'translateY(0)')}
+                >
+                  Done
+                </div>
+              ) : (
+                <div
+                  onClick={startConfirm}
+                  style={{
+                    alignSelf: 'flex-start',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '1rem',
+                    padding: '1.25rem 3rem',
+                    borderRadius: '100px',
+                    backgroundColor: '#ffffff',
+                    color: '#000000',
+                    cursor: 'pointer',
+                    fontSize: '0.875rem',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.1em',
+                    fontWeight: 600,
+                    transition: 'transform 0.3s'
+                  }}
+                  onMouseOver={(e) => (e.currentTarget.style.transform = 'translateY(-2px)')}
+                  onMouseOut={(e) => (e.currentTarget.style.transform = 'translateY(0)')}
+                >
+                  Next: Confirm Backup <ArrowRight size={18} />
+                </div>
+              )}
             </motion.div>
           )}
 

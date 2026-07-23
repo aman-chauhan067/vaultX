@@ -67,6 +67,16 @@ export const VaultProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       if (isLocked || !activeWalletId) return [];
       const wallet = accountManager.getWallets()[activeWalletId];
       if (!wallet) return [];
+      if (wallet.metadata.hidden) {
+        return [
+          {
+            id: wallet.metadata.walletId,
+            address: '0x0000000000000000000000000000000000000000',
+            name: 'Hidden Account'
+          }
+        ] as SafeAccount[];
+      }
+
       return [
         {
           id: wallet.metadata.walletId,
@@ -185,6 +195,41 @@ export const VaultProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     [accountManager, queryClient]
   );
 
+  const hideWallet = useCallback(
+    async (walletId: string, hidden: boolean) => {
+      try {
+        await accountManager.hideWallet(walletId, hidden);
+        queryClient.invalidateQueries({ queryKey: ['wallets'] });
+        queryClient.invalidateQueries({ queryKey: ['accounts'] });
+      } catch (err) {
+        setError(err as Error);
+        throw err;
+      }
+    },
+    [accountManager, queryClient]
+  );
+
+  const removeWallet = useCallback(
+    async (walletId: string) => {
+      try {
+        await accountManager.removeWallet(walletId);
+        queryClient.invalidateQueries({ queryKey: ['wallets'] });
+        queryClient.invalidateQueries({ queryKey: ['accounts'] });
+      } catch (err) {
+        setError(err as Error);
+        throw err;
+      }
+    },
+    [accountManager, queryClient]
+  );
+
+  const verifyPassword = useCallback(
+    async (password: string) => {
+      return accountManager.verifyPassword(password);
+    },
+    [accountManager]
+  );
+
   const generateMnemonic = useCallback(
     (length: 12 | 24 = 12) => {
       return accountManager.generateMnemonic(length);
@@ -253,6 +298,9 @@ export const VaultProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         createWallet,
         deriveAccount,
         importWallet,
+        hideWallet,
+        removeWallet,
+        verifyPassword,
         generateMnemonic,
         validateMnemonic,
         pingSession,

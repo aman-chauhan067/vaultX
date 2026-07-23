@@ -1,13 +1,33 @@
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, User, Copy, Check, Plus, ExternalLink, X, Eye, EyeOff } from 'lucide-react';
+import {
+  ArrowLeft,
+  User,
+  Copy,
+  Check,
+  Plus,
+  ExternalLink,
+  X,
+  Eye,
+  EyeOff,
+  EyeOff as HideIcon,
+  Trash2
+} from 'lucide-react';
 import { useWallet, useSettings } from '../../hooks/index.js';
 import { BackButton } from '../../components/index.js';
 
 export function ProfilePage() {
   const navigate = useNavigate();
-  const { wallets, activeWalletId, setActiveWallet, deriveAccount } = useWallet();
+  const {
+    wallets,
+    activeWalletId,
+    setActiveWallet,
+    deriveAccount,
+    hideWallet,
+    removeWallet,
+    verifyPassword
+  } = useWallet();
   const { displayName, setDisplayName } = useSettings();
 
   const [localName, setLocalName] = useState(displayName);
@@ -17,9 +37,12 @@ export function ProfilePage() {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [password, setPassword] = useState('');
-  const [isCreating, setIsCreating] = useState(false);
-  const [showPhraseModal, setShowPhraseModal] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [pendingAction, setPendingAction] = useState<
+    'SWITCH' | 'CREATE' | 'HIDE' | 'DELETE' | null
+  >(null);
+  const [pendingWalletId, setPendingWalletId] = useState<string | null>(null);
 
   const formatAddress = (addr: string) => {
     if (!addr) return '0x0000...0000';
@@ -40,12 +63,36 @@ export function ProfilePage() {
     copyTimeoutRef.current = setTimeout(() => setCopiedId(null), 2000);
   };
 
-  const handleOpenModal = () => {
+  const handleOpenModalForCreate = () => {
+    setPendingAction('CREATE');
+    setPendingWalletId(null);
     setIsModalOpen(true);
     setPassword('');
   };
 
-  const handleConfirmCreate = async () => {
+  const handleOpenModalForSwitch = (walletId: string) => {
+    if (walletId === activeWalletId) return;
+    setPendingAction('SWITCH');
+    setPendingWalletId(walletId);
+    setIsModalOpen(true);
+    setPassword('');
+  };
+
+  const handleOpenModalForHide = (walletId: string) => {
+    setPendingAction('HIDE');
+    setPendingWalletId(walletId);
+    setIsModalOpen(true);
+    setPassword('');
+  };
+
+  const handleOpenModalForDelete = (walletId: string) => {
+    setPendingAction('DELETE');
+    setPendingWalletId(walletId);
+    setIsModalOpen(true);
+    setPassword('');
+  };
+
+  const handlePasswordConfirm = async () => {
     if (!password) {
       const evt = new CustomEvent('toast', {
         detail: { type: 'error', message: 'Password required' }
@@ -54,25 +101,51 @@ export function ProfilePage() {
       return;
     }
     try {
-      setIsCreating(true);
-      await deriveAccount(`Account ${wallets.length + 1}`);
-      const evt = new CustomEvent('toast', {
-        detail: { type: 'success', message: 'New account created successfully' }
-      });
-      window.dispatchEvent(evt);
-      setIsModalOpen(false);
-      setShowPhraseModal(true);
+      setIsProcessing(true);
+
+      const isValid = await verifyPassword(password);
+      if (!isValid) {
+        throw new Error('Incorrect password');
+      }
+
+      if (pendingAction === 'SWITCH' && pendingWalletId) {
+        setActiveWallet(pendingWalletId);
+        setIsModalOpen(false);
+      } else if (pendingAction === 'CREATE') {
+        await deriveAccount(`Account ${wallets.length + 1}`);
+        const evt = new CustomEvent('toast', {
+          detail: { type: 'success', message: 'New account created successfully' }
+        });
+        window.dispatchEvent(evt);
+        setIsModalOpen(false);
+        const phrase = wallets.find((w) => w.mnemonic)?.mnemonic || '';
+        navigate('/create-wallet', { state: { viewOnlyPhrase: phrase } });
+      } else if (pendingAction === 'HIDE' && pendingWalletId) {
+        await hideWallet(pendingWalletId, true);
+        const evt = new CustomEvent('toast', {
+          detail: { type: 'success', message: 'Account hidden successfully' }
+        });
+        window.dispatchEvent(evt);
+        setIsModalOpen(false);
+      } else if (pendingAction === 'DELETE' && pendingWalletId) {
+        await removeWallet(pendingWalletId);
+        const evt = new CustomEvent('toast', {
+          detail: { type: 'success', message: 'Account deleted successfully' }
+        });
+        window.dispatchEvent(evt);
+        setIsModalOpen(false);
+      }
     } catch (e: any) {
       console.error(e);
       const evt = new CustomEvent('toast', {
         detail: {
           type: 'error',
-          message: e.message || 'Failed to create account. Incorrect password?'
+          message: e.message || 'Incorrect password?'
         }
       });
       window.dispatchEvent(evt);
     } finally {
-      setIsCreating(false);
+      setIsProcessing(false);
     }
   };
 
@@ -274,100 +347,145 @@ export function ProfilePage() {
                 overflow: 'hidden'
               }}
             >
-              {wallets.map((wallet, index) => {
-                const isActive = wallet.metadata.walletId === activeWalletId;
-                return (
-                  <div
-                    key={wallet.metadata.walletId}
-                    onClick={() => setActiveWallet(wallet.metadata.walletId)}
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      padding: '1.125rem 1.5rem',
-                      borderBottom:
-                        index < wallets.length - 1 ? '1px solid rgba(255, 255, 255, 0.04)' : 'none',
-                      cursor: 'pointer',
-                      background: isActive ? 'rgba(59, 130, 246, 0.05)' : 'transparent',
-                      transition: 'background 0.2s'
-                    }}
-                    onMouseOver={(e) => {
-                      if (!isActive) e.currentTarget.style.background = 'rgba(255, 255, 255, 0.02)';
-                    }}
-                    onMouseOut={(e) => {
-                      if (!isActive) e.currentTarget.style.background = 'transparent';
-                    }}
-                  >
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                      <div
-                        style={{
-                          width: 32,
-                          height: 32,
-                          borderRadius: '50%',
-                          background: 'linear-gradient(135deg, #34C759, #3B82F6)',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          fontSize: '0.8rem',
-                          fontWeight: 600
-                        }}
-                      >
-                        {wallet.metadata.walletName?.charAt(0) || `A${index + 1}`}
-                      </div>
-                      <div style={{ display: 'flex', flexDirection: 'column' }}>
-                        <span style={{ fontSize: '0.9rem', color: 'var(--color-text-primary)' }}>
-                          {wallet.metadata.walletName || `Account ${index + 1}`}
-                        </span>
-                        <span
-                          style={{
-                            fontSize: '0.75rem',
-                            color: '#8A8A93',
-                            fontFamily: 'var(--font-mono, monospace)'
-                          }}
-                        >
-                          {formatAddress(wallet.address)}
-                        </span>
-                      </div>
-                    </div>
+              {wallets
+                .filter((w) => !w.metadata.hidden)
+                .map((wallet, index, visibleWallets) => {
+                  const isActive = wallet.metadata.walletId === activeWalletId;
+                  const isImported = wallet.metadata.walletType === 'IMPORTED' || !wallet.mnemonic;
 
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleCopy(wallet.address, wallet.metadata.walletId);
-                        }}
-                        style={{
-                          background: 'none',
-                          border: 'none',
-                          color: copiedId === wallet.metadata.walletId ? '#34C759' : '#8A8A93',
-                          cursor: 'pointer',
-                          padding: '0.25rem'
-                        }}
-                      >
-                        {copiedId === wallet.metadata.walletId ? (
-                          <Check size={14} />
-                        ) : (
-                          <Copy size={14} />
-                        )}
-                      </button>
-                      {isActive && (
+                  return (
+                    <div
+                      key={wallet.metadata.walletId}
+                      onClick={() => handleOpenModalForSwitch(wallet.metadata.walletId)}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        padding: '1.125rem 1.5rem',
+                        borderBottom:
+                          index < visibleWallets.length - 1
+                            ? '1px solid rgba(255, 255, 255, 0.04)'
+                            : 'none',
+                        cursor: 'pointer',
+                        background: isActive ? 'rgba(59, 130, 246, 0.05)' : 'transparent',
+                        transition: 'background 0.2s'
+                      }}
+                      onMouseOver={(e) => {
+                        if (!isActive)
+                          e.currentTarget.style.background = 'rgba(255, 255, 255, 0.02)';
+                      }}
+                      onMouseOut={(e) => {
+                        if (!isActive) e.currentTarget.style.background = 'transparent';
+                      }}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                         <div
                           style={{
-                            width: 8,
-                            height: 8,
+                            width: 32,
+                            height: 32,
                             borderRadius: '50%',
-                            background: '#34C759'
+                            background: 'linear-gradient(135deg, #34C759, #3B82F6)',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            fontSize: '0.8rem',
+                            fontWeight: 600
                           }}
-                        />
-                      )}
+                        >
+                          {wallet.metadata.walletName?.charAt(0) || `A${index + 1}`}
+                        </div>
+                        <div style={{ display: 'flex', flexDirection: 'column' }}>
+                          <span style={{ fontSize: '0.9rem', color: 'var(--color-text-primary)' }}>
+                            {wallet.metadata.walletName || `Account ${index + 1}`}
+                          </span>
+                          <span
+                            style={{
+                              fontSize: '0.75rem',
+                              color: '#8A8A93',
+                              fontFamily: 'var(--font-mono, monospace)'
+                            }}
+                          >
+                            {formatAddress(wallet.address)}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleCopy(wallet.address, wallet.metadata.walletId);
+                          }}
+                          style={{
+                            background: 'none',
+                            border: 'none',
+                            color: copiedId === wallet.metadata.walletId ? '#34C759' : '#8A8A93',
+                            cursor: 'pointer',
+                            padding: '0.25rem'
+                          }}
+                          title="Copy Address"
+                        >
+                          {copiedId === wallet.metadata.walletId ? (
+                            <Check size={14} />
+                          ) : (
+                            <Copy size={14} />
+                          )}
+                        </button>
+
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleOpenModalForHide(wallet.metadata.walletId);
+                          }}
+                          style={{
+                            background: 'none',
+                            border: 'none',
+                            color: '#8A8A93',
+                            cursor: 'pointer',
+                            padding: '0.25rem'
+                          }}
+                          title="Hide Account"
+                        >
+                          <HideIcon size={14} />
+                        </button>
+
+                        {!isImported && (
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleOpenModalForDelete(wallet.metadata.walletId);
+                            }}
+                            style={{
+                              background: 'none',
+                              border: 'none',
+                              color: '#EF4444',
+                              cursor: 'pointer',
+                              padding: '0.25rem'
+                            }}
+                            title="Delete Account"
+                          >
+                            <Trash2 size={14} />
+                          </button>
+                        )}
+
+                        {isActive && (
+                          <div
+                            style={{
+                              width: 8,
+                              height: 8,
+                              borderRadius: '50%',
+                              background: '#34C759'
+                            }}
+                          />
+                        )}
+                      </div>
                     </div>
-                  </div>
-                );
-              })}
+                  );
+                })}
             </div>
 
             <button
-              onClick={handleOpenModal}
+              onClick={handleOpenModalForCreate}
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -455,8 +573,8 @@ export function ProfilePage() {
               left: 0,
               right: 0,
               bottom: 0,
-              backgroundColor: 'rgba(0,0,0,0.6)',
-              backdropFilter: 'blur(4px)',
+              backgroundColor: 'rgba(0,0,0,0.75)',
+              backdropFilter: 'blur(24px)',
               zIndex: 100,
               display: 'flex',
               alignItems: 'center',
@@ -465,86 +583,157 @@ export function ProfilePage() {
             }}
           >
             <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              transition={{ type: 'spring', damping: 25, stiffness: 300 }}
               style={{
-                background: '#18181b',
-                border: '1px solid rgba(255,255,255,0.1)',
-                borderRadius: '16px',
-                padding: '2rem',
+                background: 'rgba(24, 24, 27, 0.6)',
+                border: '1px solid rgba(255, 255, 255, 0.08)',
+                boxShadow: '0 32px 64px -16px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1)',
+                borderRadius: '24px',
+                padding: '2.5rem 2rem',
                 width: '100%',
-                maxWidth: '400px',
+                maxWidth: '420px',
                 display: 'flex',
                 flexDirection: 'column',
-                gap: '1.5rem'
+                gap: '2rem',
+                position: 'relative',
+                overflow: 'hidden'
               }}
             >
+              {/* Subtle background glow */}
               <div
-                style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
-              >
-                <h2 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 500 }}>
-                  Create New Account
-                </h2>
-                <button
-                  onClick={() => setIsModalOpen(false)}
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    color: '#8A8A93',
-                    cursor: 'pointer'
-                  }}
-                >
-                  <X size={20} />
-                </button>
-              </div>
+                style={{
+                  position: 'absolute',
+                  top: '-50%',
+                  left: '-50%',
+                  right: '-50%',
+                  bottom: '-50%',
+                  background:
+                    'radial-gradient(circle at top right, rgba(59, 130, 246, 0.15), transparent 50%)',
+                  pointerEvents: 'none'
+                }}
+              />
 
               <div
                 style={{
-                  background: 'rgba(59, 130, 246, 0.1)',
-                  border: '1px solid rgba(59, 130, 246, 0.2)',
-                  padding: '1rem',
-                  borderRadius: '8px'
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'flex-start',
+                  zIndex: 1
                 }}
               >
-                <p style={{ margin: 0, fontSize: '0.85rem', color: '#93C5FD', lineHeight: 1.5 }}>
-                  This will generate a new account address derived from your existing Secret
-                  Recovery Phrase. <strong>You do not need a new phrase.</strong>
-                </p>
+                <div>
+                  <h2
+                    style={{
+                      margin: 0,
+                      fontSize: '1.5rem',
+                      fontWeight: 300,
+                      letterSpacing: '-0.02em',
+                      color: '#ffffff'
+                    }}
+                  >
+                    {pendingAction === 'SWITCH'
+                      ? 'Switch Account'
+                      : pendingAction === 'HIDE'
+                        ? 'Hide Account'
+                        : pendingAction === 'DELETE'
+                          ? 'Delete Account'
+                          : 'Create Account'}
+                  </h2>
+                  <p style={{ margin: '0.5rem 0 0 0', fontSize: '0.9rem', color: '#8A8A93' }}>
+                    Enter your Vault password to authorize.
+                  </p>
+                </div>
+                <button
+                  onClick={() => setIsModalOpen(false)}
+                  style={{
+                    background: 'rgba(255,255,255,0.05)',
+                    border: 'none',
+                    color: '#8A8A93',
+                    cursor: 'pointer',
+                    width: '36px',
+                    height: '36px',
+                    borderRadius: '50%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    transition: 'all 0.2s'
+                  }}
+                  onMouseOver={(e) => {
+                    e.currentTarget.style.background = 'rgba(255,255,255,0.1)';
+                    e.currentTarget.style.color = '#ffffff';
+                  }}
+                  onMouseOut={(e) => {
+                    e.currentTarget.style.background = 'rgba(255,255,255,0.05)';
+                    e.currentTarget.style.color = '#8A8A93';
+                  }}
+                >
+                  <X size={18} />
+                </button>
               </div>
 
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                <label style={{ fontSize: '0.85rem', color: '#A1A1AA' }}>
-                  Enter Password to Confirm
-                </label>
+              {pendingAction === 'CREATE' && (
+                <div
+                  style={{
+                    background: 'rgba(59, 130, 246, 0.05)',
+                    borderLeft: '2px solid #3B82F6',
+                    padding: '1rem 1.25rem',
+                    borderRadius: '0 8px 8px 0',
+                    zIndex: 1
+                  }}
+                >
+                  <p style={{ margin: 0, fontSize: '0.85rem', color: '#93C5FD', lineHeight: 1.5 }}>
+                    This derives a new account from your existing Secret Recovery Phrase.
+                  </p>
+                </div>
+              )}
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', zIndex: 1 }}>
                 <div style={{ position: 'relative' }}>
                   <input
                     type={showPassword ? 'text' : 'password'}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
+                    placeholder="Password"
+                    autoFocus
                     style={{
                       width: '100%',
-                      background: 'rgba(255,255,255,0.05)',
-                      border: '1px solid rgba(255,255,255,0.1)',
-                      borderRadius: '8px',
-                      padding: '0.75rem 1rem',
+                      background: 'transparent',
+                      border: 'none',
+                      borderBottom: '1px solid rgba(255,255,255,0.2)',
+                      padding: '1rem 2.5rem 1rem 0',
                       color: 'white',
-                      fontSize: '1rem',
+                      fontSize: '1.25rem',
                       outline: 'none',
-                      boxSizing: 'border-box'
+                      boxSizing: 'border-box',
+                      transition: 'border-color 0.3s, box-shadow 0.3s',
+                      letterSpacing: password && !showPassword ? '0.2em' : 'normal',
+                      fontFamily: password && !showPassword ? 'var(--font-sans)' : 'inherit'
+                    }}
+                    onFocus={(e) => {
+                      e.currentTarget.style.borderBottomColor = '#ffffff';
+                    }}
+                    onBlur={(e) => {
+                      e.currentTarget.style.borderBottomColor = 'rgba(255,255,255,0.2)';
                     }}
                   />
                   <button
                     onClick={() => setShowPassword(!showPassword)}
                     style={{
                       position: 'absolute',
-                      right: '12px',
+                      right: '0',
                       top: '50%',
                       transform: 'translateY(-50%)',
                       background: 'none',
                       border: 'none',
                       color: '#8A8A93',
-                      cursor: 'pointer'
+                      cursor: 'pointer',
+                      padding: '0.5rem',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center'
                     }}
                   >
                     {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
@@ -552,176 +741,41 @@ export function ProfilePage() {
                 </div>
               </div>
 
-              <div style={{ display: 'flex', gap: '1rem', marginTop: '0.5rem' }}>
+              <div style={{ display: 'flex', marginTop: '1rem', zIndex: 1 }}>
                 <button
-                  onClick={() => setIsModalOpen(false)}
+                  onClick={handlePasswordConfirm}
+                  disabled={isProcessing || !password}
                   style={{
-                    flex: 1,
-                    padding: '0.875rem',
-                    background: 'rgba(255,255,255,0.05)',
+                    width: '100%',
+                    padding: '1rem',
+                    background: isProcessing || !password ? 'rgba(255,255,255,0.05)' : '#ffffff',
                     border: 'none',
-                    borderRadius: '8px',
-                    color: 'white',
-                    fontWeight: 500,
-                    cursor: 'pointer'
-                  }}
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={handleConfirmCreate}
-                  disabled={isCreating || !password}
-                  style={{
-                    flex: 1,
-                    padding: '0.875rem',
-                    background: '#3B82F6',
-                    border: 'none',
-                    borderRadius: '8px',
-                    color: 'white',
+                    borderRadius: '100px',
+                    color: isProcessing || !password ? '#52525b' : '#000000',
+                    fontSize: '0.875rem',
                     fontWeight: 600,
-                    cursor: isCreating || !password ? 'not-allowed' : 'pointer',
-                    opacity: isCreating || !password ? 0.5 : 1
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.1em',
+                    cursor: isProcessing || !password ? 'not-allowed' : 'pointer',
+                    transition: 'all 0.3s',
+                    transform: isProcessing || !password ? 'none' : 'translateY(0)',
+                    boxShadow:
+                      isProcessing || !password
+                        ? 'none'
+                        : '0 10px 25px -5px rgba(255, 255, 255, 0.2)'
+                  }}
+                  onMouseOver={(e) => {
+                    if (!isProcessing && password)
+                      e.currentTarget.style.transform = 'translateY(-2px)';
+                  }}
+                  onMouseOut={(e) => {
+                    if (!isProcessing && password)
+                      e.currentTarget.style.transform = 'translateY(0)';
                   }}
                 >
-                  {isCreating ? 'Creating...' : 'Confirm'}
+                  {isProcessing ? 'Authorizing...' : 'Authorize'}
                 </button>
               </div>
-            </motion.div>
-          </div>
-        )}
-
-        {/* Phrase Modal */}
-        {showPhraseModal && (
-          <div
-            style={{
-              position: 'fixed',
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              backgroundColor: 'rgba(0,0,0,0.6)',
-              backdropFilter: 'blur(4px)',
-              zIndex: 100,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              padding: '1rem'
-            }}
-          >
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              style={{
-                background: '#18181b',
-                border: '1px solid rgba(255,255,255,0.1)',
-                borderRadius: '16px',
-                padding: '2rem',
-                width: '100%',
-                maxWidth: '450px',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '1.5rem'
-              }}
-            >
-              <div
-                style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
-              >
-                <h2 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 500 }}>
-                  Account Created!
-                </h2>
-                <button
-                  onClick={() => setShowPhraseModal(false)}
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    color: '#8A8A93',
-                    cursor: 'pointer'
-                  }}
-                >
-                  <X size={20} />
-                </button>
-              </div>
-
-              <p style={{ color: '#A1A1AA', fontSize: '0.95rem', lineHeight: 1.5, margin: 0 }}>
-                Your new account shares the exact same 12-word Secret Recovery Phrase as your main
-                wallet. Here is your phrase again for your records. Please save it securely.
-              </p>
-
-              <div
-                style={{
-                  background: 'rgba(0,0,0,0.3)',
-                  border: '1px solid rgba(255,255,255,0.05)',
-                  padding: '1rem',
-                  borderRadius: '12px',
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(3, 1fr)',
-                  gap: '0.75rem'
-                }}
-              >
-                {(wallets.find((w) => w.mnemonic)?.mnemonic?.phrase || '')
-                  .split(' ')
-                  .map((word, i) => (
-                    <div
-                      key={i}
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '0.5rem',
-                        background: 'rgba(255,255,255,0.05)',
-                        padding: '0.5rem',
-                        borderRadius: '6px'
-                      }}
-                    >
-                      <span style={{ color: '#8A8A93', fontSize: '0.75rem' }}>{i + 1}</span>
-                      <span style={{ color: 'white', fontSize: '0.9rem', fontWeight: 500 }}>
-                        {word}
-                      </span>
-                    </div>
-                  ))}
-              </div>
-
-              <button
-                onClick={() => {
-                  const phrase = wallets.find((w) => w.mnemonic)?.mnemonic?.phrase || '';
-                  navigator.clipboard.writeText(phrase);
-                  const evt = new CustomEvent('toast', {
-                    detail: { type: 'success', message: 'Phrase copied to clipboard' }
-                  });
-                  window.dispatchEvent(evt);
-                }}
-                style={{
-                  padding: '0.875rem',
-                  background: 'rgba(255,255,255,0.05)',
-                  border: '1px solid rgba(255,255,255,0.1)',
-                  borderRadius: '8px',
-                  color: 'white',
-                  fontWeight: 500,
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '0.5rem'
-                }}
-              >
-                <Copy size={16} />
-                Copy to Clipboard
-              </button>
-
-              <button
-                onClick={() => setShowPhraseModal(false)}
-                style={{
-                  padding: '0.875rem',
-                  background: '#3B82F6',
-                  border: 'none',
-                  borderRadius: '8px',
-                  color: 'white',
-                  fontWeight: 600,
-                  cursor: 'pointer'
-                }}
-              >
-                Done
-              </button>
             </motion.div>
           </div>
         )}

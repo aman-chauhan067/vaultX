@@ -440,6 +440,42 @@ export class AccountManager {
   }
 
   /**
+   * Hides or unhides a wallet.
+   */
+  public async hideWallet(walletId: string, hidden: boolean): Promise<void> {
+    this.ensureUnlocked();
+    this.keyring.hideWallet(walletId, hidden);
+    this.events.emit('WalletChanged', walletId);
+
+    if (this.session.password) {
+      await this.persistState(this.session.password);
+    }
+  }
+
+  /**
+   * Verifies the given password without throwing or mutating lockout state significantly if we just want a simple boolean check.
+   * However, for security, it is best to reuse the same logic or at least attempt a dummy decrypt/derive.
+   * We can simply check if the provided password matches `this.session.password` if unlocked.
+   */
+  public async verifyPassword(password: string): Promise<boolean> {
+    if (!this.session.isLocked && this.session.password) {
+      return this.session.password === password;
+    }
+    // Fallback if password is not in session for some reason, we can do a full check.
+    const rawData = await this.storage.getItem(STORAGE_KEY);
+    if (!rawData) return false;
+    try {
+      const encryptedVault: EncryptedVaultData = JSON.parse(rawData);
+      // We create a temporary keyring to test decryption
+      const tempKeyring = new KeyringController();
+      await tempKeyring.unlockVault(password, encryptedVault);
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  /**
    * Persists the current unlocked state back to storage by re-encrypting.
    */
   private async persistState(password: string): Promise<void> {

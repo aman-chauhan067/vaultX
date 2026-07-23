@@ -2,7 +2,7 @@ import React from 'react';
 import { BackButton } from '../../components/index.js';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ShieldCheck, Key, Smartphone, AlertTriangle } from 'lucide-react';
+import { ShieldCheck, Key, Smartphone, AlertTriangle, EyeOff } from 'lucide-react';
 import { useActiveWallet } from '../../hooks/index.js';
 
 export default function Security() {
@@ -151,6 +151,7 @@ export default function Security() {
                   display: 'flex',
                   alignItems: 'center',
                   padding: '1.5rem',
+                  borderBottom: '1px solid rgba(255,255,255,0.05)',
                   cursor: 'pointer',
                   transition: 'background 0.3s'
                 }}
@@ -175,6 +176,26 @@ export default function Security() {
                 >
                   Disabled
                 </span>
+              </div>
+
+              <div
+                onClick={() => navigate('/security/hidden-accounts')}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  padding: '1.5rem',
+                  cursor: 'pointer',
+                  transition: 'background 0.3s'
+                }}
+                onMouseOver={(e) =>
+                  (e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.02)')
+                }
+                onMouseOut={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
+              >
+                <EyeOff size={24} color="#8A8A93" style={{ marginRight: '1.5rem' }} />
+                <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
+                  <span style={{ fontSize: '1.125rem', fontWeight: 400 }}>Hidden Accounts</span>
+                </div>
               </div>
             </motion.div>
           </div>

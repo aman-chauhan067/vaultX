@@ -29,6 +29,9 @@ describe('CreateWallet Flow', () => {
     createWallet: vi.fn(),
     deriveAccount: vi.fn(),
     importWallet: vi.fn(),
+    hideWallet: vi.fn(),
+    removeWallet: vi.fn(),
+    verifyPassword: vi.fn(),
     validateMnemonic: vi.fn(),
     generateMnemonic: vi
       .fn()
