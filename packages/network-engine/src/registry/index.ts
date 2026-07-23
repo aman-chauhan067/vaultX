@@ -129,7 +129,12 @@ export const CHAIN_REGISTRY: Record<number, ChainConfig> = {
   56: {
     chainId: 56,
     name: 'BNB Smart Chain',
-    rpcUrls: ['https://bsc-dataseed.binance.org'],
+    rpcUrls: [
+      'https://bsc-rpc.publicnode.com',
+      'https://binance.llamarpc.com',
+      'https://rpc.ankr.com/bsc',
+      'https://bsc-dataseed.binance.org'
+    ],
     currency: { name: 'BNB', symbol: 'BNB', decimals: 18 },
     explorer: 'https://bscscan.com',
     icon: 'https://cryptologos.cc/logos/bnb-bnb-logo.svg',

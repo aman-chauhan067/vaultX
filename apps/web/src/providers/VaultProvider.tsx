@@ -199,6 +199,18 @@ export const VaultProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     async (walletId: string, hidden: boolean) => {
       try {
         await accountManager.hideWallet(walletId, hidden);
+
+        if (hidden && walletId === activeWalletId) {
+          const wallets = Object.values(accountManager.getWallets());
+          const visibleWallets = wallets.filter(
+            (w) => !w.metadata.hidden && w.metadata.walletId !== walletId
+          );
+          const fallbackWallet = visibleWallets[0];
+          if (fallbackWallet) {
+            setActiveWalletId(fallbackWallet.metadata.walletId);
+          }
+        }
+
         queryClient.invalidateQueries({ queryKey: ['wallets'] });
         queryClient.invalidateQueries({ queryKey: ['accounts'] });
       } catch (err) {
@@ -213,6 +225,18 @@ export const VaultProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     async (walletId: string) => {
       try {
         await accountManager.removeWallet(walletId);
+
+        if (walletId === activeWalletId) {
+          const wallets = Object.values(accountManager.getWallets());
+          const visibleWallets = wallets.filter(
+            (w) => !w.metadata.hidden && w.metadata.walletId !== walletId
+          );
+          const fallbackWallet = visibleWallets[0];
+          if (fallbackWallet) {
+            setActiveWalletId(fallbackWallet.metadata.walletId);
+          }
+        }
+
         queryClient.invalidateQueries({ queryKey: ['wallets'] });
         queryClient.invalidateQueries({ queryKey: ['accounts'] });
       } catch (err) {

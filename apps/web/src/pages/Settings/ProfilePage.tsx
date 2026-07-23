@@ -351,7 +351,7 @@ export function ProfilePage() {
                 .filter((w) => !w.metadata.hidden)
                 .map((wallet, index, visibleWallets) => {
                   const isActive = wallet.metadata.walletId === activeWalletId;
-                  const isImported = wallet.metadata.walletType === 'IMPORTED' || !wallet.mnemonic;
+                  const canDelete = index !== 0 && wallet.metadata.walletType !== 'IMPORTED';
 
                   return (
                     <div
@@ -449,7 +449,7 @@ export function ProfilePage() {
                           <HideIcon size={14} />
                         </button>
 
-                        {!isImported && (
+                        {canDelete && (
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
