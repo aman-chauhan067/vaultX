@@ -9,6 +9,7 @@ coverage/
 # Hardhat output
 artifacts/
 cache/
+!packages/*/src/cache/
 typechain-types/
 
 # Local environment files and secrets
