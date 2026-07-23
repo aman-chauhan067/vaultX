@@ -1,7 +1,7 @@
 /* MOBILE FIRST APPSHELL */
 .shell {
   display: flex;
-  flex-direction: column; /* Default for mobile/extension */
+  flex-direction: column-reverse; /* Sidebar at bottom on mobile */
   height: 100vh;
   width: 100vw;
   overflow: hidden;

@@ -1,0 +1,14 @@
+{
+  "project": "VaultX",
+  "version": "1.0.0",
+  "commit": "bd5ffca56d587039c9bd27b0a8d2803ad89dd666",
+  "buildTime": "2026-07-23T09:52:00Z",
+  "buildMachine": "antigravity-worker-win-10",
+  "pnpmVersion": "9.15.5",
+  "nodeVersion": "v20.18.0",
+  "viteVersion": "6.0.11",
+  "reactVersion": "19.0.0",
+  "gitTag": "v1.0.0",
+  "deploymentProvider": "Cloudflare Pages",
+  "extensionSha256": "4A0939F6949A43C7EDB29538ADF0EE809F370F8C7947BA81CF48EAB7F622E825"
+}

@@ -1,0 +1,16 @@
+{
+  "name": "VaultX",
+  "short_name": "VaultX",
+  "description": "A highly-secure, production-ready, multi-chain Web3 wallet.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#09111f",
+  "theme_color": "#09111f",
+  "icons": [
+    {
+      "src": "/logo.png",
+      "sizes": "1024x1024",
+      "type": "image/png"
+    }
+  ]
+}

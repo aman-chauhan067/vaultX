@@ -1,0 +1,12 @@
+/*
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'wasm-unsafe-eval' https://verify.walletconnect.com; connect-src 'self' wss://*.walletconnect.com wss://*.walletconnect.org https://*.infura.io https://*.alchemyapi.io; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https:;
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+
+/index.html
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable

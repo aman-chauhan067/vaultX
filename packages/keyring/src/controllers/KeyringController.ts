@@ -181,9 +181,16 @@ export class KeyringController {
     const plaintext = this.getSerializedState();
     const payload = await encryptData(plaintext, key);
 
-    const vaultId =
-      this.vaultId ||
-      (crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).substring(2));
+    let newVaultId = '';
+    if (typeof crypto !== 'undefined' && crypto.randomUUID) {
+      newVaultId = crypto.randomUUID();
+    } else {
+      const array = new Uint8Array(16);
+      crypto.getRandomValues(array);
+      newVaultId = Array.from(array, (byte) => byte.toString(16).padStart(2, '0')).join('');
+    }
+
+    const vaultId = this.vaultId || newVaultId;
 
     const encryptedVault: EncryptedVaultData = {
       vaultId,

@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { PageLayout } from '../../layout/index.js';
 import { Button, Card, Badge, Input, useToast } from '../../design-system/index.js';
-import { Globe, Plus, Search, CheckCircle2, XCircle, Clock } from 'lucide-react';
+import { Globe, Plus, Search, CheckCircle2, XCircle, Clock, Trash2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useNetwork } from '../../hooks/index.js';
 import { BackButton } from '../../components/index.js';

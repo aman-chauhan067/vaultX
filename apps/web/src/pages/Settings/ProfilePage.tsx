@@ -1,20 +1,19 @@
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, User, Copy, Lock, Check } from 'lucide-react';
-import { useActiveWallet, useSettings } from '../../hooks/index.js';
+import { ArrowLeft, User, Copy, Check, Plus, ExternalLink } from 'lucide-react';
+import { useWallet, useSettings } from '../../hooks/index.js';
 import { BackButton } from '../../components/index.js';
 
 export function ProfilePage() {
   const navigate = useNavigate();
-  const activeWallet = useActiveWallet();
+  const { wallets, activeWalletId, setActiveWallet, createWallet, generateMnemonic } = useWallet();
   const { displayName, setDisplayName } = useSettings();
+
   const [localName, setLocalName] = useState(displayName);
   const [isSaving, setIsSaving] = useState(false);
-  const [copied, setCopied] = useState(false);
+  const [copiedId, setCopiedId] = useState<string | null>(null);
   const copyTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-
-  const rawAddress = activeWallet?.address || '';
 
   const formatAddress = (addr: string) => {
     if (!addr) return '0x0000...0000';
@@ -22,12 +21,9 @@ export function ProfilePage() {
     return `${addr.slice(0, 6)}...${addr.slice(-4)}`;
   };
 
-  const displayAddress = formatAddress(rawAddress);
-
-  const handleCopy = () => {
-    const textToCopy = rawAddress || '0x0000...0000';
-    navigator.clipboard.writeText(textToCopy);
-    setCopied(true);
+  const handleCopy = (address: string, id: string) => {
+    navigator.clipboard.writeText(address);
+    setCopiedId(id);
 
     const evt = new CustomEvent('toast', {
       detail: { type: 'success', message: 'Wallet address copied to clipboard' }
@@ -35,7 +31,20 @@ export function ProfilePage() {
     window.dispatchEvent(evt);
 
     if (copyTimeoutRef.current) clearTimeout(copyTimeoutRef.current);
-    copyTimeoutRef.current = setTimeout(() => setCopied(false), 2000);
+    copyTimeoutRef.current = setTimeout(() => setCopiedId(null), 2000);
+  };
+
+  const handleCreateAccount = async () => {
+    try {
+      const mnemonic = generateMnemonic(12);
+      await createWallet(mnemonic, `Account ${wallets.length + 1}`);
+      const evt = new CustomEvent('toast', {
+        detail: { type: 'success', message: 'New account created successfully' }
+      });
+      window.dispatchEvent(evt);
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   return (
@@ -214,74 +223,9 @@ export function ProfilePage() {
                 />
               </div>
             </div>
-
-            {/* Wallet Address Input */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-              <label
-                style={{
-                  fontSize: '0.75rem',
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.1em',
-                  color: '#52525b'
-                }}
-              >
-                Wallet Address
-              </label>
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  background: 'rgba(255, 255, 255, 0.03)',
-                  border: '1px solid rgba(255, 255, 255, 0.08)',
-                  borderRadius: '12px',
-                  padding: '0.375rem 0.375rem 0.375rem 1rem',
-                  transition: 'border 0.3s'
-                }}
-              >
-                <span
-                  style={{
-                    flex: 1,
-                    color: 'var(--color-text-primary)',
-                    fontSize: '0.95rem',
-                    fontFamily: 'var(--font-mono, monospace)',
-                    whiteSpace: 'nowrap',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis'
-                  }}
-                >
-                  {displayAddress}
-                </span>
-                <button
-                  onClick={handleCopy}
-                  title="Copy address"
-                  style={{
-                    padding: '0.5rem',
-                    borderRadius: '8px',
-                    background: copied ? 'rgba(52, 199, 89, 0.15)' : 'rgba(255, 255, 255, 0.06)',
-                    border: 'none',
-                    color: copied ? '#34C759' : '#ffffff',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    transition: 'all 0.2s ease',
-                    flexShrink: 0
-                  }}
-                  onMouseOver={(e) => {
-                    if (!copied) e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
-                  }}
-                  onMouseOut={(e) => {
-                    if (!copied)
-                      e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.06)';
-                  }}
-                >
-                  {copied ? <Check size={16} /> : <Copy size={16} />}
-                </button>
-              </div>
-            </div>
           </div>
 
-          {/* 6. Section 'Account Type' */}
+          {/* Accounts List */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
             <span
               style={{
@@ -291,7 +235,7 @@ export function ProfilePage() {
                 color: '#52525b'
               }}
             >
-              Account Type
+              Connected Wallets
             </span>
             <div
               style={{
@@ -301,66 +245,127 @@ export function ProfilePage() {
                 overflow: 'hidden'
               }}
             >
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  padding: '1.125rem 1.5rem',
-                  borderBottom: '1px solid rgba(255, 255, 255, 0.04)'
-                }}
-              >
-                <span style={{ fontSize: '0.9rem', color: '#8A8A93' }}>Derivation Path</span>
-                <span
-                  style={{
-                    fontSize: '0.875rem',
-                    color: 'var(--color-text-primary)',
-                    fontFamily: 'var(--font-mono, monospace)'
-                  }}
-                >
-                  m/44'/60'/0'/0/0
-                </span>
-              </div>
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  padding: '1.125rem 1.5rem',
-                  borderBottom: '1px solid rgba(255, 255, 255, 0.04)'
-                }}
-              >
-                <span style={{ fontSize: '0.9rem', color: '#8A8A93' }}>Account Index</span>
-                <span
-                  style={{
-                    fontSize: '0.875rem',
-                    color: 'var(--color-text-primary)',
-                    fontFamily: 'var(--font-mono, monospace)'
-                  }}
-                >
-                  0
-                </span>
-              </div>
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  padding: '1.125rem 1.5rem'
-                }}
-              >
-                <span style={{ fontSize: '0.9rem', color: '#8A8A93' }}>Key Type</span>
-                <span
-                  style={{
-                    fontSize: '0.875rem',
-                    color: 'var(--color-text-primary)',
-                    fontFamily: 'var(--font-mono, monospace)'
-                  }}
-                >
-                  secp256k1
-                </span>
-              </div>
+              {wallets.map((wallet, index) => {
+                const isActive = wallet.metadata.walletId === activeWalletId;
+                return (
+                  <div
+                    key={wallet.metadata.walletId}
+                    onClick={() => setActiveWallet(wallet.metadata.walletId)}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      padding: '1.125rem 1.5rem',
+                      borderBottom:
+                        index < wallets.length - 1 ? '1px solid rgba(255, 255, 255, 0.04)' : 'none',
+                      cursor: 'pointer',
+                      background: isActive ? 'rgba(59, 130, 246, 0.05)' : 'transparent',
+                      transition: 'background 0.2s'
+                    }}
+                    onMouseOver={(e) => {
+                      if (!isActive) e.currentTarget.style.background = 'rgba(255, 255, 255, 0.02)';
+                    }}
+                    onMouseOut={(e) => {
+                      if (!isActive) e.currentTarget.style.background = 'transparent';
+                    }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                      <div
+                        style={{
+                          width: 32,
+                          height: 32,
+                          borderRadius: '50%',
+                          background: 'linear-gradient(135deg, #34C759, #3B82F6)',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          fontSize: '0.8rem',
+                          fontWeight: 600
+                        }}
+                      >
+                        {wallet.metadata.walletName?.charAt(0) || `A${index + 1}`}
+                      </div>
+                      <div style={{ display: 'flex', flexDirection: 'column' }}>
+                        <span style={{ fontSize: '0.9rem', color: 'var(--color-text-primary)' }}>
+                          {wallet.metadata.walletName || `Account ${index + 1}`}
+                        </span>
+                        <span
+                          style={{
+                            fontSize: '0.75rem',
+                            color: '#8A8A93',
+                            fontFamily: 'var(--font-mono, monospace)'
+                          }}
+                        >
+                          {formatAddress(wallet.address)}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleCopy(wallet.address, wallet.metadata.walletId);
+                        }}
+                        style={{
+                          background: 'none',
+                          border: 'none',
+                          color: copiedId === wallet.metadata.walletId ? '#34C759' : '#8A8A93',
+                          cursor: 'pointer',
+                          padding: '0.25rem'
+                        }}
+                      >
+                        {copiedId === wallet.metadata.walletId ? (
+                          <Check size={14} />
+                        ) : (
+                          <Copy size={14} />
+                        )}
+                      </button>
+                      {isActive && (
+                        <div
+                          style={{
+                            width: 8,
+                            height: 8,
+                            borderRadius: '50%',
+                            background: '#34C759'
+                          }}
+                        />
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
             </div>
+
+            <button
+              onClick={handleCreateAccount}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '0.5rem',
+                padding: '1rem',
+                marginTop: '0.5rem',
+                borderRadius: '12px',
+                background: 'rgba(255, 255, 255, 0.03)',
+                border: '1px dashed rgba(255, 255, 255, 0.15)',
+                color: 'var(--color-text-primary)',
+                fontSize: '0.875rem',
+                cursor: 'pointer',
+                transition: 'all 0.2s'
+              }}
+              onMouseOver={(e) => {
+                e.currentTarget.style.borderColor = 'rgba(59, 130, 246, 0.5)';
+                e.currentTarget.style.background = 'rgba(59, 130, 246, 0.05)';
+              }}
+              onMouseOut={(e) => {
+                e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.15)';
+                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.03)';
+              }}
+            >
+              <Plus size={16} />
+              Create New Account
+            </button>
           </div>
 
           {/* 7. 'Save Changes' button */}

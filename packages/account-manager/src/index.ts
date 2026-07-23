@@ -9,3 +9,4 @@ export * from './events/index.js';
 export * from './storage/index.js';
 export * from './controllers/AccountManager.js';
 export * from './controllers/AddressBookController.js';
+export * from './session/SessionClient.js';

@@ -163,7 +163,7 @@ const PhysicsFallingText = () => {
               y: cy,
               rotate: cr,
               fontFamily: 'CustomHelvetica, sans-serif',
-              fontSize: 'clamp(4rem, 8vw, 8rem)',
+              fontSize: 'clamp(2.5rem, 8vw, 8rem)',
               fontWeight: 500,
               color: '#FAFAFA',
               letterSpacing: '-0.05em',
@@ -186,7 +186,7 @@ const PhysicsFallingText = () => {
               y: ry,
               rotate: rr,
               fontFamily: 'CustomHelvetica, sans-serif',
-              fontSize: 'clamp(4rem, 8vw, 8rem)',
+              fontSize: 'clamp(2.5rem, 8vw, 8rem)',
               fontWeight: 500,
               color: '#FAFAFA',
               letterSpacing: '-0.05em',
@@ -209,7 +209,7 @@ const PhysicsFallingText = () => {
               y: ay,
               rotate: ar,
               fontFamily: 'CustomHelvetica, sans-serif',
-              fontSize: 'clamp(4rem, 8vw, 8rem)',
+              fontSize: 'clamp(2.5rem, 8vw, 8rem)',
               fontWeight: 500,
               color: '#FAFAFA',
               letterSpacing: '-0.05em',
@@ -355,7 +355,7 @@ const PhysicsUnbreakableText = () => {
           flexDirection: 'column',
           alignItems: 'center',
           fontFamily: 'CustomHelvetica, sans-serif',
-          fontSize: 'clamp(4rem, 8vw, 8rem)',
+          fontSize: 'clamp(2.5rem, 8vw, 8rem)',
           fontWeight: 500,
           color: '#FAFAFA',
           letterSpacing: '-0.05em',
@@ -366,7 +366,9 @@ const PhysicsUnbreakableText = () => {
           {text1.map((char, i) => (
             <motion.div
               key={`t1-${i}`}
-              ref={(el) => (charRefs.current[i] = el)}
+              ref={(el) => {
+                charRefs.current[i] = el;
+              }}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -383,7 +385,9 @@ const PhysicsUnbreakableText = () => {
           {text2.map((char, i) => (
             <motion.div
               key={`t2-${i}`}
-              ref={(el) => (charRefs.current[text1.length + i] = el)}
+              ref={(el) => {
+                charRefs.current[text1.length + i] = el;
+              }}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -416,6 +420,12 @@ const PhysicsUnbreakableText = () => {
 export default function Landing() {
   const navigate = useNavigate();
   const { hasVault } = useWallet();
+
+  useEffect(() => {
+    if (hasVault) {
+      navigate('/unlock', { replace: true });
+    }
+  }, [hasVault, navigate]);
 
   const handleStart = () => {
     if (hasVault) {
@@ -664,7 +674,7 @@ export default function Landing() {
               <motion.div
                 variants={itemVariants}
                 style={{
-                  fontSize: 'clamp(4rem, 8vw, 8rem)',
+                  fontSize: 'clamp(2.5rem, 8vw, 8rem)',
                   fontWeight: 500,
                   lineHeight: 1,
                   letterSpacing: '-0.04em',
@@ -871,7 +881,7 @@ export default function Landing() {
                   transition={{ duration: 0.8 }}
                   style={{
                     fontFamily: 'CustomHelvetica, sans-serif',
-                    fontSize: 'clamp(4rem, 8vw, 8rem)',
+                    fontSize: 'clamp(2.5rem, 8vw, 8rem)',
                     fontWeight: 500,
                     color: '#FAFAFA',
                     letterSpacing: '-0.04em',
@@ -957,7 +967,7 @@ export default function Landing() {
                 transition={{ duration: 0.8 }}
                 style={{
                   fontFamily: 'CustomHelvetica, sans-serif',
-                  fontSize: 'clamp(4rem, 8vw, 8rem)',
+                  fontSize: 'clamp(2.5rem, 8vw, 8rem)',
                   fontWeight: 500,
                   color: '#FAFAFA',
                   letterSpacing: '-0.05em',
@@ -1077,7 +1087,7 @@ export default function Landing() {
                   transition={{ duration: 0.8 }}
                   style={{
                     fontFamily: 'CustomHelvetica, sans-serif',
-                    fontSize: 'clamp(4rem, 8vw, 8rem)',
+                    fontSize: 'clamp(2.5rem, 8vw, 8rem)',
                     fontWeight: 500,
                     color: '#FAFAFA',
                     letterSpacing: '-0.05em',
@@ -1479,7 +1489,7 @@ export default function Landing() {
               transition={{ duration: 0.8 }}
               style={{
                 fontFamily: 'CustomHelvetica, sans-serif',
-                fontSize: 'clamp(4rem, 8vw, 8rem)',
+                fontSize: 'clamp(2.5rem, 8vw, 8rem)',
                 fontWeight: 500,
                 color: '#FAFAFA',
                 letterSpacing: '-0.05em',
@@ -1516,7 +1526,7 @@ export default function Landing() {
               transition={{ duration: 0.8 }}
               style={{
                 fontFamily: 'CustomHelvetica, sans-serif',
-                fontSize: 'clamp(4rem, 8vw, 8rem)',
+                fontSize: 'clamp(2.5rem, 8vw, 8rem)',
                 fontWeight: 500,
                 color: '#FAFAFA',
                 letterSpacing: '-0.05em',
@@ -1607,7 +1617,7 @@ export default function Landing() {
               transition={{ duration: 1 }}
               style={{
                 fontFamily: 'CustomHelvetica, sans-serif',
-                fontSize: 'clamp(4rem, 8vw, 8rem)',
+                fontSize: 'clamp(2.5rem, 8vw, 8rem)',
                 fontWeight: 500,
                 color: '#FAFAFA',
                 letterSpacing: '-0.05em',

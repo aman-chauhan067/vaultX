@@ -65,7 +65,7 @@ export function AnimatedNumber({
           currentStr += finalStr[i];
         } else {
           // Still scrambling - only replace digits, keep commas and dots intact so the width doesn't glitch wildly
-          const isDigit = /[0-9]/.test(finalStr[i]);
+          const isDigit = /[0-9]/.test(finalStr[i] || '');
           if (isDigit) {
             currentStr += Math.floor(Math.random() * 10);
           } else {

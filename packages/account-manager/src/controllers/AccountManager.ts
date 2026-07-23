@@ -9,6 +9,9 @@ import { generateMnemonic, validateMnemonic } from '@vaultx/wallet-engine';
 import { TypedEventEmitter } from '../events/index.js';
 import { SessionLockedError, StorageError } from '../errors/index.js';
 import type { SessionState, StorageInterface } from '../types/index.js';
+import { SessionClient } from '../session/SessionClient.js';
+import { SessionTransport } from '../session/SessionTransport.js';
+import { PollingTransport } from '../session/PollingTransport.js';
 
 const STORAGE_KEY = 'vaultx_encrypted_vault';
 const DEFAULT_AUTO_LOCK_MS = 5 * 60 * 1000; // 5 minutes
@@ -16,6 +19,9 @@ const DEFAULT_AUTO_LOCK_MS = 5 * 60 * 1000; // 5 minutes
 export class AccountManager {
   private keyring: KeyringController;
   private storage: StorageInterface;
+  private sessionClient: SessionClient;
+  private sessionTransport: SessionTransport;
+  private deviceId: string | null = null;
   public events: TypedEventEmitter;
 
   private session: SessionState & { password?: string } = {
@@ -32,6 +38,148 @@ export class AccountManager {
     this.storage = storage;
     this.keyring = new KeyringController();
     this.events = new TypedEventEmitter();
+    this.sessionClient = new SessionClient();
+    this.sessionTransport = new PollingTransport('http://localhost:3001');
+    this.initializeDevice().catch(console.error);
+  }
+
+  private async initializeDevice() {
+    let id: string | null = null;
+
+    // 1. Try IndexedDB first
+    try {
+      if (typeof window !== 'undefined' && window.indexedDB) {
+        id = await new Promise<string | null>((resolve, reject) => {
+          const request = window.indexedDB.open('vaultx_identity', 1);
+          request.onupgradeneeded = (e: any) => {
+            const db = e.target.result;
+            if (!db.objectStoreNames.contains('metadata')) {
+              db.createObjectStore('metadata');
+            }
+          };
+          request.onsuccess = (e: any) => {
+            const db = e.target.result;
+            const transaction = db.transaction(['metadata'], 'readonly');
+            const store = transaction.objectStore('metadata');
+            const getReq = store.get('device_id');
+            getReq.onsuccess = () => resolve(getReq.result || null);
+            getReq.onerror = () => resolve(null);
+          };
+          request.onerror = () => resolve(null);
+        });
+      }
+    } catch (e) {
+      console.warn('Failed to read deviceId from IndexedDB', e);
+    }
+
+    // 2. Fallback to LocalStorage
+    if (!id) {
+      id = await this.storage.getItem('vaultx_device_id');
+    }
+
+    // 3. Generate if not found
+    if (!id) {
+      id =
+        typeof crypto !== 'undefined' && crypto.randomUUID
+          ? crypto.randomUUID()
+          : Math.random().toString(36).substring(2, 15) +
+            Math.random().toString(36).substring(2, 15);
+
+      // Save to IndexedDB
+      try {
+        if (typeof window !== 'undefined' && window.indexedDB) {
+          await new Promise<void>((resolve) => {
+            const request = window.indexedDB.open('vaultx_identity', 1);
+            request.onsuccess = (e: any) => {
+              const db = e.target.result;
+              const transaction = db.transaction(['metadata'], 'readwrite');
+              const store = transaction.objectStore('metadata');
+              store.put(id, 'device_id');
+              transaction.oncomplete = () => resolve();
+            };
+          });
+        }
+      } catch (e) {
+        console.warn('Failed to write deviceId to IndexedDB', e);
+      }
+
+      // Save to LocalStorage as fallback
+      await this.storage.setItem('vaultx_device_id', id);
+    }
+
+    this.deviceId = id;
+  }
+
+  public getSessionClient(): SessionClient {
+    return this.sessionClient;
+  }
+
+  public getDeviceId(): string {
+    return this.deviceId || '';
+  }
+
+  public async wipe(): Promise<void> {
+    // 1. Stop polling and timers
+    this.sessionTransport.stop();
+    if (this.autoLockTimer) {
+      clearTimeout(this.autoLockTimer);
+      this.autoLockTimer = null;
+    }
+
+    // 2. Lock keyring and clear sensitive memory references
+    this.lock();
+    this.keyring = new KeyringController(); // re-initialize to drop memory
+
+    // 3. Clear Storage
+    await this.storage.removeItem(STORAGE_KEY);
+    await this.storage.removeItem('vaultx_device_id');
+
+    // Attempt to clear all browser storages if in browser environment
+    if (typeof window !== 'undefined') {
+      window.localStorage.clear();
+      window.sessionStorage.clear();
+
+      // Clear IndexedDB (WalletConnect and others)
+      try {
+        const dbs = await window.indexedDB.databases();
+        dbs.forEach((db) => {
+          if (db.name) window.indexedDB.deleteDatabase(db.name);
+        });
+      } catch (e) {
+        console.warn('Failed to clear IndexedDB', e);
+      }
+
+      // Clear Service Workers
+      if ('serviceWorker' in navigator) {
+        try {
+          const registrations = await navigator.serviceWorker.getRegistrations();
+          for (const registration of registrations) {
+            await registration.unregister();
+          }
+        } catch (e) {
+          console.warn('Failed to clear service workers', e);
+        }
+      }
+
+      // Clear caches
+      if ('caches' in window) {
+        try {
+          const keys = await caches.keys();
+          for (const key of keys) {
+            await caches.delete(key);
+          }
+        } catch (e) {
+          console.warn('Failed to clear caches', e);
+        }
+      }
+    }
+
+    // 4. Emit event so the app redirects to landing
+    this.events.emit('WalletLocked');
+    if (typeof window !== 'undefined') {
+      window.location.hash = '/';
+      window.location.reload();
+    }
   }
 
   public getKeyringController(): KeyringController {
@@ -89,6 +237,7 @@ export class AccountManager {
       clearTimeout(this.autoLockTimer);
       this.autoLockTimer = null;
     }
+    this.sessionTransport.stop();
     this.events.emit('WalletLocked');
   }
 
@@ -122,6 +271,31 @@ export class AccountManager {
     this.session.isLocked = false;
     this.session.password = password;
     this.pingSession();
+
+    // Register session with backend
+    if (this.deviceId && encryptedVault.vaultId) {
+      this.sessionClient
+        .registerSession({
+          deviceId: this.deviceId,
+          vaultId: encryptedVault.vaultId,
+          deviceName: `VaultX Device`,
+          browser: typeof navigator !== 'undefined' ? navigator.userAgent : 'Unknown',
+          browserVersion: 'Unknown',
+          operatingSystem: 'Unknown',
+          platform: 'Web',
+          appVersion: '1.0.0',
+          firstSeen: Date.now(),
+          lastSeen: Date.now(),
+          trustedDevice: false,
+          status: 'active'
+        })
+        .then(() => {
+          this.sessionTransport.start(this.deviceId!, () => {
+            this.wipe();
+          });
+        });
+    }
+
     this.events.emit('WalletUnlocked');
   }
 

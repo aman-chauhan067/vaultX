@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { BackButton } from '../../components/index.js';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Monitor, Smartphone, Shield, Clock, Lock } from 'lucide-react';
+import { Monitor, Smartphone, Shield, Clock, Lock, Trash2, X } from 'lucide-react';
 import { useSettings } from '../../hooks/index.js';
+import { VaultXService } from '../../services/VaultXService.js';
+import { SessionData } from '@vaultx/account-manager';
 
 export function DevicesPage() {
   const navigate = useNavigate();
@@ -26,6 +28,47 @@ export function DevicesPage() {
   };
 
   const browserInfo = getBrowserInfo();
+
+  const [sessions, setSessions] = React.useState<SessionData[]>([]);
+  const [loading, setLoading] = React.useState(true);
+  const [showRevokeModal, setShowRevokeModal] = React.useState<string | null>(null);
+
+  const accountManager = VaultXService.getInstance().accountManager;
+  const sessionClient = accountManager.getSessionClient();
+  const currentDeviceId = accountManager.getDeviceId();
+
+  const fetchSessions = useCallback(async () => {
+    try {
+      const activeWallet = accountManager.getActiveWallet();
+      if (!activeWallet) return;
+      const data = await sessionClient.getSessions(activeWallet.metadata.walletId);
+      setSessions(data.filter((s) => s.status === 'active'));
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setLoading(false);
+    }
+  }, [accountManager, sessionClient]);
+
+  React.useEffect(() => {
+    fetchSessions();
+    const interval = setInterval(fetchSessions, 10000); // refresh every 10s
+    return () => clearInterval(interval);
+  }, [fetchSessions]);
+
+  const handleRevoke = async (deviceId: string) => {
+    await sessionClient.revokeSession(deviceId);
+    setShowRevokeModal(null);
+    fetchSessions();
+  };
+
+  const handleRename = async (deviceId: string) => {
+    const newName = prompt('Enter a new name for this device:');
+    if (newName && newName.trim() !== '') {
+      await sessionClient.renameSession(deviceId, newName.trim());
+      fetchSessions();
+    }
+  };
 
   return (
     <div
@@ -173,7 +216,9 @@ export function DevicesPage() {
                         boxShadow: '0 0 8px rgba(52, 199, 89, 0.6)'
                       }}
                     />
-                    <span style={{ fontSize: '0.75rem', color: '#52525b' }}>Active now</span>
+                    <span style={{ fontSize: '0.75rem', color: '#52525b' }}>
+                      Active now • {currentDeviceId.slice(0, 8)}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -208,56 +253,140 @@ export function DevicesPage() {
               Other Sessions
             </span>
 
-            <div
-              style={{
-                padding: '3rem 1.5rem',
-                background: 'rgba(255,255,255,0.02)',
-                borderRadius: '16px',
-                border: '1px solid rgba(255,255,255,0.05)',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                textAlign: 'center',
-                gap: '1rem'
-              }}
-            >
-              <Smartphone size={56} color="#ffffff" style={{ opacity: 0.15 }} />
-              <div
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '0.5rem',
-                  maxWidth: '420px'
-                }}
-              >
-                <span
-                  style={{ fontSize: '1rem', fontWeight: 500, color: 'var(--color-text-primary)' }}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+              {loading ? (
+                <div style={{ padding: '2rem', textAlign: 'center', color: '#52525b' }}>
+                  Loading sessions...
+                </div>
+              ) : sessions.filter((s) => s.deviceId !== currentDeviceId).length === 0 ? (
+                <div
+                  style={{
+                    padding: '3rem 1.5rem',
+                    background: 'rgba(255,255,255,0.02)',
+                    borderRadius: '16px',
+                    border: '1px solid rgba(255,255,255,0.05)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    textAlign: 'center',
+                    gap: '1rem'
+                  }}
                 >
-                  No other sessions
-                </span>
-                <span style={{ fontSize: '0.85rem', color: '#52525b', lineHeight: 1.5 }}>
-                  When you access VaultX from additional browsers or the Chrome Extension, those
-                  sessions will appear here.
-                </span>
-              </div>
-              <div
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '0.375rem',
-                  marginTop: '0.5rem',
-                  padding: '0.375rem 0.75rem',
-                  background: 'rgba(255,255,255,0.03)',
-                  borderRadius: '8px',
-                  fontSize: '0.75rem',
-                  color: '#52525b',
-                  border: '1px solid rgba(255,255,255,0.04)'
-                }}
-              >
-                <Clock size={13} color="#52525b" />
-                Remote session revocation will be available in v1.2.
-              </div>
+                  <Smartphone size={56} color="#ffffff" style={{ opacity: 0.15 }} />
+                  <div
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: '0.5rem',
+                      maxWidth: '420px'
+                    }}
+                  >
+                    <span
+                      style={{
+                        fontSize: '1rem',
+                        fontWeight: 500,
+                        color: 'var(--color-text-primary)'
+                      }}
+                    >
+                      No other sessions
+                    </span>
+                    <span style={{ fontSize: '0.85rem', color: '#52525b', lineHeight: 1.5 }}>
+                      When you access VaultX from additional browsers, those sessions will appear
+                      here.
+                    </span>
+                  </div>
+                </div>
+              ) : (
+                sessions
+                  .filter((s) => s.deviceId !== currentDeviceId)
+                  .map((session) => (
+                    <div
+                      key={session.deviceId}
+                      style={{
+                        padding: '1.25rem 1.5rem',
+                        background: 'rgba(255,255,255,0.02)',
+                        borderRadius: '16px',
+                        border: '1px solid rgba(255,255,255,0.05)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        gap: '1rem'
+                      }}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                        <div
+                          style={{
+                            padding: '0.75rem',
+                            background: 'rgba(255,255,255,0.04)',
+                            borderRadius: '12px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center'
+                          }}
+                        >
+                          {session.platform === 'Web' ? (
+                            <Monitor size={22} color="#ffffff" />
+                          ) : (
+                            <Smartphone size={22} color="#ffffff" />
+                          )}
+                        </div>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+                          <span
+                            style={{
+                              fontSize: '1rem',
+                              fontWeight: 500,
+                              color: 'var(--color-text-primary)'
+                            }}
+                          >
+                            {session.deviceName || 'VaultX Device'}
+                          </span>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                            <span style={{ fontSize: '0.75rem', color: '#52525b' }}>
+                              {session.browser} · {session.platform} • Last seen:{' '}
+                              {session.lastSeen
+                                ? new Date(session.lastSeen).toLocaleString()
+                                : 'Unknown'}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div style={{ display: 'flex', gap: '0.5rem' }}>
+                        <button
+                          onClick={() => handleRename(session.deviceId)}
+                          style={{
+                            padding: '0.5rem 1rem',
+                            background: 'rgba(255,255,255,0.05)',
+                            border: 'none',
+                            color: 'var(--color-text-primary)',
+                            borderRadius: '8px',
+                            cursor: 'pointer',
+                            fontSize: '0.875rem',
+                            fontWeight: 500
+                          }}
+                        >
+                          Rename
+                        </button>
+                        <button
+                          onClick={() => setShowRevokeModal(session.deviceId)}
+                          style={{
+                            padding: '0.5rem 1rem',
+                            background: 'transparent',
+                            border: '1px solid #ef4444',
+                            color: '#ef4444',
+                            borderRadius: '8px',
+                            cursor: 'pointer',
+                            fontSize: '0.875rem',
+                            fontWeight: 500
+                          }}
+                        >
+                          Revoke
+                        </button>
+                      </div>
+                    </div>
+                  ))
+              )}
             </div>
           </div>
 
@@ -394,6 +523,73 @@ export function DevicesPage() {
           </div>
         </motion.div>
       </div>
+
+      {showRevokeModal && (
+        <div
+          style={{
+            position: 'fixed',
+            inset: 0,
+            background: 'rgba(0,0,0,0.8)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 100,
+            padding: '1rem'
+          }}
+        >
+          <div
+            style={{
+              background: 'var(--color-bg-primary)',
+              border: '1px solid var(--color-border-secondary)',
+              borderRadius: '16px',
+              padding: '2rem',
+              maxWidth: '400px',
+              width: '100%'
+            }}
+          >
+            <h3 style={{ margin: '0 0 1rem 0', fontSize: '1.25rem' }}>Revoke Device?</h3>
+            <p
+              style={{
+                color: '#a1a1aa',
+                fontSize: '0.875rem',
+                marginBottom: '2rem',
+                lineHeight: 1.5
+              }}
+            >
+              This will log out the device and wipe its local storage. You will need to re-import
+              your wallet on that device if you want to use it again.
+            </p>
+            <div style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end' }}>
+              <button
+                onClick={() => setShowRevokeModal(null)}
+                style={{
+                  padding: '0.75rem 1.5rem',
+                  background: 'transparent',
+                  color: '#ffffff',
+                  border: 'none',
+                  cursor: 'pointer'
+                }}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => handleRevoke(showRevokeModal)}
+                style={{
+                  padding: '0.75rem 1.5rem',
+                  background: '#ef4444',
+                  color: '#ffffff',
+                  border: 'none',
+                  borderRadius: '8px',
+                  cursor: 'pointer',
+                  fontWeight: 600
+                }}
+              >
+                Yes, Revoke
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

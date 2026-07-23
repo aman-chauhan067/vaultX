@@ -139,7 +139,7 @@ export default function Dashboard() {
           <div style={{ display: 'flex', alignItems: 'baseline', gap: '1rem' }}>
             <span
               style={{
-                fontSize: 'clamp(4rem, 12vw, 8rem)',
+                fontSize: 'clamp(2.5rem, 10vw, 6rem)',
                 fontWeight: 300,
                 lineHeight: 0.9,
                 letterSpacing: '-0.04em'
@@ -282,7 +282,13 @@ export default function Dashboard() {
         {/* Level 2: Quick Actions */}
         <motion.div
           variants={itemVariants}
-          style={{ display: 'flex', justifyContent: 'center', gap: '1rem', marginTop: '4rem' }}
+          style={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            justifyContent: 'center',
+            gap: '1rem',
+            marginTop: '4rem'
+          }}
         >
           <div
             onClick={() => navigate('/send')}

@@ -10,11 +10,19 @@ const comparisonData = [
   { feature: 'Network Lock-in', trad: 'Limited chains', vault: 'Any EVM chain' }
 ];
 
-function ExplodingText({ text, trigger, style }) {
+function ExplodingText({
+  text,
+  trigger,
+  style
+}: {
+  text: string;
+  trigger: boolean;
+  style?: React.CSSProperties;
+}) {
   const letters = text.split('');
   return (
     <div style={{ display: 'inline-flex', overflow: 'visible', ...style }}>
-      {letters.map((char, i) => {
+      {letters.map((char: string, i: number) => {
         const randX = (Math.random() - 0.5) * 200;
         const randY = Math.random() * 200 + 100;
         const randRot = (Math.random() - 0.5) * 360;
@@ -48,7 +56,17 @@ function ExplodingText({ text, trigger, style }) {
   );
 }
 
-function ComparisonRow({ row, index, startAnimation, isHeader = false }) {
+function ComparisonRow({
+  row,
+  index,
+  startAnimation,
+  isHeader = false
+}: {
+  row: { feature: string; trad: string; vault: string } | any;
+  index: number;
+  startAnimation: boolean;
+  isHeader?: boolean;
+}) {
   const [exploded, setExploded] = useState(false);
 
   useEffect(() => {
@@ -68,7 +86,6 @@ function ComparisonRow({ row, index, startAnimation, isHeader = false }) {
       style={{
         display: 'grid',
         gridTemplateColumns: '1fr 1fr',
-        borderBottom: index < 5 && !isHeader ? '1px solid rgba(255,255,255,0.06)' : 'none',
         position: 'relative',
         background: isHeader ? 'rgba(255,255,255,0.02)' : 'transparent',
         borderBottom: isHeader

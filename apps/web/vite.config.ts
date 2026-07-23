@@ -17,11 +17,23 @@ export default defineConfig({
     strictPort: true
   },
   build: {
+    sourcemap: false,
     rollupOptions: {
       output: {
         manualChunks: {
-          vendor: ['react', 'react-dom', 'react-router-dom', 'lucide-react', 'framer-motion'],
-          ethers: ['ethers']
+          react: ['react', 'react-dom', 'react-router-dom'],
+          ethers: ['ethers'],
+          animation: ['framer-motion', 'lottie-web'],
+          physics: ['matter-js'],
+          ui: ['lucide-react', 'qrcode.react'],
+          vaultx: [
+            '@vaultx/account-manager',
+            '@vaultx/blockchain-core',
+            '@vaultx/keyring',
+            '@vaultx/network-engine',
+            '@vaultx/transaction-engine',
+            '@vaultx/wallet-engine'
+          ]
         }
       }
     }

@@ -20,7 +20,12 @@ export const VaultProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     const init = async () => {
       const exists = await accountManager.hasExistingVault();
       setHasVault(exists);
-      setIsLocked(accountManager.getSessionState().isLocked);
+      const locked = accountManager.getSessionState().isLocked;
+      setIsLocked(locked);
+      if (!locked) {
+        const active = accountManager.getActiveWallet();
+        if (active) setActiveWalletId(active.metadata.walletId);
+      }
     };
     init();
 
@@ -32,6 +37,8 @@ export const VaultProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
     const handleUnlock = () => {
       setIsLocked(false);
+      const active = accountManager.getActiveWallet();
+      if (active) setActiveWalletId(active.metadata.walletId);
       queryClient.invalidateQueries({ queryKey: ['wallets'] });
       queryClient.invalidateQueries({ queryKey: ['accounts'] });
     };
