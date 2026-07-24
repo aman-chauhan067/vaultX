@@ -11,8 +11,8 @@ import {
   formatUnits
 } from '@vaultx/network-engine';
 import { VaultXService } from '../../services/VaultXService.js';
-import { ArrowLeft, ArrowRight, CheckCircle2, XCircle } from 'lucide-react';
-import { BackButton } from '../../components/index.js';
+import { ArrowLeft, ArrowRight, CheckCircle2, XCircle, QrCode } from 'lucide-react';
+import { BackButton, QRScannerModal } from '../../components/index.js';
 
 type WizardState = 'recipient' | 'amount' | 'review' | 'broadcasting' | 'success' | 'failed';
 
@@ -53,6 +53,7 @@ export default function Send() {
 
   const [error, setError] = useState<string | null>(null);
   const [txHash, setTxHash] = useState<string | null>(null);
+  const [showQRScanner, setShowQRScanner] = useState(false);
 
   const validateRecipient = () => {
     setError(null);
@@ -280,34 +281,62 @@ export default function Send() {
                 Destination
               </span>
 
-              <input
-                type="text"
-                value={recipient}
-                onChange={(e) => {
-                  setRecipient(e.target.value);
-                  setError(null);
-                }}
-                placeholder="0x..."
-                style={{
-                  width: '100%',
-                  background: 'transparent',
-                  border: 'none',
-                  borderBottom: error ? '1px solid #ef4444' : '1px solid rgba(255,255,255,0.2)',
-                  padding: '1rem 0',
-                  fontSize: 'clamp(2rem, 5vw, 4rem)',
-                  color: 'var(--color-text-primary)',
-                  outline: 'none',
-                  fontFamily: 'var(--font-mono)',
-                  textAlign: 'center',
-                  transition: 'border-color 0.3s'
-                }}
-                onFocus={(e) => {
-                  if (!error) e.currentTarget.style.borderBottomColor = 'var(--color-text-primary)';
-                }}
-                onBlur={(e) => {
-                  if (!error) e.currentTarget.style.borderBottomColor = 'rgba(255,255,255,0.2)';
-                }}
-              />
+              <div style={{ position: 'relative', width: '100%' }}>
+                <input
+                  type="text"
+                  value={recipient}
+                  onChange={(e) => {
+                    setRecipient(e.target.value);
+                    setError(null);
+                  }}
+                  placeholder="0x..."
+                  style={{
+                    width: '100%',
+                    background: 'transparent',
+                    border: 'none',
+                    borderBottom: error ? '1px solid #ef4444' : '1px solid rgba(255,255,255,0.2)',
+                    padding: '1rem 48px 1rem 0',
+                    fontSize: 'clamp(1.5rem, 4vw, 3rem)',
+                    color: 'var(--color-text-primary)',
+                    outline: 'none',
+                    fontFamily: 'var(--font-mono)',
+                    textAlign: 'center',
+                    transition: 'border-color 0.3s'
+                  }}
+                  onFocus={(e) => {
+                    if (!error)
+                      e.currentTarget.style.borderBottomColor = 'var(--color-text-primary)';
+                  }}
+                  onBlur={(e) => {
+                    if (!error) e.currentTarget.style.borderBottomColor = 'rgba(255,255,255,0.2)';
+                  }}
+                />
+                <button
+                  onClick={() => setShowQRScanner(true)}
+                  title="Scan QR Code"
+                  style={{
+                    position: 'absolute',
+                    right: 0,
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    background: 'rgba(255,255,255,0.1)',
+                    border: 'none',
+                    borderRadius: '50%',
+                    width: '48px',
+                    height: '48px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: 'var(--color-text-primary)',
+                    cursor: 'pointer',
+                    transition: 'background 0.2s'
+                  }}
+                  onMouseOver={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,0.2)')}
+                  onMouseOut={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,0.1)')}
+                >
+                  <QrCode size={24} />
+                </button>
+              </div>
 
               <div
                 style={{
@@ -773,6 +802,15 @@ export default function Send() {
           )}
         </AnimatePresence>
       </div>
+
+      <QRScannerModal
+        isOpen={showQRScanner}
+        onClose={() => setShowQRScanner(false)}
+        onScan={(scannedAddress) => {
+          setRecipient(scannedAddress);
+          setError(null);
+        }}
+      />
     </div>
   );
 }

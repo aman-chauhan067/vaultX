@@ -128,6 +128,7 @@ export default function Networks() {
         <div
           style={{
             display: 'flex',
+            flexWrap: 'wrap',
             gap: 'var(--space-4)',
             alignItems: 'center',
             background: 'var(--color-surface)',

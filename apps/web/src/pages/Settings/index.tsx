@@ -143,13 +143,14 @@ export default function Settings() {
                 >
                   A
                 </div>
-                <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
+                <div style={{ display: 'flex', flexDirection: 'column', flex: 1, minWidth: 0 }}>
                   <span style={{ fontSize: '1.25rem', fontWeight: 400 }}>{displayName}</span>
                   <span
                     style={{
                       fontSize: '0.875rem',
                       color: 'var(--color-text-secondary)',
-                      fontFamily: 'var(--font-mono)'
+                      fontFamily: 'var(--font-mono)',
+                      wordBreak: 'break-all'
                     }}
                   >
                     {activeWallet?.address || 'Not connected'}
