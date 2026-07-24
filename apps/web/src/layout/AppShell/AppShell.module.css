@@ -2,7 +2,7 @@
 .shell {
   display: flex;
   flex-direction: column-reverse; /* Sidebar at bottom on mobile */
-  height: 100vh;
+  height: 100dvh;
   width: 100vw;
   overflow: hidden;
   background: transparent;
@@ -13,6 +13,7 @@
   flex-direction: column;
   flex: 1;
   min-width: 0;
+  min-height: 0;
   position: relative;
 }
 
