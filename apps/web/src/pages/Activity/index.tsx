@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BackButton } from '../../components/index.js';
 import { useTransactions, useNetwork, usePortfolio, useActiveWallet } from '../../hooks/index.js';
 import { VaultXService } from '../../services/VaultXService.js';
 import { formatUnits, formatEther } from '@vaultx/network-engine';
 import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowUpRight, ArrowDownLeft } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
@@ -17,6 +17,8 @@ export default function Activity() {
   const activeWallet = useActiveWallet();
   const navigate = useNavigate();
 
+  const [filterMode, setFilterMode] = useState<'current' | 'all'>('current');
+
   const shortenAddress = (addr: string) => {
     if (!addr) return '';
     return `${addr.slice(0, 6)}...${addr.slice(-4)}`;
@@ -28,7 +30,17 @@ export default function Activity() {
     return num.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 18 });
   };
 
-  const allEmpty = pendingTransactions.length === 0 && history.length === 0;
+  const filteredPending =
+    filterMode === 'current'
+      ? pendingTransactions.filter((tx) => tx.request.chainId === activeChainId)
+      : pendingTransactions;
+
+  const filteredHistory =
+    filterMode === 'current'
+      ? history.filter((tx) => tx.request.chainId === activeChainId)
+      : history;
+
+  const allEmpty = filteredPending.length === 0 && filteredHistory.length === 0;
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -36,8 +48,8 @@ export default function Activity() {
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, x: -20 },
-    show: { opacity: 1, x: 0, transition: { duration: 0.5 } }
+    hidden: { opacity: 0, y: 10 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.4 } }
   };
 
   return (
@@ -51,7 +63,6 @@ export default function Activity() {
         flexDirection: 'column'
       }}
     >
-      {/* Top Nav - Level 4 Metadata */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -77,27 +88,79 @@ export default function Activity() {
         </span>
       </motion.div>
 
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', marginTop: '10vh' }}>
-        {/* Level 1: Context Header (The Timeline) */}
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', marginTop: '6vh' }}>
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8 }}
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'flex-end',
+            marginBottom: '4rem',
+            flexWrap: 'wrap',
+            gap: '2rem'
+          }}
         >
           <div
             style={{
-              fontSize: 'clamp(3rem, 8vw, 5rem)',
-              fontWeight: 300,
+              fontSize: 'clamp(2rem, 5vw, 3.5rem)',
+              fontWeight: 400,
               lineHeight: 1,
-              letterSpacing: '-0.02em',
-              marginBottom: '6rem'
+              letterSpacing: '-0.02em'
             }}
           >
             {t('activity.title')}
           </div>
+
+          <div
+            style={{
+              display: 'flex',
+              background: 'var(--glass-overlay-light)',
+              padding: '4px',
+              borderRadius: '100px',
+              border: '1px solid var(--glass-border-light)'
+            }}
+          >
+            <button
+              onClick={() => setFilterMode('current')}
+              style={{
+                padding: '8px 16px',
+                borderRadius: '100px',
+                background: filterMode === 'current' ? 'var(--color-text-primary)' : 'transparent',
+                color:
+                  filterMode === 'current'
+                    ? 'var(--color-bg-primary)'
+                    : 'var(--color-text-secondary)',
+                border: 'none',
+                cursor: 'pointer',
+                fontSize: '0.75rem',
+                fontWeight: 500,
+                transition: 'all 0.3s ease'
+              }}
+            >
+              Current Network
+            </button>
+            <button
+              onClick={() => setFilterMode('all')}
+              style={{
+                padding: '8px 16px',
+                borderRadius: '100px',
+                background: filterMode === 'all' ? 'var(--color-text-primary)' : 'transparent',
+                color:
+                  filterMode === 'all' ? 'var(--color-bg-primary)' : 'var(--color-text-secondary)',
+                border: 'none',
+                cursor: 'pointer',
+                fontSize: '0.75rem',
+                fontWeight: 500,
+                transition: 'all 0.3s ease'
+              }}
+            >
+              All Networks
+            </button>
+          </div>
         </motion.div>
 
-        {/* Level 2: The Timeline Data (No Cards) */}
         <motion.div
           variants={containerVariants}
           initial="hidden"
@@ -122,12 +185,12 @@ export default function Activity() {
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                 <span
                   style={{
-                    fontSize: '1.5rem',
-                    fontWeight: 300,
+                    fontSize: '1.25rem',
+                    fontWeight: 400,
                     color: 'var(--color-text-primary)'
                   }}
                 >
-                  No activity yet
+                  No activity found
                 </span>
                 <span
                   style={{
@@ -136,7 +199,9 @@ export default function Activity() {
                     maxWidth: '320px'
                   }}
                 >
-                  Once you send or receive your first transaction, it will appear here.
+                  {filterMode === 'current'
+                    ? `You have no recent transactions on ${activeNetwork?.name}.`
+                    : 'Once you send or receive your first transaction, it will appear here.'}
                 </span>
               </div>
               <div
@@ -161,7 +226,10 @@ export default function Activity() {
             </motion.div>
           ) : (
             <>
-              {pendingTransactions.map((tx, i) => {
+              {filteredPending.map((tx, i) => {
+                const txChainId = tx.request.chainId;
+                const txNetwork =
+                  supportedNetworks.find((n) => n.chainId === txChainId) || activeNetwork;
                 const decoded = VaultXService.getInstance().assetManager.parseTransferData(
                   tx.request.data || '0x'
                 );
@@ -173,7 +241,7 @@ export default function Activity() {
                   : null;
                 const symbol = isERC20
                   ? tokenInfo?.symbol || 'ERC20'
-                  : activeNetwork?.currency.symbol || 'ETH';
+                  : txNetwork?.currency.symbol || 'ETH';
                 const amount = isERC20
                   ? tokenInfo
                     ? formatUnits(decoded.amount, tokenInfo.decimals)
@@ -187,9 +255,6 @@ export default function Activity() {
                     key={`pending-${tx.hash || i}`}
                     variants={itemVariants}
                     onClick={() => {
-                      const txChainId = tx.request.chainId;
-                      const txNetwork =
-                        supportedNetworks.find((n) => n.chainId === txChainId) || activeNetwork;
                       if (tx.hash && txNetwork?.explorer) {
                         window.open(`${txNetwork.explorer}/tx/${tx.hash}`, '_blank');
                       }
@@ -254,7 +319,10 @@ export default function Activity() {
                 );
               })}
 
-              {history.map((tx, i) => {
+              {filteredHistory.map((tx, i) => {
+                const txChainId = tx.request.chainId;
+                const txNetwork =
+                  supportedNetworks.find((n) => n.chainId === txChainId) || activeNetwork;
                 const decoded = VaultXService.getInstance().assetManager.parseTransferData(
                   tx.request.data || '0x'
                 );
@@ -266,7 +334,7 @@ export default function Activity() {
                   : null;
                 const symbol = isERC20
                   ? tokenInfo?.symbol || 'ERC20'
-                  : activeNetwork?.currency.symbol || 'ETH';
+                  : txNetwork?.currency.symbol || 'ETH';
                 const amount = isERC20
                   ? tokenInfo
                     ? formatUnits(decoded.amount, tokenInfo.decimals)

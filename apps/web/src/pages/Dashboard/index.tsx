@@ -1,12 +1,13 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useActiveWallet, useNetwork, useTransactions, usePortfolio } from '../../hooks/index.js';
-import { formatUnits } from '@vaultx/network-engine';
+import { formatUnits, formatEther } from '@vaultx/network-engine';
 import { useNetworkStats } from '../../hooks/useNetworkStats.js';
 import { useNavigate } from 'react-router-dom';
 import { ArrowUpRight, ArrowDownLeft } from 'lucide-react';
 import { AnimatedNumber } from '../../components/AnimatedNumber.js';
 import { useTranslation } from 'react-i18next';
+import { VaultXService } from '../../services/VaultXService.js';
 
 export default function Dashboard() {
   const activeWallet = useActiveWallet();
@@ -19,13 +20,10 @@ export default function Dashboard() {
 
   const activeNetwork = supportedNetworks.find((n) => n.chainId === activeChainId);
 
-  const formatBalance = (bal: string) => {
-    const num = parseFloat(bal);
-    if (isNaN(num)) return '0.00';
-    return num.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 6 });
-  };
-
-  const recentTxs = [...pendingTransactions, ...history].slice(0, 3);
+  const allTxs = [...pendingTransactions, ...history]
+    .filter((tx) => tx.request.chainId === activeChainId)
+    .sort((a, b) => b.timestamp - a.timestamp);
+  const recentTxs = allTxs.slice(0, 3);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -231,7 +229,7 @@ export default function Dashboard() {
                 >
                   <span
                     style={{
-                      fontSize: '1.75rem',
+                      fontSize: 'clamp(1.5rem, 3vw, 2.5rem)',
                       fontWeight: 300,
                       color: 'var(--color-text-primary)'
                     }}
@@ -240,31 +238,32 @@ export default function Dashboard() {
                     {portfolio?.ethPrice?.toLocaleString(undefined, {
                       minimumFractionDigits: 2,
                       maximumFractionDigits: 2
-                    }) || '---'}
+                    }) || '0.00'}
                   </span>
-                  <span
+                  <div
                     style={{
-                      fontSize: '0.875rem',
-                      color:
-                        (portfolio?.ethPriceChange24h || 0) >= 0
-                          ? 'var(--color-success)'
-                          : 'var(--color-danger)',
                       display: 'flex',
                       alignItems: 'center',
                       gap: '0.25rem',
+                      padding: '0.25rem 0.75rem',
+                      borderRadius: '100px',
                       backgroundColor:
                         (portfolio?.ethPriceChange24h || 0) >= 0
                           ? 'var(--color-success-bg)'
                           : 'var(--color-danger-bg)',
-                      padding: '0.25rem 0.5rem',
-                      borderRadius: '6px'
+                      color:
+                        (portfolio?.ethPriceChange24h || 0) >= 0
+                          ? 'var(--color-success)'
+                          : 'var(--color-danger)',
+                      fontSize: '0.875rem',
+                      fontWeight: 500
                     }}
                   >
                     {(portfolio?.ethPriceChange24h || 0) >= 0 ? '▲' : '▼'}
                     {portfolio?.ethPriceChange24h
                       ? `${portfolio.ethPriceChange24h > 0 ? '+' : ''}${portfolio.ethPriceChange24h.toFixed(2)}%`
                       : '0.00%'}
-                  </span>
+                  </div>
                 </div>
                 {portfolio?.lastUpdated && (
                   <div
@@ -277,24 +276,32 @@ export default function Dashboard() {
                       gap: '0.25rem'
                     }}
                   >
-                    <div
-                      style={{
-                        width: 6,
-                        height: 6,
-                        borderRadius: '50%',
-                        backgroundColor: 'var(--color-success)'
-                      }}
-                    />
+                    <span style={{ color: 'var(--color-success)', marginRight: '4px' }}>●</span>
                     Last Updated:{' '}
                     {Math.max(0, Math.floor((Date.now() - portfolio.lastUpdated) / 1000))} sec ago
                   </div>
                 )}
               </>
             )}
+
+            <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>
+              {activeNetwork?.isTestnet ? (
+                'Market Price: Not Available'
+              ) : (
+                <>
+                  <span style={{ color: 'var(--color-success)', marginRight: '4px' }}>●</span>
+                  {portfolio?.lastUpdated && (
+                    <span>
+                      Last Updated:{' '}
+                      {Math.max(0, Math.floor((Date.now() - portfolio.lastUpdated) / 1000))} sec ago
+                    </span>
+                  )}
+                </>
+              )}
+            </div>
           </div>
         </motion.div>
 
-        {/* Level 2: Quick Actions */}
         <motion.div
           variants={itemVariants}
           style={{
@@ -355,7 +362,6 @@ export default function Dashboard() {
           </div>
         </motion.div>
 
-        {/* Level 3: Recent Activity (Raw Information, No Containers) */}
         <motion.div
           variants={itemVariants}
           style={{ marginTop: 'auto', paddingBottom: '4rem', paddingTop: '10vh' }}
@@ -370,9 +376,7 @@ export default function Dashboard() {
               marginBottom: '2rem'
             }}
           >
-            <h3 style={{ fontSize: '1.25rem', margin: 0, fontWeight: 500 }}>
-              {t('dashboard.portfolio')}
-            </h3>
+            <h3 style={{ fontSize: '1.25rem', margin: 0, fontWeight: 500 }}>Recent Transactions</h3>
             <span
               onClick={() => navigate('/activity')}
               style={{
@@ -411,7 +415,7 @@ export default function Dashboard() {
                       padding: '2rem 0'
                     }}
                   >
-                    {t('dashboard.no_transactions')}
+                    No recent transactions on {activeNetwork?.name}.
                   </div>
                 </div>
                 <span
@@ -443,18 +447,70 @@ export default function Dashboard() {
                 const isSend =
                   tx.request?.from?.toLowerCase() === activeWallet?.address?.toLowerCase();
 
+                const decoded = VaultXService.getInstance().assetManager.parseTransferData(
+                  tx.request.data || '0x'
+                );
+                const isERC20 = decoded !== null;
+                const tokenInfo = isERC20
+                  ? portfolio?.tokens.find(
+                      (t) => t.address.toLowerCase() === tx.request.to?.toLowerCase()
+                    )
+                  : null;
+                const symbol = isERC20
+                  ? tokenInfo?.symbol || 'ERC20'
+                  : activeNetwork?.currency.symbol || 'ETH';
+
+                const formatBalance = (bal: string) => {
+                  const num = parseFloat(bal);
+                  if (isNaN(num)) return '0.00';
+                  return num.toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 18
+                  });
+                };
+
+                const amount = isERC20
+                  ? tokenInfo
+                    ? formatUnits(decoded.amount, tokenInfo.decimals)
+                    : decoded.amount
+                  : tx.request.value
+                    ? formatBalance(formatEther(tx.request.value))
+                    : '0.0';
+
                 return (
                   <div
                     key={i}
+                    onClick={() => {
+                      if (tx.hash && activeNetwork?.explorer) {
+                        window.open(`${activeNetwork.explorer}/tx/${tx.hash}`, '_blank');
+                      } else if (tx.receipt?.transactionHash && activeNetwork?.explorer) {
+                        window.open(
+                          `${activeNetwork.explorer}/tx/${tx.receipt.transactionHash}`,
+                          '_blank'
+                        );
+                      }
+                    }}
                     style={{
                       display: 'flex',
                       justifyContent: 'space-between',
                       alignItems: 'center',
-                      padding: '1.5rem 0',
-                      borderBottom: '1px solid var(--glass-border-light)'
+                      padding: '1.5rem 1.5rem',
+                      margin: '0 -1.5rem',
+                      borderBottom: '1px solid var(--glass-border-light)',
+                      borderRadius: '16px',
+                      cursor: 'pointer',
+                      transition: 'all 0.3s ease'
+                    }}
+                    onMouseOver={(e) => {
+                      e.currentTarget.style.backgroundColor = 'var(--color-surface)';
+                      e.currentTarget.style.borderColor = 'transparent';
+                    }}
+                    onMouseOut={(e) => {
+                      e.currentTarget.style.backgroundColor = 'transparent';
+                      e.currentTarget.style.borderColor = 'var(--glass-border-light)';
                     }}
                   >
-                    <div style={{ display: 'flex', gap: '2rem', alignItems: 'center' }}>
+                    <div style={{ display: 'flex', gap: '2rem', alignItems: 'center', flex: 1 }}>
                       <span
                         style={{
                           fontSize: '0.75rem',
@@ -466,22 +522,43 @@ export default function Dashboard() {
                       >
                         {isPending ? 'Pending' : tx.receipt?.status === 1 ? 'Confirmed' : 'Failed'}
                       </span>
-                      <span style={{ fontSize: '1.25rem', fontWeight: 300 }}>
-                        {isSend ? 'Sent' : 'Received'} {activeNetwork?.currency.symbol}
+                      <span
+                        style={{
+                          fontSize: 'clamp(1.1rem, 2vw, 1.25rem)',
+                          fontWeight: 300,
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '0.5rem'
+                        }}
+                      >
+                        {isSend ? 'Sent' : 'Received'} {symbol}
+                        {isSend ? <ArrowUpRight size={16} /> : <ArrowDownLeft size={16} />}
                       </span>
                     </div>
                     <div
                       style={{
-                        fontFamily: 'var(--font-mono)',
-                        fontSize: '0.875rem',
-                        color: 'var(--color-text-muted)'
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'flex-end',
+                        gap: '0.25rem'
                       }}
                     >
-                      {tx.hash
-                        ? `${tx.hash.slice(0, 10)}...${tx.hash.slice(-8)}`
-                        : tx.receipt?.transactionHash
-                          ? `${tx.receipt.transactionHash.slice(0, 10)}...${tx.receipt.transactionHash.slice(-8)}`
-                          : ''}
+                      <span style={{ fontSize: 'clamp(1.1rem, 2vw, 1.25rem)', fontWeight: 400 }}>
+                        {amount}
+                      </span>
+                      <span
+                        style={{
+                          fontFamily: 'var(--font-mono)',
+                          fontSize: '0.75rem',
+                          color: 'var(--color-text-muted)'
+                        }}
+                      >
+                        {tx.hash
+                          ? `${tx.hash.slice(0, 10)}...${tx.hash.slice(-8)}`
+                          : tx.receipt?.transactionHash
+                            ? `${tx.receipt.transactionHash.slice(0, 10)}...${tx.receipt.transactionHash.slice(-8)}`
+                            : ''}
+                      </span>
                     </div>
                   </div>
                 );
