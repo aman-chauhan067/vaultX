@@ -23,6 +23,7 @@ export default function Networks() {
   const [searchQuery, setSearchQuery] = useState('');
   const [filterType, setFilterType] = useState<'All' | 'Mainnets' | 'Testnets' | 'Custom'>('All');
   const [switchingChainId, setSwitchingChainId] = useState<number | null>(null);
+  const [scrollTop, setScrollTop] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const [rpcStatus, setRpcStatus] = useState<
@@ -76,9 +77,8 @@ export default function Networks() {
     const net = supportedNetworks.find((n) => n.chainId === chainId);
     try {
       await switchNetwork(chainId);
-      if (scrollRef.current) {
-        scrollRef.current.scrollTo({ top: 0, behavior: 'smooth' });
-      }
+      if (scrollRef.current) scrollRef.current.scrollTop = 0;
+      setScrollTop(0);
       showToast({ title: `Network switched to ${net?.name || chainId}`, type: 'success' });
     } catch {
       showToast({
@@ -244,6 +244,7 @@ export default function Networks() {
 
         <div
           ref={scrollRef}
+          onScroll={(e) => setScrollTop(e.currentTarget.scrollTop)}
           style={{
             display: 'flex',
             flexDirection: 'column',
@@ -259,8 +260,32 @@ export default function Networks() {
             const isActive = activeChainId === net.chainId;
             const isSwitching = switchingChainId === net.chainId;
 
+            const startFade = index * 160;
+            const distance = 160;
+
+            let opacity = 1;
+            let scale = 1;
+
+            if (scrollTop > startFade) {
+              const progress = Math.min((scrollTop - startFade) / distance, 1);
+              opacity = 1 - progress;
+              scale = 1 - progress * 0.05;
+            }
+
             return (
-              <div id={`network-card-${net.chainId}`} key={net.chainId}>
+              <div
+                id={`network-card-${net.chainId}`}
+                key={net.chainId}
+                style={{
+                  position: 'sticky',
+                  top: 0,
+                  zIndex: index,
+                  opacity,
+                  transform: `scale(${scale})`,
+                  transformOrigin: 'top center',
+                  flexShrink: 0
+                }}
+              >
                 <Card
                   padding="md"
                   style={{

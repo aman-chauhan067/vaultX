@@ -49,8 +49,6 @@ export default function Dashboard() {
         flexDirection: 'column'
       }}
     >
-      {/* Top Nav is handled globally by Layout/Header.tsx */}
-
       <motion.div
         variants={containerVariants}
         initial="hidden"
