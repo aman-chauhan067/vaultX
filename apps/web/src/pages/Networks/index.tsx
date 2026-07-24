@@ -24,7 +24,7 @@ export default function Networks() {
   const [filterType, setFilterType] = useState<'All' | 'Mainnets' | 'Testnets' | 'Custom'>('All');
   const [switchingChainId, setSwitchingChainId] = useState<number | null>(null);
   const [scrollTop, setScrollTop] = useState(0);
-  const scrollRef = useRef<HTMLDivElement>(null);
+  const listRef = useRef<HTMLDivElement>(null);
 
   const [rpcStatus, setRpcStatus] = useState<
     Record<number, { latency: number; sync: string; status: 'connected' | 'disconnected' }>
@@ -41,6 +41,12 @@ export default function Networks() {
     });
     setRpcStatus(statuses);
   }, [supportedNetworks]);
+
+  useEffect(() => {
+    if (listRef.current) {
+      listRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [activeChainId]);
 
   const handleAdd = () => {
     try {
@@ -77,8 +83,6 @@ export default function Networks() {
     const net = supportedNetworks.find((n) => n.chainId === chainId);
     try {
       await switchNetwork(chainId);
-      if (scrollRef.current) scrollRef.current.scrollTop = 0;
-      setScrollTop(0);
       showToast({ title: `Network switched to ${net?.name || chainId}`, type: 'success' });
     } catch {
       showToast({
@@ -107,8 +111,9 @@ export default function Networks() {
       );
     }
 
-    const active = result.find((n) => n.chainId === activeChainId);
-    const others = result.filter((n) => n.chainId !== activeChainId);
+    const unique = Array.from(new Map(result.map((item) => [item.chainId, item])).values());
+    const active = unique.find((n) => n.chainId === activeChainId);
+    const others = unique.filter((n) => n.chainId !== activeChainId);
     return active ? [active, ...others] : others;
   }, [supportedNetworks, filterType, searchQuery, activeChainId]);
 
@@ -243,7 +248,7 @@ export default function Networks() {
         )}
 
         <div
-          ref={scrollRef}
+          ref={listRef}
           onScroll={(e) => setScrollTop(e.currentTarget.scrollTop)}
           style={{
             display: 'flex',

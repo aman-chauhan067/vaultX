@@ -49,6 +49,31 @@ export default function Dashboard() {
         flexDirection: 'column'
       }}
     >
+      {/* Top Nav - Level 4 Metadata */}
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1 }}
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          padding: '2rem 0',
+          borderBottom: '1px solid var(--glass-border-light)'
+        }}
+      >
+        <div
+          style={{
+            fontFamily: 'var(--font-brand)',
+            fontSize: '1.25rem',
+            fontWeight: 700,
+            letterSpacing: '0.05em'
+          }}
+        >
+          V.X
+        </div>
+      </motion.div>
+
       <motion.div
         variants={containerVariants}
         initial="hidden"
@@ -205,22 +230,6 @@ export default function Dashboard() {
                       : '0.00%'}
                   </div>
                 </div>
-                {portfolio?.lastUpdated && (
-                  <div
-                    style={{
-                      fontSize: '0.75rem',
-                      color: 'var(--color-text-secondary)',
-                      marginTop: '0.5rem',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '0.25rem'
-                    }}
-                  >
-                    <span style={{ color: 'var(--color-success)', marginRight: '4px' }}>●</span>
-                    Last Updated:{' '}
-                    {Math.max(0, Math.floor((Date.now() - portfolio.lastUpdated) / 1000))} sec ago
-                  </div>
-                )}
               </>
             )}
 
