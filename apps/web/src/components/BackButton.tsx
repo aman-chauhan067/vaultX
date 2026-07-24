@@ -24,21 +24,21 @@ export function BackButton({ label = 'Back', onClick, style }: BackButtonProps) 
         fontSize: '0.75rem',
         textTransform: 'uppercase',
         letterSpacing: '0.1em',
-        color: '#8A8A93',
+        color: 'var(--color-text-secondary)',
         padding: '0.5rem 0',
         transition: 'color 0.3s ease',
         ...style
       }}
-      onMouseOver={(e) => (e.currentTarget.style.color = '#ffffff')}
-      onMouseOut={(e) => (e.currentTarget.style.color = '#8A8A93')}
+      onMouseOver={(e) => (e.currentTarget.style.color = 'var(--color-text-primary)')}
+      onMouseOut={(e) => (e.currentTarget.style.color = 'var(--color-text-secondary)')}
       onFocus={(e) => {
-        e.currentTarget.style.color = '#ffffff';
+        e.currentTarget.style.color = 'var(--color-text-primary)';
         e.currentTarget.style.outline = '2px solid rgba(255, 255, 255, 0.2)';
         e.currentTarget.style.outlineOffset = '2px';
         e.currentTarget.style.borderRadius = '4px';
       }}
       onBlur={(e) => {
-        e.currentTarget.style.color = '#8A8A93';
+        e.currentTarget.style.color = 'var(--color-text-secondary)';
         e.currentTarget.style.outline = 'none';
       }}
       aria-label="Go back"

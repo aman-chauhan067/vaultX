@@ -20,7 +20,7 @@
 }
 
 .variant-glass {
-  background: rgba(17, 11, 56, 0.3);
+  background: var(--glass-bg);
 }
 
 .variant-highlight {

@@ -39,7 +39,7 @@ export default function Security() {
           justifyContent: 'space-between',
           alignItems: 'center',
           padding: '2rem 0',
-          borderBottom: '1px solid rgba(255,255,255,0.05)'
+          borderBottom: '1px solid var(--glass-border-light)'
         }}
       >
         <BackButton />
@@ -93,12 +93,18 @@ export default function Security() {
               gap: '1.5rem'
             }}
           >
-            <ShieldCheck size={32} color="#34C759" />
+            <ShieldCheck size={32} color="var(--color-success)" />
             <div style={{ display: 'flex', flexDirection: 'column' }}>
-              <span style={{ fontSize: '1.25rem', fontWeight: 500, color: '#34C759' }}>
+              <span style={{ fontSize: '1.25rem', fontWeight: 500, color: 'var(--color-success)' }}>
                 Account is Secure
               </span>
-              <span style={{ fontSize: '1rem', color: '#8A8A93', marginTop: '0.5rem' }}>
+              <span
+                style={{
+                  fontSize: '1rem',
+                  color: 'var(--color-text-secondary)',
+                  marginTop: '0.5rem'
+                }}
+              >
                 Your recovery phrase is backed up and password is strong.
               </span>
             </div>
@@ -110,7 +116,7 @@ export default function Security() {
                 fontSize: '0.75rem',
                 textTransform: 'uppercase',
                 letterSpacing: '0.1em',
-                color: '#56565C',
+                color: 'var(--color-text-muted)',
                 paddingLeft: '1rem'
               }}
             >
@@ -119,7 +125,7 @@ export default function Security() {
             <motion.div
               variants={itemVariants}
               style={{
-                background: 'rgba(255,255,255,0.03)',
+                background: 'var(--color-surface)',
                 borderRadius: '16px',
                 overflow: 'hidden'
               }}
@@ -130,16 +136,20 @@ export default function Security() {
                   display: 'flex',
                   alignItems: 'center',
                   padding: '1.5rem',
-                  borderBottom: '1px solid rgba(255,255,255,0.05)',
+                  borderBottom: '1px solid var(--glass-border-light)',
                   cursor: 'pointer',
                   transition: 'background 0.3s'
                 }}
                 onMouseOver={(e) =>
-                  (e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.02)')
+                  (e.currentTarget.style.backgroundColor = 'var(--color-surface)')
                 }
                 onMouseOut={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
               >
-                <Key size={24} color="#8A8A93" style={{ marginRight: '1.5rem' }} />
+                <Key
+                  size={24}
+                  color="var(--color-text-secondary)"
+                  style={{ marginRight: '1.5rem' }}
+                />
                 <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
                   <span style={{ fontSize: '1.125rem', fontWeight: 400 }}>Change Password</span>
                 </div>
@@ -151,16 +161,20 @@ export default function Security() {
                   display: 'flex',
                   alignItems: 'center',
                   padding: '1.5rem',
-                  borderBottom: '1px solid rgba(255,255,255,0.05)',
+                  borderBottom: '1px solid var(--glass-border-light)',
                   cursor: 'pointer',
                   transition: 'background 0.3s'
                 }}
                 onMouseOver={(e) =>
-                  (e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.02)')
+                  (e.currentTarget.style.backgroundColor = 'var(--color-surface)')
                 }
                 onMouseOut={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
               >
-                <Smartphone size={24} color="#8A8A93" style={{ marginRight: '1.5rem' }} />
+                <Smartphone
+                  size={24}
+                  color="var(--color-text-secondary)"
+                  style={{ marginRight: '1.5rem' }}
+                />
                 <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
                   <span style={{ fontSize: '1.125rem', fontWeight: 400 }}>
                     Two-Factor Authentication
@@ -169,7 +183,7 @@ export default function Security() {
                 <span
                   style={{
                     padding: '0.25rem 0.75rem',
-                    background: 'rgba(255,255,255,0.1)',
+                    background: 'var(--color-border-primary)',
                     borderRadius: '100px',
                     fontSize: '0.75rem'
                   }}
@@ -188,11 +202,15 @@ export default function Security() {
                   transition: 'background 0.3s'
                 }}
                 onMouseOver={(e) =>
-                  (e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.02)')
+                  (e.currentTarget.style.backgroundColor = 'var(--color-surface)')
                 }
                 onMouseOut={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
               >
-                <EyeOff size={24} color="#8A8A93" style={{ marginRight: '1.5rem' }} />
+                <EyeOff
+                  size={24}
+                  color="var(--color-text-secondary)"
+                  style={{ marginRight: '1.5rem' }}
+                />
                 <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
                   <span style={{ fontSize: '1.125rem', fontWeight: 400 }}>Hidden Accounts</span>
                 </div>
@@ -206,7 +224,7 @@ export default function Security() {
                 fontSize: '0.75rem',
                 textTransform: 'uppercase',
                 letterSpacing: '0.1em',
-                color: '#56565C',
+                color: 'var(--color-text-muted)',
                 paddingLeft: '1rem'
               }}
             >
@@ -215,7 +233,7 @@ export default function Security() {
             <motion.div
               variants={itemVariants}
               style={{
-                background: 'rgba(255,255,255,0.03)',
+                background: 'var(--color-surface)',
                 borderRadius: '16px',
                 overflow: 'hidden'
               }}

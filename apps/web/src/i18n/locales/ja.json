@@ -1,0 +1,80 @@
+{
+  "sidebar": {
+    "dashboard": "ダッシュボード",
+    "portfolio": "ポートフォリオ",
+    "activity": "アクティビティ",
+    "settings": "設定",
+    "security": "セキュリティ",
+    "developer": "開発者"
+  },
+  "settings": {
+    "preferences": "環境設定",
+    "language_region": "言語と地域",
+    "language_desc": "言語を選択してください。",
+    "language": "言語",
+    "currency": "通貨",
+    "date_format": "日付形式",
+    "number_format": "数値形式"
+  },
+  "developer": {
+    "title": "開発者モード",
+    "description": "高度なツール",
+    "system_diagnostics": "システム診断",
+    "current_chain": "チェーン",
+    "chain_id": "チェーンID",
+    "rpc_url": "RPC URL",
+    "current_block": "ブロック",
+    "wallet_address": "アドレス",
+    "connected_dapps": "dApp",
+    "wc_sessions": "セッション",
+    "cache_size": "キャッシュ",
+    "extension_status": "状態",
+    "background_worker": "ワーカー",
+    "show_testnets": "テストネット",
+    "show_testnets_desc": "テストネットを表示"
+  },
+  "dashboard": {
+    "total_balance": "総残高",
+    "portfolio": "ポートフォリオ",
+    "recent_activity": "最近のアクティビティ",
+    "unknown_network": "不明",
+    "no_transactions": "取引なし"
+  },
+  "settings_index": {
+    "title": "設定",
+    "account": "アカウント",
+    "edit_profile": "プロファイル",
+    "preferences": "環境設定",
+    "language": "言語",
+    "appearance": "外観",
+    "security": "セキュリティ",
+    "security_desc": "パスワード, 2FA",
+    "connected_apps": "接続済みアプリ",
+    "connected_apps_desc": "dAppの権限",
+    "notifications": "通知",
+    "notifications_desc": "アラート",
+    "devices": "デバイス",
+    "devices_desc": "セッション"
+  },
+  "portfolio": {
+    "title": "ポートフォリオ",
+    "tokens": "トークン",
+    "nfts": "NFT",
+    "balance": "残高",
+    "price": "価格",
+    "value": "価値",
+    "no_tokens": "トークンなし",
+    "no_nfts": "NFTなし"
+  },
+  "activity": {
+    "title": "アクティビティ",
+    "all": "すべて",
+    "sent": "送信済み",
+    "received": "受信済み",
+    "pending": "保留中",
+    "no_activity": "アクティビティなし",
+    "status": "ステータス",
+    "amount": "金額",
+    "date": "日付"
+  }
+}

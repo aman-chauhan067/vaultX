@@ -109,22 +109,22 @@ h6 {
 /* Feature Card Glow */
 @keyframes fluctuateGlow {
   0% {
-    box-shadow: 0 0 15px rgba(255, 255, 255, 0.04);
+    box-shadow: 0 0 15px var(--glass-border-light);
   }
   50% {
     box-shadow: 0 0 40px rgba(255, 255, 255, 0.15);
   }
   100% {
-    box-shadow: 0 0 15px rgba(255, 255, 255, 0.04);
+    box-shadow: 0 0 15px var(--glass-border-light);
   }
 }
 
 .feature-glow-card {
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--color-surface);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--glass-border-light);
   padding: 3rem 2.5rem;
   transition:
     transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275),
@@ -139,16 +139,16 @@ h6 {
 
 .feature-glow-card:hover {
   transform: translateY(-8px);
-  background: rgba(255, 255, 255, 0.04);
-  border-color: rgba(255, 255, 255, 0.1);
+  background: var(--glass-border-light);
+  border-color: var(--glass-border);
   animation: fluctuateGlow 4s infinite ease-in-out;
 }
 
 .step-glow-card {
-  background: rgba(255, 255, 255, 0.02) !important;
+  background: var(--color-surface) !important;
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--glass-border-light);
   transition:
     transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275),
     background 0.4s ease,
@@ -158,8 +158,8 @@ h6 {
 
 .step-glow-card:hover {
   transform: translateY(-8px);
-  background: rgba(255, 255, 255, 0.04) !important;
-  border-color: rgba(255, 255, 255, 0.1);
+  background: var(--glass-border-light) !important;
+  border-color: var(--glass-border);
   animation: fluctuateGlow 4s infinite ease-in-out;
 }
 
@@ -231,10 +231,10 @@ h6 {
   width: 80px;
   height: 80px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--color-surface);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--glass-border);
   display: flex;
   align-items: center;
   justify-content: center;

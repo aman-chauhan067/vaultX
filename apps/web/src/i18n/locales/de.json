@@ -1,0 +1,80 @@
+{
+  "sidebar": {
+    "dashboard": "Dashboard",
+    "portfolio": "Portfolio",
+    "activity": "Aktivität",
+    "settings": "Einstellungen",
+    "security": "Sicherheit",
+    "developer": "Entwickler"
+  },
+  "settings": {
+    "preferences": "Präferenzen",
+    "language_region": "Sprache & Region",
+    "language_desc": "Wählen Sie Ihre Sprache aus.",
+    "language": "Sprache",
+    "currency": "Währung",
+    "date_format": "Datumsformat",
+    "number_format": "Zahlenformat"
+  },
+  "developer": {
+    "title": "Entwicklermodus",
+    "description": "Erweiterte Tools",
+    "system_diagnostics": "Systemdiagnose",
+    "current_chain": "Aktuelle Chain",
+    "chain_id": "Chain-ID",
+    "rpc_url": "RPC-URL",
+    "current_block": "Aktueller Block",
+    "wallet_address": "Adresse",
+    "connected_dapps": "dApps",
+    "wc_sessions": "Sitzungen",
+    "cache_size": "Cache",
+    "extension_status": "Status",
+    "background_worker": "Worker",
+    "show_testnets": "Testnetze",
+    "show_testnets_desc": "Testnetze anzeigen"
+  },
+  "dashboard": {
+    "total_balance": "Gesamtsaldo",
+    "portfolio": "Portfolio",
+    "recent_activity": "Letzte Aktivität",
+    "unknown_network": "Unbekanntes Netzwerk",
+    "no_transactions": "Keine Transaktionen"
+  },
+  "settings_index": {
+    "title": "Einstellungen",
+    "account": "Konto",
+    "edit_profile": "Profil",
+    "preferences": "Präferenzen",
+    "language": "Sprache",
+    "appearance": "Aussehen",
+    "security": "Sicherheit",
+    "security_desc": "Passwörter, 2FA",
+    "connected_apps": "Verbundene Apps",
+    "connected_apps_desc": "dApps",
+    "notifications": "Benachrichtigungen",
+    "notifications_desc": "Warnungen",
+    "devices": "Geräte",
+    "devices_desc": "Sitzungen"
+  },
+  "portfolio": {
+    "title": "Portfolio",
+    "tokens": "Token",
+    "nfts": "NFTs",
+    "balance": "Saldo",
+    "price": "Preis",
+    "value": "Wert",
+    "no_tokens": "Keine Token",
+    "no_nfts": "Keine NFTs"
+  },
+  "activity": {
+    "title": "Aktivität",
+    "all": "Alle",
+    "sent": "Gesendet",
+    "received": "Empfangen",
+    "pending": "Ausstehend",
+    "no_activity": "Keine Aktivität",
+    "status": "Status",
+    "amount": "Betrag",
+    "date": "Datum"
+  }
+}

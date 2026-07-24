@@ -1,0 +1,80 @@
+{
+  "sidebar": {
+    "dashboard": "Tableau de bord",
+    "portfolio": "Portefeuille",
+    "activity": "Activité",
+    "settings": "Paramètres",
+    "security": "Sécurité",
+    "developer": "Développeur"
+  },
+  "settings": {
+    "preferences": "Préférences",
+    "language_region": "Langue et région",
+    "language_desc": "Choisissez votre langue.",
+    "language": "Langue",
+    "currency": "Devise",
+    "date_format": "Format de date",
+    "number_format": "Format de nombre"
+  },
+  "developer": {
+    "title": "Mode Développeur",
+    "description": "Outils avancés",
+    "system_diagnostics": "Diagnostic",
+    "current_chain": "Chaîne actuelle",
+    "chain_id": "ID Chaîne",
+    "rpc_url": "URL RPC",
+    "current_block": "Bloc",
+    "wallet_address": "Adresse",
+    "connected_dapps": "dApps",
+    "wc_sessions": "Sessions WC",
+    "cache_size": "Cache",
+    "extension_status": "Statut",
+    "background_worker": "Worker",
+    "show_testnets": "Testnets",
+    "show_testnets_desc": "Afficher les réseaux"
+  },
+  "dashboard": {
+    "total_balance": "Solde total",
+    "portfolio": "Portefeuille",
+    "recent_activity": "Activité récente",
+    "unknown_network": "Réseau inconnu",
+    "no_transactions": "Aucune transaction"
+  },
+  "settings_index": {
+    "title": "Paramètres",
+    "account": "Compte",
+    "edit_profile": "Profil",
+    "preferences": "Préférences",
+    "language": "Langue",
+    "appearance": "Apparence",
+    "security": "Sécurité",
+    "security_desc": "Mots de passe",
+    "connected_apps": "Applications",
+    "connected_apps_desc": "Gérer les dApps",
+    "notifications": "Notifications",
+    "notifications_desc": "Alertes",
+    "devices": "Appareils",
+    "devices_desc": "Sessions"
+  },
+  "portfolio": {
+    "title": "Portefeuille",
+    "tokens": "Jetons",
+    "nfts": "NFTs",
+    "balance": "Solde",
+    "price": "Prix",
+    "value": "Valeur",
+    "no_tokens": "Aucun jeton",
+    "no_nfts": "Aucun NFT"
+  },
+  "activity": {
+    "title": "Activité",
+    "all": "Tout",
+    "sent": "Envoyé",
+    "received": "Reçu",
+    "pending": "En attente",
+    "no_activity": "Aucune activité",
+    "status": "Statut",
+    "amount": "Montant",
+    "date": "Date"
+  }
+}

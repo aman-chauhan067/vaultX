@@ -5,7 +5,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 0 var(--space-4);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid var(--glass-border-light);
   background: rgba(17, 11, 56, 0.6);
   backdrop-filter: blur(24px);
   z-index: var(--z-index-sticky);
@@ -74,7 +74,7 @@
   gap: var(--space-2);
   padding: 8px 16px;
   background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--glass-border-light);
   border-radius: var(--radius-pill);
   font-size: 14px;
   font-weight: 600;
@@ -96,7 +96,7 @@
   height: 40px;
   border-radius: var(--radius-pill);
   background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--glass-border-light);
   color: var(--color-text-secondary);
   cursor: pointer;
   transition: all var(--motion-duration-fast) var(--motion-curve-default);
@@ -113,7 +113,7 @@
   .header {
     height: 100px; /* Taller header for premium feel */
     padding: 0 var(--space-10);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid var(--glass-border-light);
     background: transparent; /* Assuming AppShell sets a nice background */
     backdrop-filter: none;
   }
@@ -141,7 +141,7 @@
     padding: 8px 16px;
     background: rgba(255, 255, 255, 0.03);
     border-radius: var(--radius-pill);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border-light);
   }
 
   .indicator {

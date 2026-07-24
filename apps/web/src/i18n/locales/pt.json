@@ -1,0 +1,80 @@
+{
+  "sidebar": {
+    "dashboard": "Painel",
+    "portfolio": "Portfólio",
+    "activity": "Atividade",
+    "settings": "Configurações",
+    "security": "Segurança",
+    "developer": "Desenvolvedor"
+  },
+  "settings": {
+    "preferences": "Preferências",
+    "language_region": "Idioma e Região",
+    "language_desc": "Escolha seu idioma.",
+    "language": "Idioma",
+    "currency": "Moeda",
+    "date_format": "Formato",
+    "number_format": "Formato numérico"
+  },
+  "developer": {
+    "title": "Modo Desenvolvedor",
+    "description": "Ferramentas",
+    "system_diagnostics": "Diagnóstico",
+    "current_chain": "Corrente",
+    "chain_id": "ID",
+    "rpc_url": "RPC URL",
+    "current_block": "Bloco",
+    "wallet_address": "Endereço",
+    "connected_dapps": "dApps",
+    "wc_sessions": "Sessões",
+    "cache_size": "Cache",
+    "extension_status": "Status",
+    "background_worker": "Worker",
+    "show_testnets": "Testnets",
+    "show_testnets_desc": "Mostrar testnets"
+  },
+  "dashboard": {
+    "total_balance": "Saldo Total",
+    "portfolio": "Portfólio",
+    "recent_activity": "Atividade",
+    "unknown_network": "Rede Desconhecida",
+    "no_transactions": "Sem transações"
+  },
+  "settings_index": {
+    "title": "Configurações",
+    "account": "Conta",
+    "edit_profile": "Perfil",
+    "preferences": "Preferências",
+    "language": "Idioma",
+    "appearance": "Aparência",
+    "security": "Segurança",
+    "security_desc": "Senhas, 2FA",
+    "connected_apps": "Apps",
+    "connected_apps_desc": "dApps",
+    "notifications": "Notificações",
+    "notifications_desc": "Alertas",
+    "devices": "Dispositivos",
+    "devices_desc": "Sessões"
+  },
+  "portfolio": {
+    "title": "Portfólio",
+    "tokens": "Tokens",
+    "nfts": "NFTs",
+    "balance": "Saldo",
+    "price": "Preço",
+    "value": "Valor",
+    "no_tokens": "Nenhum token",
+    "no_nfts": "Nenhum NFT"
+  },
+  "activity": {
+    "title": "Atividade",
+    "all": "Tudo",
+    "sent": "Enviado",
+    "received": "Recebido",
+    "pending": "Pendente",
+    "no_activity": "Sem atividade",
+    "status": "Status",
+    "amount": "Quantia",
+    "date": "Data"
+  }
+}

@@ -139,7 +139,7 @@ export default function CreateWallet() {
             fontSize: '0.75rem',
             textTransform: 'uppercase',
             letterSpacing: '0.1em',
-            color: '#56565C'
+            color: 'var(--color-text-muted)'
           }}
         >
           {viewOnlyPhrase ? 'Recovery Phrase' : 'Setup'}
@@ -190,7 +190,7 @@ export default function CreateWallet() {
               <p
                 style={{
                   fontSize: '1rem',
-                  color: '#8A8A93',
+                  color: 'var(--color-text-secondary)',
                   marginBottom: '4rem',
                   maxWidth: '100%',
                   wordWrap: 'break-word'
@@ -207,8 +207,8 @@ export default function CreateWallet() {
                   gap: '1rem',
                   padding: '1.25rem 3rem',
                   borderRadius: '100px',
-                  backgroundColor: '#ffffff',
-                  color: '#000000',
+                  backgroundColor: 'var(--color-text-primary)',
+                  color: 'var(--color-bg-primary)',
                   cursor: 'pointer',
                   fontSize: '0.875rem',
                   textTransform: 'uppercase',
@@ -250,7 +250,7 @@ export default function CreateWallet() {
               <p
                 style={{
                   fontSize: '0.9rem',
-                  color: '#8A8A93',
+                  color: 'var(--color-text-secondary)',
                   marginBottom: '4rem',
                   maxWidth: '100%',
                   wordWrap: 'break-word'
@@ -274,10 +274,16 @@ export default function CreateWallet() {
                       display: 'flex',
                       alignItems: 'center',
                       padding: '1rem 1.5rem',
-                      borderBottom: '1px solid rgba(255,255,255,0.1)'
+                      borderBottom: '1px solid var(--glass-border)'
                     }}
                   >
-                    <span style={{ fontSize: '0.75rem', color: '#56565C', width: '24px' }}>
+                    <span
+                      style={{
+                        fontSize: '0.75rem',
+                        color: 'var(--color-text-muted)',
+                        width: '24px'
+                      }}
+                    >
                       {i + 1}
                     </span>
                     <span style={{ fontSize: '1.25rem', fontWeight: 400 }}>{word}</span>
@@ -295,8 +301,8 @@ export default function CreateWallet() {
                     gap: '1rem',
                     padding: '1.25rem 3rem',
                     borderRadius: '100px',
-                    backgroundColor: '#ffffff',
-                    color: '#000000',
+                    backgroundColor: 'var(--color-text-primary)',
+                    color: 'var(--color-bg-primary)',
                     cursor: 'pointer',
                     fontSize: '0.875rem',
                     textTransform: 'uppercase',
@@ -319,8 +325,8 @@ export default function CreateWallet() {
                     gap: '1rem',
                     padding: '1.25rem 3rem',
                     borderRadius: '100px',
-                    backgroundColor: '#ffffff',
-                    color: '#000000',
+                    backgroundColor: 'var(--color-text-primary)',
+                    color: 'var(--color-bg-primary)',
                     cursor: 'pointer',
                     fontSize: '0.875rem',
                     textTransform: 'uppercase',
@@ -363,7 +369,7 @@ export default function CreateWallet() {
               <p
                 style={{
                   fontSize: '0.9rem',
-                  color: '#8A8A93',
+                  color: 'var(--color-text-secondary)',
                   marginBottom: '4rem',
                   maxWidth: '100%',
                   wordWrap: 'break-word'
@@ -390,7 +396,13 @@ export default function CreateWallet() {
                       paddingBottom: '0.5rem'
                     }}
                   >
-                    <span style={{ fontSize: '0.875rem', color: '#8A8A93', width: '40px' }}>
+                    <span
+                      style={{
+                        fontSize: '0.875rem',
+                        color: 'var(--color-text-secondary)',
+                        width: '40px'
+                      }}
+                    >
                       Word {idx + 1}
                     </span>
                     <input
@@ -425,8 +437,8 @@ export default function CreateWallet() {
                     gap: '1rem',
                     padding: '1.25rem 3rem',
                     borderRadius: '100px',
-                    backgroundColor: '#ffffff',
-                    color: '#000000',
+                    backgroundColor: 'var(--color-text-primary)',
+                    color: 'var(--color-bg-primary)',
                     cursor: 'pointer',
                     fontSize: '0.875rem',
                     textTransform: 'uppercase',
@@ -470,7 +482,7 @@ export default function CreateWallet() {
               <p
                 style={{
                   fontSize: '0.9rem',
-                  color: '#8A8A93',
+                  color: 'var(--color-text-secondary)',
                   marginBottom: '4rem',
                   maxWidth: '100%',
                   wordWrap: 'break-word'
@@ -506,7 +518,9 @@ export default function CreateWallet() {
                     outline: 'none',
                     transition: 'border-color 0.3s'
                   }}
-                  onFocus={(e) => (e.currentTarget.style.borderBottomColor = '#ffffff')}
+                  onFocus={(e) =>
+                    (e.currentTarget.style.borderBottomColor = 'var(--color-text-primary)')
+                  }
                   onBlur={(e) =>
                     (e.currentTarget.style.borderBottomColor = 'rgba(255,255,255,0.2)')
                   }
@@ -531,7 +545,9 @@ export default function CreateWallet() {
                     outline: 'none',
                     transition: 'border-color 0.3s'
                   }}
-                  onFocus={(e) => (e.currentTarget.style.borderBottomColor = '#ffffff')}
+                  onFocus={(e) =>
+                    (e.currentTarget.style.borderBottomColor = 'var(--color-text-primary)')
+                  }
                   onBlur={(e) =>
                     (e.currentTarget.style.borderBottomColor = 'rgba(255,255,255,0.2)')
                   }
@@ -549,8 +565,8 @@ export default function CreateWallet() {
                     gap: '1rem',
                     padding: '1.25rem 3rem',
                     borderRadius: '100px',
-                    backgroundColor: '#ffffff',
-                    color: '#000000',
+                    backgroundColor: 'var(--color-text-primary)',
+                    color: 'var(--color-bg-primary)',
                     cursor: 'pointer',
                     fontSize: '0.875rem',
                     textTransform: 'uppercase',

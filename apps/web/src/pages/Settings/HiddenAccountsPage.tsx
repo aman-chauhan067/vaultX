@@ -83,7 +83,7 @@ export default function HiddenAccountsPage() {
           justifyContent: 'space-between',
           alignItems: 'center',
           padding: '2rem 0',
-          borderBottom: '1px solid rgba(255,255,255,0.05)'
+          borderBottom: '1px solid var(--glass-border-light)'
         }}
       >
         <BackButton />
@@ -92,7 +92,7 @@ export default function HiddenAccountsPage() {
             fontSize: '0.75rem',
             textTransform: 'uppercase',
             letterSpacing: '0.1em',
-            color: '#52525b'
+            color: 'var(--color-text-secondary)'
           }}
         >
           Security
@@ -129,7 +129,7 @@ export default function HiddenAccountsPage() {
                   flexShrink: 0
                 }}
               >
-                <EyeOff size={22} color="#3B82F6" />
+                <EyeOff size={22} color="var(--color-info)" />
               </div>
               <h1
                 style={{
@@ -142,7 +142,14 @@ export default function HiddenAccountsPage() {
                 Hidden Accounts
               </h1>
             </div>
-            <p style={{ color: '#52525b', fontSize: '0.9rem', lineHeight: 1.6, margin: 0 }}>
+            <p
+              style={{
+                color: 'var(--color-text-secondary)',
+                fontSize: '0.9rem',
+                lineHeight: 1.6,
+                margin: 0
+              }}
+            >
               Manage accounts you have hidden from the main interface. Unhide them to make them
               visible again.
             </p>
@@ -154,9 +161,9 @@ export default function HiddenAccountsPage() {
                 <div
                   style={{
                     textAlign: 'center',
-                    color: '#8A8A93',
+                    color: 'var(--color-text-secondary)',
                     padding: '3rem 1rem',
-                    background: 'rgba(255,255,255,0.02)',
+                    background: 'var(--color-surface)',
                     borderRadius: '16px'
                   }}
                 >
@@ -165,9 +172,9 @@ export default function HiddenAccountsPage() {
               ) : (
                 <div
                   style={{
-                    background: 'rgba(255, 255, 255, 0.02)',
+                    background: 'var(--color-surface)',
                     borderRadius: '16px',
-                    border: '1px solid rgba(255, 255, 255, 0.05)',
+                    border: '1px solid var(--glass-border-light)',
                     overflow: 'hidden'
                   }}
                 >
@@ -181,7 +188,7 @@ export default function HiddenAccountsPage() {
                         padding: '1.125rem 1.5rem',
                         borderBottom:
                           index < hiddenWallets.length - 1
-                            ? '1px solid rgba(255, 255, 255, 0.04)'
+                            ? '1px solid var(--glass-border-light)'
                             : 'none'
                       }}
                     >
@@ -208,7 +215,7 @@ export default function HiddenAccountsPage() {
                           <span
                             style={{
                               fontSize: '0.75rem',
-                              color: '#8A8A93',
+                              color: 'var(--color-text-secondary)',
                               fontFamily: 'var(--font-mono, monospace)'
                             }}
                           >
@@ -222,7 +229,7 @@ export default function HiddenAccountsPage() {
                         style={{
                           background: 'rgba(59, 130, 246, 0.1)',
                           border: 'none',
-                          color: '#3B82F6',
+                          color: 'var(--color-info)',
                           cursor: 'pointer',
                           padding: '0.5rem 1rem',
                           borderRadius: '100px',
@@ -241,9 +248,9 @@ export default function HiddenAccountsPage() {
           ) : (
             <div
               style={{
-                background: 'rgba(24, 24, 27, 0.6)',
-                border: '1px solid rgba(255, 255, 255, 0.08)',
-                boxShadow: '0 32px 64px -16px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1)',
+                background: 'var(--glass-bg)',
+                border: '1px solid var(--glass-border)',
+                boxShadow: '0 32px 64px -16px rgba(0,0,0,0.5), inset 0 1px 0 var(--glass-border)',
                 borderRadius: '24px',
                 padding: '2.5rem 2rem',
                 width: '100%',
@@ -283,12 +290,18 @@ export default function HiddenAccountsPage() {
                       fontSize: '1.5rem',
                       fontWeight: 300,
                       letterSpacing: '-0.02em',
-                      color: '#ffffff'
+                      color: 'var(--color-text-primary)'
                     }}
                   >
                     Authentication Required
                   </h2>
-                  <p style={{ margin: '0.5rem 0 0 0', fontSize: '0.9rem', color: '#8A8A93' }}>
+                  <p
+                    style={{
+                      margin: '0.5rem 0 0 0',
+                      fontSize: '0.9rem',
+                      color: 'var(--color-text-secondary)'
+                    }}
+                  >
                     Enter your Vault password to view hidden accounts.
                   </p>
                 </div>
@@ -317,7 +330,7 @@ export default function HiddenAccountsPage() {
                       fontFamily: password && !showPassword ? 'var(--font-sans)' : 'inherit'
                     }}
                     onFocus={(e) => {
-                      e.currentTarget.style.borderBottomColor = '#ffffff';
+                      e.currentTarget.style.borderBottomColor = 'var(--color-text-primary)';
                     }}
                     onBlur={(e) => {
                       e.currentTarget.style.borderBottomColor = 'rgba(255,255,255,0.2)';
@@ -332,7 +345,7 @@ export default function HiddenAccountsPage() {
                       transform: 'translateY(-50%)',
                       background: 'none',
                       border: 'none',
-                      color: '#8A8A93',
+                      color: 'var(--color-text-secondary)',
                       cursor: 'pointer',
                       padding: '0.5rem',
                       display: 'flex',
@@ -352,10 +365,16 @@ export default function HiddenAccountsPage() {
                   style={{
                     width: '100%',
                     padding: '1rem',
-                    background: isProcessing || !password ? 'rgba(255,255,255,0.05)' : '#ffffff',
+                    background:
+                      isProcessing || !password
+                        ? 'var(--color-border-secondary)'
+                        : 'var(--color-text-primary)',
                     border: 'none',
                     borderRadius: '100px',
-                    color: isProcessing || !password ? '#52525b' : '#000000',
+                    color:
+                      isProcessing || !password
+                        ? 'var(--color-text-secondary)'
+                        : 'var(--color-bg-primary)',
                     fontSize: '0.875rem',
                     fontWeight: 600,
                     textTransform: 'uppercase',

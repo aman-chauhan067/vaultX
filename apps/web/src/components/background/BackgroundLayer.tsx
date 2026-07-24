@@ -75,7 +75,7 @@ export const BackgroundLayer: React.FC = () => {
         pointerEvents: 'none',
         zIndex: -1,
         overflow: 'hidden',
-        backgroundColor: '#000000'
+        backgroundColor: 'var(--color-bg-primary)'
       }}
     >
       {/* 0. Soft Nebula */}
@@ -108,11 +108,11 @@ export const BackgroundLayer: React.FC = () => {
           zIndex: 1,
           backgroundImage: `
             radial-gradient(1px 1px at 10% 20%, rgba(255, 255, 255, 0.15) 100%, transparent),
-            radial-gradient(1.5px 1.5px at 30% 40%, rgba(255, 255, 255, 0.1) 100%, transparent),
+            radial-gradient(1.5px 1.5px at 30% 40%, var(--glass-border) 100%, transparent),
             radial-gradient(1px 1px at 60% 80%, rgba(255, 255, 255, 0.2) 100%, transparent),
-            radial-gradient(2px 2px at 80% 10%, rgba(255, 255, 255, 0.08) 100%, transparent),
+            radial-gradient(2px 2px at 80% 10%, var(--glass-border) 100%, transparent),
             radial-gradient(1px 1px at 90% 60%, rgba(255, 255, 255, 0.15) 100%, transparent),
-            radial-gradient(1.5px 1.5px at 40% 90%, rgba(255, 255, 255, 0.1) 100%, transparent),
+            radial-gradient(1.5px 1.5px at 40% 90%, var(--glass-border) 100%, transparent),
             radial-gradient(1px 1px at 20% 70%, rgba(255, 255, 255, 0.12) 100%, transparent),
             radial-gradient(1.5px 1.5px at 70% 30%, rgba(255, 255, 255, 0.18) 100%, transparent)
           `,

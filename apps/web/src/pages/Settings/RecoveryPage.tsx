@@ -29,7 +29,7 @@ export function RecoveryPage() {
           justifyContent: 'space-between',
           alignItems: 'center',
           padding: '2rem 0',
-          borderBottom: '1px solid rgba(255,255,255,0.05)'
+          borderBottom: '1px solid var(--glass-border-light)'
         }}
       >
         <BackButton />
@@ -38,7 +38,7 @@ export function RecoveryPage() {
             fontSize: '0.75rem',
             textTransform: 'uppercase',
             letterSpacing: '0.1em',
-            color: '#52525b'
+            color: 'var(--color-text-secondary)'
           }}
         >
           Security
@@ -85,7 +85,14 @@ export function RecoveryPage() {
                 Recovery Center
               </h1>
             </div>
-            <p style={{ color: '#52525b', fontSize: '0.9rem', lineHeight: 1.6, margin: 0 }}>
+            <p
+              style={{
+                color: 'var(--color-text-secondary)',
+                fontSize: '0.9rem',
+                lineHeight: 1.6,
+                margin: 0
+              }}
+            >
               Your 12-word recovery phrase was generated during wallet creation. It is the only way
               to restore your wallet if you lose access to this device.
             </p>
@@ -98,16 +105,16 @@ export function RecoveryPage() {
                 fontSize: '0.75rem',
                 textTransform: 'uppercase',
                 letterSpacing: '0.1em',
-                color: '#52525b'
+                color: 'var(--color-text-secondary)'
               }}
             >
               Backup Status
             </span>
             <div
               style={{
-                background: 'rgba(255,255,255,0.02)',
+                background: 'var(--color-surface)',
                 borderRadius: '16px',
-                border: '1px solid rgba(255,255,255,0.05)',
+                border: '1px solid var(--glass-border-light)',
                 overflow: 'hidden'
               }}
             >
@@ -124,10 +131,13 @@ export function RecoveryPage() {
                     justifyContent: 'space-between',
                     alignItems: 'center',
                     padding: '1rem 1.5rem',
-                    borderBottom: i < arr.length - 1 ? '1px solid rgba(255,255,255,0.04)' : 'none'
+                    borderBottom:
+                      i < arr.length - 1 ? '1px solid var(--glass-border-light)' : 'none'
                   }}
                 >
-                  <span style={{ fontSize: '0.875rem', color: '#8A8A93' }}>{row.label}</span>
+                  <span style={{ fontSize: '0.875rem', color: 'var(--color-text-secondary)' }}>
+                    {row.label}
+                  </span>
                   {row.badge ? (
                     <span
                       style={{
@@ -135,7 +145,7 @@ export function RecoveryPage() {
                         alignItems: 'center',
                         gap: '0.375rem',
                         fontSize: '0.8rem',
-                        color: '#34C759',
+                        color: 'var(--color-success)',
                         background: 'rgba(52,199,89,0.1)',
                         padding: '0.25rem 0.75rem',
                         borderRadius: '100px'
@@ -165,7 +175,7 @@ export function RecoveryPage() {
               borderRadius: '12px'
             }}
           >
-            <Info size={18} color="#3B82F6" style={{ marginTop: '2px', flexShrink: 0 }} />
+            <Info size={18} color="var(--color-info)" style={{ marginTop: '2px', flexShrink: 0 }} />
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
               <span
                 style={{
@@ -176,7 +186,13 @@ export function RecoveryPage() {
               >
                 Phrase Reveal is currently restricted
               </span>
-              <span style={{ fontSize: '0.8rem', color: '#8A8A93', lineHeight: 1.5 }}>
+              <span
+                style={{
+                  fontSize: '0.8rem',
+                  color: 'var(--color-text-secondary)',
+                  lineHeight: 1.5
+                }}
+              >
                 For your security, viewing your recovery phrase or exporting an encrypted backup
                 requires a secure password re-verification flow. This flow is undergoing an
                 additional security audit and will be available in v1.1.

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -38,9 +38,29 @@ export function ProfilePage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [password, setPassword] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
+
+  useEffect(() => {
+    const mainElement = document.querySelector('main');
+    if (isModalOpen) {
+      document.body.style.overflow = 'hidden';
+      document.documentElement.style.overflow = 'hidden';
+      if (mainElement) mainElement.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
+      if (mainElement) mainElement.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
+      const mainEl = document.querySelector('main');
+      if (mainEl) mainEl.style.overflow = '';
+    };
+  }, [isModalOpen]);
+
   const [showPassword, setShowPassword] = useState(false);
   const [pendingAction, setPendingAction] = useState<
-    'SWITCH' | 'CREATE' | 'HIDE' | 'DELETE' | null
+    'SWITCH' | 'CREATE' | 'HIDE' | 'DELETE' | 'IMPORT' | null
   >(null);
   const [pendingWalletId, setPendingWalletId] = useState<string | null>(null);
 
@@ -65,6 +85,13 @@ export function ProfilePage() {
 
   const handleOpenModalForCreate = () => {
     setPendingAction('CREATE');
+    setPendingWalletId(null);
+    setIsModalOpen(true);
+    setPassword('');
+  };
+
+  const handleOpenModalForImport = () => {
+    setPendingAction('IMPORT');
     setPendingWalletId(null);
     setIsModalOpen(true);
     setPassword('');
@@ -120,6 +147,9 @@ export function ProfilePage() {
         setIsModalOpen(false);
         const phrase = wallets.find((w) => w.mnemonic)?.mnemonic || '';
         navigate('/create-wallet', { state: { viewOnlyPhrase: phrase } });
+      } else if (pendingAction === 'IMPORT') {
+        setIsModalOpen(false);
+        navigate('/settings/import-account');
       } else if (pendingAction === 'HIDE' && pendingWalletId) {
         await hideWallet(pendingWalletId, true);
         const evt = new CustomEvent('toast', {
@@ -170,7 +200,7 @@ export function ProfilePage() {
           justifyContent: 'space-between',
           alignItems: 'center',
           padding: '2rem 0',
-          borderBottom: '1px solid rgba(255,255,255,0.05)'
+          borderBottom: '1px solid var(--glass-border-light)'
         }}
       >
         <BackButton />
@@ -179,7 +209,7 @@ export function ProfilePage() {
             fontSize: '0.75rem',
             textTransform: 'uppercase',
             letterSpacing: '0.1em',
-            color: '#52525b'
+            color: 'var(--color-text-secondary)'
           }}
         >
           Account
@@ -218,7 +248,7 @@ export function ProfilePage() {
                   flexShrink: 0
                 }}
               >
-                <User size={22} color="#3B82F6" />
+                <User size={22} color="var(--color-info)" />
               </div>
               <h1
                 style={{
@@ -231,7 +261,14 @@ export function ProfilePage() {
                 Edit Profile
               </h1>
             </div>
-            <p style={{ color: '#52525b', fontSize: '0.9rem', lineHeight: 1.6, margin: 0 }}>
+            <p
+              style={{
+                color: 'var(--color-text-secondary)',
+                fontSize: '0.9rem',
+                lineHeight: 1.6,
+                margin: 0
+              }}
+            >
               Customize your wallet identity. These changes are stored locally.
             </p>
           </div>
@@ -243,9 +280,9 @@ export function ProfilePage() {
               alignItems: 'center',
               gap: '1.25rem',
               padding: '1.25rem',
-              background: 'rgba(255, 255, 255, 0.02)',
+              background: 'var(--color-surface)',
               borderRadius: '16px',
-              border: '1px solid rgba(255, 255, 255, 0.05)'
+              border: '1px solid var(--glass-border-light)'
             }}
           >
             <div
@@ -272,7 +309,7 @@ export function ProfilePage() {
               >
                 Profile Avatar
               </span>
-              <span style={{ fontSize: '0.8rem', color: '#8A8A93' }}>
+              <span style={{ fontSize: '0.8rem', color: 'var(--color-text-secondary)' }}>
                 Auto-generated from your display name.
               </span>
             </div>
@@ -285,7 +322,7 @@ export function ProfilePage() {
                 fontSize: '0.75rem',
                 textTransform: 'uppercase',
                 letterSpacing: '0.1em',
-                color: '#52525b'
+                color: 'var(--color-text-secondary)'
               }}
             >
               Account Details
@@ -298,7 +335,7 @@ export function ProfilePage() {
                   fontSize: '0.75rem',
                   textTransform: 'uppercase',
                   letterSpacing: '0.1em',
-                  color: '#52525b'
+                  color: 'var(--color-text-secondary)'
                 }}
               >
                 Display Name
@@ -310,8 +347,8 @@ export function ProfilePage() {
                   onChange={(e) => setLocalName(e.target.value)}
                   style={{
                     width: '100%',
-                    background: 'rgba(255, 255, 255, 0.04)',
-                    border: '1px solid rgba(255, 255, 255, 0.08)',
+                    background: 'var(--glass-border-light)',
+                    border: '1px solid var(--glass-border)',
                     borderRadius: '12px',
                     padding: '0.875rem 1rem',
                     color: 'var(--color-text-primary)',
@@ -321,7 +358,7 @@ export function ProfilePage() {
                     transition: 'border 0.3s'
                   }}
                   onFocus={(e) => (e.target.style.borderColor = 'rgba(59, 130, 246, 0.5)')}
-                  onBlur={(e) => (e.target.style.borderColor = 'rgba(255, 255, 255, 0.08)')}
+                  onBlur={(e) => (e.target.style.borderColor = 'var(--glass-border)')}
                 />
               </div>
             </div>
@@ -334,16 +371,16 @@ export function ProfilePage() {
                 fontSize: '0.75rem',
                 textTransform: 'uppercase',
                 letterSpacing: '0.1em',
-                color: '#52525b'
+                color: 'var(--color-text-secondary)'
               }}
             >
               Connected Wallets
             </span>
             <div
               style={{
-                background: 'rgba(255, 255, 255, 0.02)',
+                background: 'var(--color-surface)',
                 borderRadius: '16px',
-                border: '1px solid rgba(255, 255, 255, 0.05)',
+                border: '1px solid var(--glass-border-light)',
                 overflow: 'hidden'
               }}
             >
@@ -364,15 +401,14 @@ export function ProfilePage() {
                         padding: '1.125rem 1.5rem',
                         borderBottom:
                           index < visibleWallets.length - 1
-                            ? '1px solid rgba(255, 255, 255, 0.04)'
+                            ? '1px solid var(--glass-border-light)'
                             : 'none',
                         cursor: 'pointer',
                         background: isActive ? 'rgba(59, 130, 246, 0.05)' : 'transparent',
                         transition: 'background 0.2s'
                       }}
                       onMouseOver={(e) => {
-                        if (!isActive)
-                          e.currentTarget.style.background = 'rgba(255, 255, 255, 0.02)';
+                        if (!isActive) e.currentTarget.style.background = 'var(--color-surface)';
                       }}
                       onMouseOut={(e) => {
                         if (!isActive) e.currentTarget.style.background = 'transparent';
@@ -401,7 +437,7 @@ export function ProfilePage() {
                           <span
                             style={{
                               fontSize: '0.75rem',
-                              color: '#8A8A93',
+                              color: 'var(--color-text-secondary)',
                               fontFamily: 'var(--font-mono, monospace)'
                             }}
                           >
@@ -419,7 +455,10 @@ export function ProfilePage() {
                           style={{
                             background: 'none',
                             border: 'none',
-                            color: copiedId === wallet.metadata.walletId ? '#34C759' : '#8A8A93',
+                            color:
+                              copiedId === wallet.metadata.walletId
+                                ? 'var(--color-success)'
+                                : 'var(--color-text-secondary)',
                             cursor: 'pointer',
                             padding: '0.25rem'
                           }}
@@ -440,7 +479,7 @@ export function ProfilePage() {
                           style={{
                             background: 'none',
                             border: 'none',
-                            color: '#8A8A93',
+                            color: 'var(--color-text-secondary)',
                             cursor: 'pointer',
                             padding: '0.25rem'
                           }}
@@ -474,7 +513,7 @@ export function ProfilePage() {
                               width: 8,
                               height: 8,
                               borderRadius: '50%',
-                              background: '#34C759'
+                              background: 'var(--color-success)'
                             }}
                           />
                         )}
@@ -494,7 +533,7 @@ export function ProfilePage() {
                 padding: '1rem',
                 marginTop: '0.5rem',
                 borderRadius: '12px',
-                background: 'rgba(255, 255, 255, 0.03)',
+                background: 'var(--color-surface)',
                 border: '1px dashed rgba(255, 255, 255, 0.15)',
                 color: 'var(--color-text-primary)',
                 fontSize: '0.875rem',
@@ -507,11 +546,55 @@ export function ProfilePage() {
               }}
               onMouseOut={(e) => {
                 e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.15)';
-                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.03)';
+                e.currentTarget.style.background = 'var(--color-surface)';
               }}
             >
               <Plus size={16} />
               Create New Account
+            </button>
+
+            <button
+              onClick={handleOpenModalForImport}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '0.5rem',
+                padding: '1rem',
+                marginTop: '0.5rem',
+                borderRadius: '12px',
+                background: 'transparent',
+                border: '1px solid var(--color-border-primary)',
+                color: 'var(--color-text-primary)',
+                fontSize: '0.875rem',
+                cursor: 'pointer',
+                transition: 'all 0.2s'
+              }}
+              onMouseOver={(e) => {
+                e.currentTarget.style.borderColor = 'rgba(59, 130, 246, 0.5)';
+                e.currentTarget.style.background = 'rgba(59, 130, 246, 0.05)';
+              }}
+              onMouseOut={(e) => {
+                e.currentTarget.style.borderColor = 'var(--color-border-primary)';
+                e.currentTarget.style.background = 'transparent';
+              }}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+              Import Account
             </button>
           </div>
 
@@ -533,16 +616,16 @@ export function ProfilePage() {
               borderRadius: '100px',
               background:
                 isSaving || localName === displayName || localName.trim().length === 0
-                  ? 'rgba(255, 255, 255, 0.05)'
-                  : '#3B82F6',
+                  ? 'var(--color-border-secondary)'
+                  : 'var(--color-info)',
               border:
                 isSaving || localName === displayName || localName.trim().length === 0
-                  ? '1px solid rgba(255, 255, 255, 0.08)'
+                  ? '1px solid var(--glass-border)'
                   : '1px solid #3B82F6',
               color:
                 isSaving || localName === displayName || localName.trim().length === 0
-                  ? '#52525b'
-                  : '#ffffff',
+                  ? 'var(--color-text-secondary)'
+                  : 'var(--color-text-primary)',
               fontSize: '0.875rem',
               textTransform: 'uppercase',
               letterSpacing: '0.1em',
@@ -568,11 +651,11 @@ export function ProfilePage() {
         {isModalOpen && (
           <div
             style={{
-              position: 'fixed',
-              top: 0,
+              position: 'absolute',
+              top: document.querySelector('main')?.scrollTop || 0,
               left: 0,
               right: 0,
-              bottom: 0,
+              height: document.querySelector('main')?.clientHeight || '100vh',
               backgroundColor: 'rgba(0,0,0,0.75)',
               backdropFilter: 'blur(24px)',
               zIndex: 100,
@@ -583,14 +666,14 @@ export function ProfilePage() {
             }}
           >
             <motion.div
-              initial={{ opacity: 0, scale: 0.9, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              initial={{ opacity: 0, scale: 0.85, filter: 'blur(10px)' }}
+              animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
+              exit={{ opacity: 0, scale: 0.85, filter: 'blur(10px)' }}
               transition={{ type: 'spring', damping: 25, stiffness: 300 }}
               style={{
-                background: 'rgba(24, 24, 27, 0.6)',
-                border: '1px solid rgba(255, 255, 255, 0.08)',
-                boxShadow: '0 32px 64px -16px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1)',
+                background: 'var(--glass-bg)',
+                border: '1px solid var(--glass-border)',
+                boxShadow: '0 32px 64px -16px rgba(0,0,0,0.5), inset 0 1px 0 var(--glass-border)',
                 borderRadius: '24px',
                 padding: '2.5rem 2rem',
                 width: '100%',
@@ -631,27 +714,31 @@ export function ProfilePage() {
                       fontSize: '1.5rem',
                       fontWeight: 300,
                       letterSpacing: '-0.02em',
-                      color: '#ffffff'
+                      color: 'var(--color-text-primary)'
                     }}
                   >
-                    {pendingAction === 'SWITCH'
-                      ? 'Switch Account'
-                      : pendingAction === 'HIDE'
-                        ? 'Hide Account'
-                        : pendingAction === 'DELETE'
-                          ? 'Delete Account'
-                          : 'Create Account'}
+                    {pendingAction === 'SWITCH' && 'Switch Account'}
+                    {pendingAction === 'CREATE' && 'Create Account'}
+                    {pendingAction === 'IMPORT' && 'Import Account'}
+                    {pendingAction === 'HIDE' && 'Hide Account'}
+                    {pendingAction === 'DELETE' && 'Delete Account'}
                   </h2>
-                  <p style={{ margin: '0.5rem 0 0 0', fontSize: '0.9rem', color: '#8A8A93' }}>
+                  <p
+                    style={{
+                      margin: '0.5rem 0 0 0',
+                      fontSize: '0.9rem',
+                      color: 'var(--color-text-secondary)'
+                    }}
+                  >
                     Enter your Vault password to authorize.
                   </p>
                 </div>
                 <button
                   onClick={() => setIsModalOpen(false)}
                   style={{
-                    background: 'rgba(255,255,255,0.05)',
+                    background: 'var(--color-border-secondary)',
                     border: 'none',
-                    color: '#8A8A93',
+                    color: 'var(--color-text-secondary)',
                     cursor: 'pointer',
                     width: '36px',
                     height: '36px',
@@ -662,12 +749,12 @@ export function ProfilePage() {
                     transition: 'all 0.2s'
                   }}
                   onMouseOver={(e) => {
-                    e.currentTarget.style.background = 'rgba(255,255,255,0.1)';
-                    e.currentTarget.style.color = '#ffffff';
+                    e.currentTarget.style.background = 'var(--color-border-primary)';
+                    e.currentTarget.style.color = 'var(--color-text-primary)';
                   }}
                   onMouseOut={(e) => {
-                    e.currentTarget.style.background = 'rgba(255,255,255,0.05)';
-                    e.currentTarget.style.color = '#8A8A93';
+                    e.currentTarget.style.background = 'var(--color-border-secondary)';
+                    e.currentTarget.style.color = 'var(--color-text-secondary)';
                   }}
                 >
                   <X size={18} />
@@ -677,15 +764,91 @@ export function ProfilePage() {
               {pendingAction === 'CREATE' && (
                 <div
                   style={{
-                    background: 'rgba(59, 130, 246, 0.05)',
-                    borderLeft: '2px solid #3B82F6',
+                    background: 'var(--color-info-bg)',
+                    borderLeft: '2px solid var(--color-info)',
                     padding: '1rem 1.25rem',
                     borderRadius: '0 8px 8px 0',
                     zIndex: 1
                   }}
                 >
-                  <p style={{ margin: 0, fontSize: '0.85rem', color: '#93C5FD', lineHeight: 1.5 }}>
+                  <p
+                    style={{
+                      margin: 0,
+                      fontSize: '0.85rem',
+                      color: 'var(--color-info)',
+                      lineHeight: 1.5
+                    }}
+                  >
                     This derives a new account from your existing Secret Recovery Phrase.
+                  </p>
+                </div>
+              )}
+              {pendingAction === 'IMPORT' && (
+                <div
+                  style={{
+                    background: 'var(--color-info-bg)',
+                    borderLeft: '2px solid var(--color-info)',
+                    padding: '1rem 1.25rem',
+                    borderRadius: '0 8px 8px 0',
+                    zIndex: 1
+                  }}
+                >
+                  <p
+                    style={{
+                      margin: 0,
+                      fontSize: '0.85rem',
+                      color: 'var(--color-info)',
+                      lineHeight: 1.5
+                    }}
+                  >
+                    Import a single account using its private key. This account will not be backed
+                    up by your Secret Recovery Phrase.
+                  </p>
+                </div>
+              )}
+              {pendingAction === 'HIDE' && (
+                <div
+                  style={{
+                    background: 'var(--color-warning-bg)',
+                    borderLeft: '2px solid var(--color-warning)',
+                    padding: '1rem 1.25rem',
+                    borderRadius: '0 8px 8px 0',
+                    zIndex: 1
+                  }}
+                >
+                  <p
+                    style={{
+                      margin: 0,
+                      fontSize: '0.85rem',
+                      color: 'var(--color-warning)',
+                      lineHeight: 1.5
+                    }}
+                  >
+                    This will remove the account from your dashboard. You can always recover it
+                    using your original seed phrase.
+                  </p>
+                </div>
+              )}
+              {pendingAction === 'DELETE' && (
+                <div
+                  style={{
+                    background: 'var(--color-danger-bg)',
+                    borderLeft: '2px solid var(--color-danger)',
+                    padding: '1rem 1.25rem',
+                    borderRadius: '0 8px 8px 0',
+                    zIndex: 1
+                  }}
+                >
+                  <p
+                    style={{
+                      margin: 0,
+                      fontSize: '0.85rem',
+                      color: 'var(--color-danger)',
+                      lineHeight: 1.5
+                    }}
+                  >
+                    Warning: This action will permanently delete this imported account. Make sure
+                    you have the private key backed up elsewhere.
                   </p>
                 </div>
               )}
@@ -702,9 +865,9 @@ export function ProfilePage() {
                       width: '100%',
                       background: 'transparent',
                       border: 'none',
-                      borderBottom: '1px solid rgba(255,255,255,0.2)',
+                      borderBottom: '1px solid var(--color-border-primary)',
                       padding: '1rem 2.5rem 1rem 0',
-                      color: 'white',
+                      color: 'var(--color-text-primary)',
                       fontSize: '1.25rem',
                       outline: 'none',
                       boxSizing: 'border-box',
@@ -713,10 +876,10 @@ export function ProfilePage() {
                       fontFamily: password && !showPassword ? 'var(--font-sans)' : 'inherit'
                     }}
                     onFocus={(e) => {
-                      e.currentTarget.style.borderBottomColor = '#ffffff';
+                      e.currentTarget.style.borderBottomColor = 'var(--color-text-primary)';
                     }}
                     onBlur={(e) => {
-                      e.currentTarget.style.borderBottomColor = 'rgba(255,255,255,0.2)';
+                      e.currentTarget.style.borderBottomColor = 'var(--color-border-primary)';
                     }}
                   />
                   <button
@@ -728,7 +891,7 @@ export function ProfilePage() {
                       transform: 'translateY(-50%)',
                       background: 'none',
                       border: 'none',
-                      color: '#8A8A93',
+                      color: 'var(--color-text-secondary)',
                       cursor: 'pointer',
                       padding: '0.5rem',
                       display: 'flex',
@@ -748,10 +911,16 @@ export function ProfilePage() {
                   style={{
                     width: '100%',
                     padding: '1rem',
-                    background: isProcessing || !password ? 'rgba(255,255,255,0.05)' : '#ffffff',
+                    background:
+                      isProcessing || !password
+                        ? 'var(--color-border-secondary)'
+                        : 'var(--color-text-primary)',
                     border: 'none',
                     borderRadius: '100px',
-                    color: isProcessing || !password ? '#52525b' : '#000000',
+                    color:
+                      isProcessing || !password
+                        ? 'var(--color-text-secondary)'
+                        : 'var(--color-bg-primary)',
                     fontSize: '0.875rem',
                     fontWeight: 600,
                     textTransform: 'uppercase',

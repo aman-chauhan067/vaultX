@@ -12,10 +12,12 @@ import {
 import { formatUnits } from '@vaultx/network-engine';
 import {} from 'lucide-react';
 import { AnimatedNumber } from '../../components/AnimatedNumber.js';
+import { useTranslation } from 'react-i18next';
 
 export default function Portfolio() {
   const navigate = useNavigate();
   const activeWallet = useActiveWallet();
+  const { t } = useTranslation();
   const { activeChainId, supportedNetworks } = useNetwork();
   const { data: stats, isLoading: isStatsLoading } = useNetworkStats(activeWallet?.address);
   const { portfolio } = usePortfolio();
@@ -71,7 +73,7 @@ export default function Portfolio() {
           justifyContent: 'space-between',
           alignItems: 'center',
           padding: '2rem 0',
-          borderBottom: '1px solid rgba(255,255,255,0.05)'
+          borderBottom: '1px solid var(--glass-border-light)'
         }}
       >
         <BackButton />
@@ -88,21 +90,25 @@ export default function Portfolio() {
             onClick={() => setActiveView('tokens')}
             style={{
               cursor: 'pointer',
-              color: activeView === 'tokens' ? '#ffffff' : '#52525b',
+              color:
+                activeView === 'tokens'
+                  ? 'var(--color-text-primary)'
+                  : 'var(--color-text-secondary)',
               transition: 'color 0.3s'
             }}
           >
-            Tokens
+            {t('portfolio.tokens')}
           </span>
           <span
             onClick={() => setActiveView('nfts')}
             style={{
               cursor: 'pointer',
-              color: activeView === 'nfts' ? '#ffffff' : '#52525b',
+              color:
+                activeView === 'nfts' ? 'var(--color-text-primary)' : 'var(--color-text-secondary)',
               transition: 'color 0.3s'
             }}
           >
-            Collectibles
+            {t('portfolio.nfts')}
           </span>
         </div>
       </motion.div>
@@ -119,7 +125,7 @@ export default function Portfolio() {
               fontSize: '0.875rem',
               textTransform: 'uppercase',
               letterSpacing: '0.2em',
-              color: '#52525b',
+              color: 'var(--color-text-secondary)',
               display: 'block',
               marginBottom: '1rem'
             }}
@@ -169,7 +175,7 @@ export default function Portfolio() {
                 justifyContent: 'space-between',
                 alignItems: 'baseline',
                 padding: '2rem 0',
-                borderTop: '1px solid rgba(255,255,255,0.1)',
+                borderTop: '1px solid var(--glass-border)',
                 cursor: 'pointer'
               }}
             >
@@ -180,7 +186,7 @@ export default function Portfolio() {
                 <span
                   style={{
                     fontSize: '0.875rem',
-                    color: '#52525b',
+                    color: 'var(--color-text-secondary)',
                     textTransform: 'uppercase',
                     letterSpacing: '0.1em'
                   }}
@@ -214,9 +220,9 @@ export default function Portfolio() {
                   justifyContent: 'space-between',
                   alignItems: 'baseline',
                   padding: '2rem 0',
-                  borderTop: '1px solid rgba(255,255,255,0.05)',
+                  borderTop: '1px solid var(--glass-border-light)',
                   borderBottom:
-                    i === tokens.length - 1 ? '1px solid rgba(255,255,255,0.05)' : 'none',
+                    i === tokens.length - 1 ? '1px solid var(--glass-border-light)' : 'none',
                   cursor: 'pointer'
                 }}
               >
@@ -227,7 +233,7 @@ export default function Portfolio() {
                   <span
                     style={{
                       fontSize: '0.875rem',
-                      color: '#52525b',
+                      color: 'var(--color-text-secondary)',
                       textTransform: 'uppercase',
                       letterSpacing: '0.1em'
                     }}
@@ -291,7 +297,13 @@ export default function Portfolio() {
                   >
                     No collectibles found
                   </span>
-                  <span style={{ fontSize: '0.875rem', color: '#52525b', maxWidth: '320px' }}>
+                  <span
+                    style={{
+                      fontSize: '0.875rem',
+                      color: 'var(--color-text-secondary)',
+                      maxWidth: '320px'
+                    }}
+                  >
                     NFTs and collectibles held by this wallet will appear here.
                   </span>
                 </div>
@@ -311,7 +323,7 @@ export default function Portfolio() {
                       style={{
                         width: '100%',
                         aspectRatio: '1',
-                        backgroundColor: '#18181b',
+                        backgroundColor: 'var(--color-bg-secondary)',
                         position: 'relative',
                         overflow: 'hidden'
                       }}
@@ -330,7 +342,7 @@ export default function Portfolio() {
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
-                            color: '#52525b',
+                            color: 'var(--color-text-secondary)',
                             fontSize: '0.875rem',
                             textTransform: 'uppercase',
                             letterSpacing: '0.1em'
@@ -349,7 +361,9 @@ export default function Portfolio() {
                       }}
                     >
                       <span style={{ fontSize: '1.25rem', fontWeight: 300 }}>{nft.name}</span>
-                      <span style={{ fontSize: '0.875rem', color: '#52525b' }}>#{nft.tokenId}</span>
+                      <span style={{ fontSize: '0.875rem', color: 'var(--color-text-secondary)' }}>
+                        #{nft.tokenId}
+                      </span>
                     </div>
                   </motion.div>
                 ))

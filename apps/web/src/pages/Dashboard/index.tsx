@@ -6,10 +6,12 @@ import { useNetworkStats } from '../../hooks/useNetworkStats.js';
 import { useNavigate } from 'react-router-dom';
 import { ArrowUpRight, ArrowDownLeft } from 'lucide-react';
 import { AnimatedNumber } from '../../components/AnimatedNumber.js';
+import { useTranslation } from 'react-i18next';
 
 export default function Dashboard() {
   const activeWallet = useActiveWallet();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { activeChainId, supportedNetworks } = useNetwork();
   const { history, pendingTransactions } = useTransactions();
   const { portfolio } = usePortfolio();
@@ -59,7 +61,7 @@ export default function Dashboard() {
           justifyContent: 'space-between',
           alignItems: 'center',
           padding: '2rem 0',
-          borderBottom: '1px solid rgba(255,255,255,0.05)'
+          borderBottom: '1px solid var(--glass-border-light)'
         }}
       >
         <div
@@ -79,7 +81,7 @@ export default function Dashboard() {
             fontSize: '0.75rem',
             textTransform: 'uppercase',
             letterSpacing: '0.1em',
-            color: '#a1a1aa'
+            color: 'var(--color-text-muted)'
           }}
         >
           <span
@@ -91,16 +93,16 @@ export default function Dashboard() {
               gap: '0.25rem',
               transition: 'color 0.3s'
             }}
-            onMouseOver={(e) => (e.currentTarget.style.color = '#ffffff')}
-            onMouseOut={(e) => (e.currentTarget.style.color = '#a1a1aa')}
+            onMouseOver={(e) => (e.currentTarget.style.color = 'var(--color-text-primary)')}
+            onMouseOut={(e) => (e.currentTarget.style.color = 'var(--color-text-muted)')}
           >
-            {activeNetwork?.name || 'Unknown Network'} <ArrowUpRight size={12} />
+            {activeNetwork?.name || t('dashboard.unknown_network')} <ArrowUpRight size={12} />
           </span>
           <span
             onClick={() => navigate('/settings')}
             style={{ cursor: 'pointer', transition: 'color 0.3s' }}
-            onMouseOver={(e) => (e.currentTarget.style.color = '#ffffff')}
-            onMouseOut={(e) => (e.currentTarget.style.color = '#a1a1aa')}
+            onMouseOver={(e) => (e.currentTarget.style.color = 'var(--color-text-primary)')}
+            onMouseOut={(e) => (e.currentTarget.style.color = 'var(--color-text-muted)')}
           >
             {activeWallet?.address
               ? `${activeWallet.address.slice(0, 6)}...${activeWallet.address.slice(-4)}`
@@ -130,11 +132,11 @@ export default function Dashboard() {
               fontSize: '0.875rem',
               textTransform: 'uppercase',
               letterSpacing: '0.2em',
-              color: '#52525b',
+              color: 'var(--color-text-secondary)',
               marginBottom: '1rem'
             }}
           >
-            Total Balance
+            {t('dashboard.total_balance')}
           </span>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: '1rem' }}>
             <span
@@ -156,7 +158,11 @@ export default function Dashboard() {
               )}
             </span>
             <span
-              style={{ fontSize: 'clamp(1.5rem, 4vw, 2.5rem)', fontWeight: 300, color: '#52525b' }}
+              style={{
+                fontSize: 'clamp(1.5rem, 4vw, 2.5rem)',
+                fontWeight: 300,
+                color: 'var(--color-text-secondary)'
+              }}
             >
               {activeNetwork?.currency.symbol || 'ETH'}
             </span>
@@ -168,8 +174,8 @@ export default function Dashboard() {
               marginTop: '2.5rem',
               padding: '1.5rem 2.5rem',
               borderRadius: '16px',
-              backgroundColor: 'rgba(255,255,255,0.03)',
-              border: '1px solid rgba(255,255,255,0.05)',
+              backgroundColor: 'var(--color-surface)',
+              border: '1px solid var(--glass-border-light)',
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
@@ -183,12 +189,12 @@ export default function Dashboard() {
                 alignItems: 'center',
                 gap: '0.5rem',
                 fontSize: '1rem',
-                color: '#a1a1aa',
+                color: 'var(--color-text-muted)',
                 fontWeight: 500
               }}
             >
               <span>{activeNetwork?.name || 'Unknown'}</span>
-              <span style={{ color: '#52525b' }}>•</span>
+              <span style={{ color: 'var(--color-text-secondary)' }}>•</span>
               <span>{activeNetwork?.currency.symbol || 'ETH'}</span>
             </div>
 
@@ -203,7 +209,13 @@ export default function Dashboard() {
                 >
                   Test Network
                 </div>
-                <div style={{ fontSize: '0.875rem', color: '#52525b', marginTop: '0.5rem' }}>
+                <div
+                  style={{
+                    fontSize: '0.875rem',
+                    color: 'var(--color-text-secondary)',
+                    marginTop: '0.5rem'
+                  }}
+                >
                   Market Price: Not Available
                 </div>
               </>
@@ -233,14 +245,17 @@ export default function Dashboard() {
                   <span
                     style={{
                       fontSize: '0.875rem',
-                      color: (portfolio?.ethPriceChange24h || 0) >= 0 ? '#10b981' : '#ef4444',
+                      color:
+                        (portfolio?.ethPriceChange24h || 0) >= 0
+                          ? 'var(--color-success)'
+                          : 'var(--color-danger)',
                       display: 'flex',
                       alignItems: 'center',
                       gap: '0.25rem',
                       backgroundColor:
                         (portfolio?.ethPriceChange24h || 0) >= 0
-                          ? 'rgba(16,185,129,0.1)'
-                          : 'rgba(239,68,68,0.1)',
+                          ? 'var(--color-success-bg)'
+                          : 'var(--color-danger-bg)',
                       padding: '0.25rem 0.5rem',
                       borderRadius: '6px'
                     }}
@@ -255,7 +270,7 @@ export default function Dashboard() {
                   <div
                     style={{
                       fontSize: '0.75rem',
-                      color: '#52525b',
+                      color: 'var(--color-text-secondary)',
                       marginTop: '0.5rem',
                       display: 'flex',
                       alignItems: 'center',
@@ -267,7 +282,7 @@ export default function Dashboard() {
                         width: 6,
                         height: 6,
                         borderRadius: '50%',
-                        backgroundColor: '#10b981'
+                        backgroundColor: 'var(--color-success)'
                       }}
                     />
                     Last Updated:{' '}
@@ -298,8 +313,8 @@ export default function Dashboard() {
               gap: '0.75rem',
               padding: '1rem 2rem',
               borderRadius: '100px',
-              backgroundColor: '#ffffff',
-              color: '#000000',
+              backgroundColor: 'var(--color-text-primary)',
+              color: 'var(--color-bg-primary)',
               cursor: 'pointer',
               fontSize: '0.875rem',
               textTransform: 'uppercase',
@@ -320,7 +335,7 @@ export default function Dashboard() {
               gap: '0.75rem',
               padding: '1rem 2rem',
               borderRadius: '100px',
-              backgroundColor: 'rgba(255,255,255,0.05)',
+              backgroundColor: 'var(--color-border-secondary)',
               color: 'var(--color-text-primary)',
               cursor: 'pointer',
               fontSize: '0.875rem',
@@ -329,8 +344,12 @@ export default function Dashboard() {
               fontWeight: 600,
               transition: 'background 0.3s'
             }}
-            onMouseOver={(e) => (e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.1)')}
-            onMouseOut={(e) => (e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.05)')}
+            onMouseOver={(e) =>
+              (e.currentTarget.style.backgroundColor = 'var(--color-border-primary)')
+            }
+            onMouseOut={(e) =>
+              (e.currentTarget.style.backgroundColor = 'var(--color-border-secondary)')
+            }
           >
             Receive <ArrowDownLeft size={16} />
           </div>
@@ -346,19 +365,21 @@ export default function Dashboard() {
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'flex-end',
-              borderBottom: '1px solid rgba(255,255,255,0.1)',
+              borderBottom: '1px solid var(--glass-border)',
               paddingBottom: '1rem',
               marginBottom: '2rem'
             }}
           >
-            <span style={{ fontSize: '1.25rem', fontWeight: 300 }}>Recent Activity</span>
+            <h3 style={{ fontSize: '1.25rem', margin: 0, fontWeight: 500 }}>
+              {t('dashboard.portfolio')}
+            </h3>
             <span
               onClick={() => navigate('/activity')}
               style={{
                 fontSize: '0.75rem',
                 textTransform: 'uppercase',
                 letterSpacing: '0.1em',
-                color: '#a1a1aa',
+                color: 'var(--color-text-muted)',
                 cursor: 'pointer'
               }}
             >
@@ -380,10 +401,18 @@ export default function Dashboard() {
               >
                 <div style={{ fontSize: '3rem', opacity: 0.15 }}>◎</div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                  <span style={{ color: '#a1a1aa', fontSize: '1rem' }}>No transactions yet</span>
-                  <span style={{ color: '#52525b', fontSize: '0.875rem' }}>
-                    Your transaction history will appear here.
-                  </span>
+                  <div
+                    style={{
+                      fontSize: '0.75rem',
+                      color: 'var(--color-text-secondary)',
+                      marginTop: '0.5rem',
+                      display: 'flex',
+                      textAlign: 'center',
+                      padding: '2rem 0'
+                    }}
+                  >
+                    {t('dashboard.no_transactions')}
+                  </div>
                 </div>
                 <span
                   onClick={() => navigate('/send')}
@@ -391,13 +420,13 @@ export default function Dashboard() {
                     fontSize: '0.75rem',
                     textTransform: 'uppercase',
                     letterSpacing: '0.1em',
-                    color: '#a1a1aa',
+                    color: 'var(--color-text-muted)',
                     cursor: 'pointer',
                     borderBottom: '1px solid rgba(255,255,255,0.2)',
                     paddingBottom: '2px'
                   }}
-                  onMouseOver={(e) => (e.currentTarget.style.color = '#ffffff')}
-                  onMouseOut={(e) => (e.currentTarget.style.color = '#a1a1aa')}
+                  onMouseOver={(e) => (e.currentTarget.style.color = 'var(--color-text-primary)')}
+                  onMouseOut={(e) => (e.currentTarget.style.color = 'var(--color-text-muted)')}
                 >
                   Send a transaction →
                 </span>
@@ -407,10 +436,10 @@ export default function Dashboard() {
                 const tx = _tx as any;
                 const isPending = !tx.receipt;
                 const statusColor = isPending
-                  ? '#f59e0b'
+                  ? 'var(--color-warning)'
                   : tx.receipt?.status === 1
-                    ? '#ffffff'
-                    : '#ef4444';
+                    ? 'var(--color-text-primary)'
+                    : 'var(--color-danger)';
                 const isSend =
                   tx.request?.from?.toLowerCase() === activeWallet?.address?.toLowerCase();
 
@@ -422,7 +451,7 @@ export default function Dashboard() {
                       justifyContent: 'space-between',
                       alignItems: 'center',
                       padding: '1.5rem 0',
-                      borderBottom: '1px solid rgba(255,255,255,0.05)'
+                      borderBottom: '1px solid var(--glass-border-light)'
                     }}
                   >
                     <div style={{ display: 'flex', gap: '2rem', alignItems: 'center' }}>
@@ -445,7 +474,7 @@ export default function Dashboard() {
                       style={{
                         fontFamily: 'var(--font-mono)',
                         fontSize: '0.875rem',
-                        color: '#a1a1aa'
+                        color: 'var(--color-text-muted)'
                       }}
                     >
                       {tx.hash

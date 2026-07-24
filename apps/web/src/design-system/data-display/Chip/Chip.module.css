@@ -15,7 +15,7 @@
 }
 
 .filled {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--glass-border);
   color: var(--color-text-primary);
 }
 

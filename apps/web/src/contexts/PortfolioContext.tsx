@@ -8,7 +8,7 @@ import type {
   PortfolioAnalytics
 } from '@vaultx/network-engine';
 import { VaultXService } from '../services/VaultXService.js';
-import { useActiveWallet, useNetwork, useCurrency } from '../hooks/index.js';
+import { useActiveWallet, useNetwork, useSettings } from '../hooks/index.js';
 import { formatEther } from '@vaultx/network-engine';
 import { DEFAULT_TOKENS } from '../config/tokens.js';
 
@@ -55,7 +55,7 @@ export const PortfolioContext = createContext<PortfolioContextType>({
 export const PortfolioProvider = ({ children }: { children: ReactNode }) => {
   const activeWallet = useActiveWallet();
   const { activeChainId } = useNetwork();
-  const { currency } = useCurrency();
+  const { currency } = useSettings();
 
   const [portfolio, setPortfolio] = useState<PortfolioData | null>(null);
   const [history, setHistory] = useState<PortfolioSnapshot[]>([]);

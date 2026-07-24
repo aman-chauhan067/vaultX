@@ -130,7 +130,7 @@ export default function ImportWallet() {
             fontSize: '0.75rem',
             textTransform: 'uppercase',
             letterSpacing: '0.1em',
-            color: '#56565C'
+            color: 'var(--color-text-muted)'
           }}
         >
           Import
@@ -181,7 +181,7 @@ export default function ImportWallet() {
               <p
                 style={{
                   fontSize: '1rem',
-                  color: '#8A8A93',
+                  color: 'var(--color-text-secondary)',
                   marginBottom: '4rem',
                   maxWidth: '100%',
                   wordWrap: 'break-word'
@@ -200,8 +200,8 @@ export default function ImportWallet() {
                     gap: '1rem',
                     padding: '1.25rem 3rem',
                     borderRadius: '100px',
-                    backgroundColor: '#ffffff',
-                    color: '#000000',
+                    backgroundColor: 'var(--color-text-primary)',
+                    color: 'var(--color-bg-primary)',
                     cursor: 'pointer',
                     fontSize: '0.875rem',
                     textTransform: 'uppercase',
@@ -234,7 +234,7 @@ export default function ImportWallet() {
                   }}
                   onMouseOver={(e) => {
                     e.currentTarget.style.transform = 'translateY(-2px)';
-                    e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.05)';
+                    e.currentTarget.style.backgroundColor = 'var(--color-border-secondary)';
                   }}
                   onMouseOut={(e) => {
                     e.currentTarget.style.transform = 'translateY(0)';
@@ -273,7 +273,7 @@ export default function ImportWallet() {
               <p
                 style={{
                   fontSize: '0.9rem',
-                  color: '#8A8A93',
+                  color: 'var(--color-text-secondary)',
                   marginBottom: '4rem',
                   maxWidth: '100%',
                   wordWrap: 'break-word'
@@ -303,7 +303,7 @@ export default function ImportWallet() {
                     <span
                       style={{
                         fontSize: '0.75rem',
-                        color: '#56565C',
+                        color: 'var(--color-text-muted)',
                         width: '24px',
                         marginRight: '0.5rem',
                         display: 'inline-block'
@@ -341,8 +341,8 @@ export default function ImportWallet() {
                     gap: '1rem',
                     padding: '1.25rem 3rem',
                     borderRadius: '100px',
-                    backgroundColor: '#ffffff',
-                    color: '#000000',
+                    backgroundColor: 'var(--color-text-primary)',
+                    color: 'var(--color-bg-primary)',
                     cursor: 'pointer',
                     fontSize: '0.875rem',
                     textTransform: 'uppercase',
@@ -386,7 +386,7 @@ export default function ImportWallet() {
               <p
                 style={{
                   fontSize: '0.9rem',
-                  color: '#8A8A93',
+                  color: 'var(--color-text-secondary)',
                   marginBottom: '4rem',
                   maxWidth: '100%',
                   wordWrap: 'break-word'
@@ -417,7 +417,8 @@ export default function ImportWallet() {
                     fontFamily: 'var(--font-mono)'
                   }}
                   onFocus={(e) => {
-                    if (!error) e.currentTarget.style.borderBottomColor = '#ffffff';
+                    if (!error)
+                      e.currentTarget.style.borderBottomColor = 'var(--color-text-primary)';
                   }}
                   onBlur={(e) => {
                     if (!error) e.currentTarget.style.borderBottomColor = 'rgba(255,255,255,0.2)';
@@ -435,8 +436,8 @@ export default function ImportWallet() {
                     gap: '1rem',
                     padding: '1.25rem 3rem',
                     borderRadius: '100px',
-                    backgroundColor: '#ffffff',
-                    color: '#000000',
+                    backgroundColor: 'var(--color-text-primary)',
+                    color: 'var(--color-bg-primary)',
                     cursor: 'pointer',
                     fontSize: '0.875rem',
                     textTransform: 'uppercase',
@@ -475,7 +476,13 @@ export default function ImportWallet() {
               >
                 Secure access
               </div>
-              <p style={{ fontSize: '1rem', color: '#8A8A93', marginBottom: '4rem' }}>
+              <p
+                style={{
+                  fontSize: '1rem',
+                  color: 'var(--color-text-secondary)',
+                  marginBottom: '4rem'
+                }}
+              >
                 Create a password to encrypt this wallet on your device.
               </p>
 
@@ -506,7 +513,9 @@ export default function ImportWallet() {
                     outline: 'none',
                     transition: 'border-color 0.3s'
                   }}
-                  onFocus={(e) => (e.currentTarget.style.borderBottomColor = '#ffffff')}
+                  onFocus={(e) =>
+                    (e.currentTarget.style.borderBottomColor = 'var(--color-text-primary)')
+                  }
                   onBlur={(e) =>
                     (e.currentTarget.style.borderBottomColor = 'rgba(255,255,255,0.2)')
                   }
@@ -531,7 +540,9 @@ export default function ImportWallet() {
                     outline: 'none',
                     transition: 'border-color 0.3s'
                   }}
-                  onFocus={(e) => (e.currentTarget.style.borderBottomColor = '#ffffff')}
+                  onFocus={(e) =>
+                    (e.currentTarget.style.borderBottomColor = 'var(--color-text-primary)')
+                  }
                   onBlur={(e) =>
                     (e.currentTarget.style.borderBottomColor = 'rgba(255,255,255,0.2)')
                   }
@@ -549,8 +560,8 @@ export default function ImportWallet() {
                     gap: '1rem',
                     padding: '1.25rem 3rem',
                     borderRadius: '100px',
-                    backgroundColor: '#ffffff',
-                    color: '#000000',
+                    backgroundColor: 'var(--color-text-primary)',
+                    color: 'var(--color-bg-primary)',
                     cursor: 'pointer',
                     fontSize: '0.875rem',
                     textTransform: 'uppercase',

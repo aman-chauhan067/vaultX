@@ -616,7 +616,7 @@ export default function Landing() {
                 zIndex: 10
               }}
             >
-              <Logo size="md" variant="light" />
+              <Logo size="md" variant="dark" />
               <div
                 style={{
                   fontSize: '0.75rem',

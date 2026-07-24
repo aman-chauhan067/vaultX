@@ -6,8 +6,10 @@ import { formatUnits, formatEther } from '@vaultx/network-engine';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowUpRight, ArrowDownLeft } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 export default function Activity() {
+  const { t } = useTranslation();
   const { history, pendingTransactions } = useTransactions();
   const { activeChainId, supportedNetworks } = useNetwork();
   const activeNetwork = supportedNetworks.find((n) => n.chainId === activeChainId);
@@ -59,20 +61,20 @@ export default function Activity() {
           justifyContent: 'space-between',
           alignItems: 'center',
           padding: '2rem 0',
-          borderBottom: '1px solid rgba(255,255,255,0.05)'
+          borderBottom: '1px solid var(--glass-border-light)'
         }}
       >
         <BackButton />
-        <div
+        <span
           style={{
             fontSize: '0.75rem',
             textTransform: 'uppercase',
             letterSpacing: '0.1em',
-            color: '#52525b'
+            color: 'var(--color-text-secondary)'
           }}
         >
-          Network Activity
-        </div>
+          {t('activity.title')}
+        </span>
       </motion.div>
 
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', marginTop: '10vh' }}>
@@ -91,7 +93,7 @@ export default function Activity() {
               marginBottom: '6rem'
             }}
           >
-            Ledger
+            {t('activity.no_activity')}
           </div>
         </motion.div>
 
@@ -127,7 +129,13 @@ export default function Activity() {
                 >
                   No activity yet
                 </span>
-                <span style={{ fontSize: '0.875rem', color: '#52525b', maxWidth: '320px' }}>
+                <span
+                  style={{
+                    fontSize: '0.875rem',
+                    color: 'var(--color-text-secondary)',
+                    maxWidth: '320px'
+                  }}
+                >
                   Once you send or receive your first transaction, it will appear here.
                 </span>
               </div>
@@ -136,8 +144,8 @@ export default function Activity() {
                 style={{
                   padding: '0.875rem 2rem',
                   borderRadius: '100px',
-                  backgroundColor: '#ffffff',
-                  color: '#000000',
+                  backgroundColor: 'var(--color-text-primary)',
+                  color: 'var(--color-bg-primary)',
                   cursor: 'pointer',
                   fontSize: '0.75rem',
                   textTransform: 'uppercase',
@@ -182,14 +190,14 @@ export default function Activity() {
                       display: 'flex',
                       alignItems: 'center',
                       padding: '2rem 0',
-                      borderBottom: '1px solid rgba(255,255,255,0.05)'
+                      borderBottom: '1px solid var(--glass-border-light)'
                     }}
                   >
                     <div style={{ flex: 1, display: 'flex', alignItems: 'baseline', gap: '2rem' }}>
                       <span
                         style={{
                           fontSize: '0.875rem',
-                          color: '#f59e0b',
+                          color: 'var(--color-warning)',
                           textTransform: 'uppercase',
                           letterSpacing: '0.1em',
                           width: '100px'
@@ -215,7 +223,7 @@ export default function Activity() {
                       <span
                         style={{
                           fontSize: '0.875rem',
-                          color: '#52525b',
+                          color: 'var(--color-text-secondary)',
                           fontFamily: 'var(--font-mono)'
                         }}
                       >
@@ -267,12 +275,12 @@ export default function Activity() {
                       display: 'flex',
                       alignItems: 'center',
                       padding: '2rem 0',
-                      borderBottom: '1px solid rgba(255,255,255,0.05)',
+                      borderBottom: '1px solid var(--glass-border-light)',
                       cursor: 'pointer',
                       transition: 'background 0.3s'
                     }}
                     onMouseOver={(e) =>
-                      (e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.02)')
+                      (e.currentTarget.style.backgroundColor = 'var(--color-surface)')
                     }
                     onMouseOut={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
                   >
@@ -280,7 +288,7 @@ export default function Activity() {
                       <span
                         style={{
                           fontSize: '0.875rem',
-                          color: isSuccess ? '#52525b' : '#ef4444',
+                          color: isSuccess ? 'var(--color-text-secondary)' : 'var(--color-danger)',
                           textTransform: 'uppercase',
                           letterSpacing: '0.1em',
                           width: '100px'
@@ -299,9 +307,9 @@ export default function Activity() {
                       >
                         {isSend ? 'Sent' : 'Received'} {symbol}
                         {isSend ? (
-                          <ArrowUpRight size={24} color="#52525b" />
+                          <ArrowUpRight size={24} color="var(--color-text-secondary)" />
                         ) : (
-                          <ArrowDownLeft size={24} color="#52525b" />
+                          <ArrowDownLeft size={24} color="var(--color-text-secondary)" />
                         )}
                       </span>
                     </div>
@@ -317,7 +325,9 @@ export default function Activity() {
                         style={{
                           fontSize: 'clamp(1.5rem, 3vw, 2rem)',
                           fontWeight: 300,
-                          color: isSuccess ? '#ffffff' : '#52525b'
+                          color: isSuccess
+                            ? 'var(--color-text-primary)'
+                            : 'var(--color-text-secondary)'
                         }}
                       >
                         {amount}
@@ -325,7 +335,7 @@ export default function Activity() {
                       <span
                         style={{
                           fontSize: '0.875rem',
-                          color: '#52525b',
+                          color: 'var(--color-text-secondary)',
                           fontFamily: 'var(--font-mono)'
                         }}
                       >

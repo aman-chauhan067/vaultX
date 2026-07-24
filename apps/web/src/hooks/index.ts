@@ -47,4 +47,3 @@ export function useActiveAccount() {
 export * from './useNetworkStats.js';
 export * from './useNFTs.js';
 export * from './usePortfolio.js';
-export { useCurrency } from '../contexts/CurrencyContext.js';

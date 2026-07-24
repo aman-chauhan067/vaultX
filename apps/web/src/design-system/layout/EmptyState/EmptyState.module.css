@@ -21,7 +21,7 @@
   transform: translate(-50%, -50%);
   font-family: var(--font-brand);
   font-size: clamp(80px, 10vw, 160px);
-  color: rgba(255, 255, 255, 0.02);
+  color: var(--color-surface);
   white-space: nowrap;
   pointer-events: none;
   z-index: 0;
@@ -31,7 +31,7 @@
 .icon {
   margin-bottom: var(--space-6);
   color: var(--color-text-primary);
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--glass-border-light);
   padding: var(--space-5);
   border-radius: var(--radius-pill);
   display: flex;

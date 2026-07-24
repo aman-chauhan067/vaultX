@@ -10,26 +10,34 @@ import {
   ShieldCheck,
   TerminalSquare
 } from 'lucide-react';
+import { useSettings } from '../../hooks/index.js';
+import { useTranslation } from 'react-i18next';
 import styles from './Sidebar.module.css';
-
-const navItems = [
-  { path: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { path: '/portfolio', label: 'Portfolio', icon: Briefcase },
-  { path: '/activity', label: 'Activity', icon: Activity },
-  { path: '/settings', label: 'Settings', icon: Settings },
-  { path: '/security', label: 'Security', icon: ShieldCheck },
-  { path: '/developer', label: 'Developer', icon: TerminalSquare }
-];
 
 export const Sidebar: React.FC = () => {
   const location = useLocation();
+  const { theme } = useSettings();
+  const { t } = useTranslation();
+
+  const navItems = [
+    { path: '/dashboard', label: t('sidebar.dashboard'), icon: LayoutDashboard },
+    { path: '/portfolio', label: t('sidebar.portfolio'), icon: Briefcase },
+    { path: '/activity', label: t('sidebar.activity'), icon: Activity },
+    { path: '/settings', label: t('sidebar.settings'), icon: Settings },
+    { path: '/security', label: t('sidebar.security'), icon: ShieldCheck },
+    { path: '/developer', label: t('sidebar.developer'), icon: TerminalSquare }
+  ];
+
+  const isLight =
+    theme === 'light' ||
+    (theme === 'system' && window.matchMedia('(prefers-color-scheme: light)').matches);
 
   return (
     <aside className={styles.sidebar}>
       <div className={styles.brand}>
         <div className={styles.logo}>
           <img
-            src="/logo.png"
+            src={isLight ? '/logolight.png' : '/logo.png'}
             alt="VaultX Logo"
             style={{ width: '150%', height: '150%', objectFit: 'contain' }}
           />

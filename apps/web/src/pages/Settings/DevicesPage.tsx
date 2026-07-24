@@ -93,7 +93,7 @@ export function DevicesPage() {
           justifyContent: 'space-between',
           alignItems: 'center',
           padding: '2rem 0',
-          borderBottom: '1px solid rgba(255,255,255,0.05)'
+          borderBottom: '1px solid var(--glass-border-light)'
         }}
       >
         <BackButton />
@@ -102,7 +102,7 @@ export function DevicesPage() {
             fontSize: '0.75rem',
             textTransform: 'uppercase',
             letterSpacing: '0.1em',
-            color: '#52525b'
+            color: 'var(--color-text-secondary)'
           }}
         >
           Security
@@ -142,7 +142,7 @@ export function DevicesPage() {
                   flexShrink: 0
                 }}
               >
-                <Monitor size={22} color="#14B8A6" />
+                <Monitor size={22} color="var(--color-teal)" />
               </div>
               <h1
                 style={{
@@ -155,7 +155,14 @@ export function DevicesPage() {
                 Connected Devices
               </h1>
             </div>
-            <p style={{ color: '#52525b', fontSize: '0.9rem', lineHeight: 1.6, margin: 0 }}>
+            <p
+              style={{
+                color: 'var(--color-text-secondary)',
+                fontSize: '0.9rem',
+                lineHeight: 1.6,
+                margin: 0
+              }}
+            >
               View and manage all devices that have accessed your VaultX wallet.
             </p>
           </div>
@@ -167,7 +174,7 @@ export function DevicesPage() {
                 fontSize: '0.75rem',
                 textTransform: 'uppercase',
                 letterSpacing: '0.1em',
-                color: '#52525b'
+                color: 'var(--color-text-secondary)'
               }}
             >
               Current Session
@@ -176,9 +183,9 @@ export function DevicesPage() {
             <div
               style={{
                 padding: '1.25rem 1.5rem',
-                background: 'rgba(255,255,255,0.02)',
+                background: 'var(--color-surface)',
                 borderRadius: '16px',
-                border: '1px solid rgba(255,255,255,0.05)',
+                border: '1px solid var(--glass-border-light)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
@@ -189,14 +196,14 @@ export function DevicesPage() {
                 <div
                   style={{
                     padding: '0.75rem',
-                    background: 'rgba(255,255,255,0.04)',
+                    background: 'var(--glass-border-light)',
                     borderRadius: '12px',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center'
                   }}
                 >
-                  <Monitor size={22} color="#ffffff" />
+                  <Monitor size={22} color="var(--color-text-primary)" />
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
                   <span
@@ -214,11 +221,11 @@ export function DevicesPage() {
                         width: '8px',
                         height: '8px',
                         borderRadius: '50%',
-                        background: '#34C759',
+                        background: 'var(--color-success)',
                         boxShadow: '0 0 8px rgba(52, 199, 89, 0.6)'
                       }}
                     />
-                    <span style={{ fontSize: '0.75rem', color: '#52525b' }}>
+                    <span style={{ fontSize: '0.75rem', color: 'var(--color-text-secondary)' }}>
                       Active now • {currentDeviceId.slice(0, 8)}
                     </span>
                   </div>
@@ -233,7 +240,7 @@ export function DevicesPage() {
                   background: 'rgba(20, 184, 166, 0.12)',
                   border: '1px solid rgba(20, 184, 166, 0.3)',
                   borderRadius: '100px',
-                  color: '#14B8A6',
+                  color: 'var(--color-teal)',
                   whiteSpace: 'nowrap'
                 }}
               >
@@ -249,7 +256,7 @@ export function DevicesPage() {
                 fontSize: '0.75rem',
                 textTransform: 'uppercase',
                 letterSpacing: '0.1em',
-                color: '#52525b'
+                color: 'var(--color-text-secondary)'
               }}
             >
               Other Sessions
@@ -257,16 +264,22 @@ export function DevicesPage() {
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
               {loading ? (
-                <div style={{ padding: '2rem', textAlign: 'center', color: '#52525b' }}>
+                <div
+                  style={{
+                    padding: '2rem',
+                    textAlign: 'center',
+                    color: 'var(--color-text-secondary)'
+                  }}
+                >
                   Loading sessions...
                 </div>
               ) : sessions.filter((s) => s.deviceId !== currentDeviceId).length === 0 ? (
                 <div
                   style={{
                     padding: '3rem 1.5rem',
-                    background: 'rgba(255,255,255,0.02)',
+                    background: 'var(--color-surface)',
                     borderRadius: '16px',
-                    border: '1px solid rgba(255,255,255,0.05)',
+                    border: '1px solid var(--glass-border-light)',
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
@@ -275,7 +288,11 @@ export function DevicesPage() {
                     gap: '1rem'
                   }}
                 >
-                  <Smartphone size={56} color="#ffffff" style={{ opacity: 0.15 }} />
+                  <Smartphone
+                    size={56}
+                    color="var(--color-text-primary)"
+                    style={{ opacity: 0.15 }}
+                  />
                   <div
                     style={{
                       display: 'flex',
@@ -293,7 +310,13 @@ export function DevicesPage() {
                     >
                       No other sessions
                     </span>
-                    <span style={{ fontSize: '0.85rem', color: '#52525b', lineHeight: 1.5 }}>
+                    <span
+                      style={{
+                        fontSize: '0.85rem',
+                        color: 'var(--color-text-secondary)',
+                        lineHeight: 1.5
+                      }}
+                    >
                       When you access VaultX from additional browsers, those sessions will appear
                       here.
                     </span>
@@ -307,9 +330,9 @@ export function DevicesPage() {
                       key={session.deviceId}
                       style={{
                         padding: '1.25rem 1.5rem',
-                        background: 'rgba(255,255,255,0.02)',
+                        background: 'var(--color-surface)',
                         borderRadius: '16px',
-                        border: '1px solid rgba(255,255,255,0.05)',
+                        border: '1px solid var(--glass-border-light)',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'space-between',
@@ -320,7 +343,7 @@ export function DevicesPage() {
                         <div
                           style={{
                             padding: '0.75rem',
-                            background: 'rgba(255,255,255,0.04)',
+                            background: 'var(--glass-border-light)',
                             borderRadius: '12px',
                             display: 'flex',
                             alignItems: 'center',
@@ -328,9 +351,9 @@ export function DevicesPage() {
                           }}
                         >
                           {session.platform === 'Web' ? (
-                            <Monitor size={22} color="#ffffff" />
+                            <Monitor size={22} color="var(--color-text-primary)" />
                           ) : (
-                            <Smartphone size={22} color="#ffffff" />
+                            <Smartphone size={22} color="var(--color-text-primary)" />
                           )}
                         </div>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
@@ -344,7 +367,9 @@ export function DevicesPage() {
                             {session.deviceName || 'VaultX Device'}
                           </span>
                           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                            <span style={{ fontSize: '0.75rem', color: '#52525b' }}>
+                            <span
+                              style={{ fontSize: '0.75rem', color: 'var(--color-text-secondary)' }}
+                            >
                               {session.browser} · {session.platform} • Last seen:{' '}
                               {session.lastSeen
                                 ? new Date(session.lastSeen).toLocaleString()
@@ -359,7 +384,7 @@ export function DevicesPage() {
                           onClick={() => handleRename(session.deviceId)}
                           style={{
                             padding: '0.5rem 1rem',
-                            background: 'rgba(255,255,255,0.05)',
+                            background: 'var(--color-border-secondary)',
                             border: 'none',
                             color: 'var(--color-text-primary)',
                             borderRadius: '8px',
@@ -376,7 +401,7 @@ export function DevicesPage() {
                             padding: '0.5rem 1rem',
                             background: 'transparent',
                             border: '1px solid #ef4444',
-                            color: '#ef4444',
+                            color: 'var(--color-danger)',
                             borderRadius: '8px',
                             cursor: 'pointer',
                             fontSize: '0.875rem',
@@ -399,7 +424,7 @@ export function DevicesPage() {
                 fontSize: '0.75rem',
                 textTransform: 'uppercase',
                 letterSpacing: '0.1em',
-                color: '#52525b'
+                color: 'var(--color-text-secondary)'
               }}
             >
               Session Security
@@ -407,9 +432,9 @@ export function DevicesPage() {
 
             <div
               style={{
-                background: 'rgba(255,255,255,0.02)',
+                background: 'var(--color-surface)',
                 borderRadius: '16px',
-                border: '1px solid rgba(255,255,255,0.05)',
+                border: '1px solid var(--glass-border-light)',
                 overflow: 'hidden',
                 display: 'flex',
                 flexDirection: 'column'
@@ -422,11 +447,11 @@ export function DevicesPage() {
                   alignItems: 'center',
                   justifyContent: 'space-between',
                   padding: '1.25rem 1.5rem',
-                  borderBottom: '1px solid rgba(255,255,255,0.05)'
+                  borderBottom: '1px solid var(--glass-border-light)'
                 }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.875rem' }}>
-                  <Clock size={18} color="#8A8A93" />
+                  <Clock size={18} color="var(--color-text-secondary)" />
                   <span style={{ fontSize: '0.95rem', color: 'var(--color-text-primary)' }}>
                     Auto-lock timeout
                   </span>
@@ -440,14 +465,14 @@ export function DevicesPage() {
                     onChange={(e) => setAutoLockTime(parseInt(e.target.value) * 60 * 1000)}
                     style={{
                       width: '80px',
-                      accentColor: '#14B8A6',
+                      accentColor: 'var(--color-teal)',
                       cursor: 'pointer'
                     }}
                   />
                   <span
                     style={{
                       fontSize: '0.875rem',
-                      color: '#14B8A6',
+                      color: 'var(--color-teal)',
                       fontWeight: 500,
                       minWidth: '70px',
                       textAlign: 'right'
@@ -465,11 +490,11 @@ export function DevicesPage() {
                   alignItems: 'center',
                   justifyContent: 'space-between',
                   padding: '1.25rem 1.5rem',
-                  borderBottom: '1px solid rgba(255,255,255,0.05)'
+                  borderBottom: '1px solid var(--glass-border-light)'
                 }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.875rem' }}>
-                  <Shield size={18} color="#8A8A93" />
+                  <Shield size={18} color="var(--color-text-secondary)" />
                   <span style={{ fontSize: '0.95rem', color: 'var(--color-text-primary)' }}>
                     Idle detection
                   </span>
@@ -483,7 +508,7 @@ export function DevicesPage() {
                       background: 'rgba(52, 199, 89, 0.12)',
                       border: '1px solid rgba(52, 199, 89, 0.25)',
                       borderRadius: '100px',
-                      color: '#34C759'
+                      color: 'var(--color-success)'
                     }}
                   >
                     Enabled
@@ -501,7 +526,7 @@ export function DevicesPage() {
                 }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.875rem' }}>
-                  <Lock size={18} color="#8A8A93" />
+                  <Lock size={18} color="var(--color-text-secondary)" />
                   <span style={{ fontSize: '0.95rem', color: 'var(--color-text-primary)' }}>
                     Session encryption
                   </span>
@@ -515,7 +540,7 @@ export function DevicesPage() {
                     background: 'rgba(20, 184, 166, 0.1)',
                     border: '1px solid rgba(20, 184, 166, 0.2)',
                     borderRadius: '6px',
-                    color: '#14B8A6'
+                    color: 'var(--color-teal)'
                   }}
                 >
                   AES-256-GCM
@@ -552,7 +577,7 @@ export function DevicesPage() {
             <h3 style={{ margin: '0 0 1rem 0', fontSize: '1.25rem' }}>Revoke Device?</h3>
             <p
               style={{
-                color: '#a1a1aa',
+                color: 'var(--color-text-muted)',
                 fontSize: '0.875rem',
                 marginBottom: '2rem',
                 lineHeight: 1.5
@@ -567,7 +592,7 @@ export function DevicesPage() {
                 style={{
                   padding: '0.75rem 1.5rem',
                   background: 'transparent',
-                  color: '#ffffff',
+                  color: 'var(--color-text-primary)',
                   border: 'none',
                   cursor: 'pointer'
                 }}
@@ -578,8 +603,8 @@ export function DevicesPage() {
                 onClick={() => handleRevoke(showRevokeModal)}
                 style={{
                   padding: '0.75rem 1.5rem',
-                  background: '#ef4444',
-                  color: '#ffffff',
+                  background: 'var(--color-danger)',
+                  color: 'var(--color-text-primary)',
                   border: 'none',
                   borderRadius: '8px',
                   cursor: 'pointer',

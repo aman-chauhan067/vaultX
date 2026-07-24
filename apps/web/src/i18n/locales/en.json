@@ -1,0 +1,80 @@
+{
+  "sidebar": {
+    "dashboard": "Dashboard",
+    "portfolio": "Portfolio",
+    "activity": "Activity",
+    "settings": "Settings",
+    "security": "Security",
+    "developer": "Developer"
+  },
+  "settings": {
+    "preferences": "Preferences",
+    "language_region": "Language & Region",
+    "language_desc": "Choose your preferred language. VaultX will display all interface text in the selected language.",
+    "language": "Language",
+    "currency": "Currency",
+    "date_format": "Date Format",
+    "number_format": "Number Format"
+  },
+  "developer": {
+    "title": "Developer Mode",
+    "description": "Advanced tools and read-only diagnostics",
+    "system_diagnostics": "System Diagnostics",
+    "current_chain": "Current Chain",
+    "chain_id": "Chain ID",
+    "rpc_url": "RPC URL",
+    "current_block": "Current Block",
+    "wallet_address": "Wallet Address",
+    "connected_dapps": "Connected dApps",
+    "wc_sessions": "WC Sessions",
+    "cache_size": "Cache Size",
+    "extension_status": "Extension Status",
+    "background_worker": "Background Worker",
+    "show_testnets": "Show Testnets",
+    "show_testnets_desc": "Display test networks in network selector"
+  },
+  "dashboard": {
+    "total_balance": "Total Balance",
+    "portfolio": "Portfolio",
+    "recent_activity": "Recent Activity",
+    "unknown_network": "Unknown Network",
+    "no_transactions": "No recent transactions"
+  },
+  "settings_index": {
+    "title": "Settings",
+    "account": "Account",
+    "edit_profile": "Edit Profile",
+    "preferences": "Preferences",
+    "language": "Language",
+    "appearance": "Appearance",
+    "security": "Security",
+    "security_desc": "Passwords, Recovery, 2FA",
+    "connected_apps": "Connected Apps",
+    "connected_apps_desc": "Manage dApp permissions",
+    "notifications": "Notifications",
+    "notifications_desc": "Alerts & updates",
+    "devices": "Devices",
+    "devices_desc": "Manage active sessions"
+  },
+  "portfolio": {
+    "title": "Portfolio",
+    "tokens": "Tokens",
+    "nfts": "NFTs",
+    "balance": "Balance",
+    "price": "Price",
+    "value": "Value",
+    "no_tokens": "No tokens found",
+    "no_nfts": "No NFTs found"
+  },
+  "activity": {
+    "title": "Activity",
+    "all": "All",
+    "sent": "Sent",
+    "received": "Received",
+    "pending": "Pending",
+    "no_activity": "No recent activity found",
+    "status": "Status",
+    "amount": "Amount",
+    "date": "Date"
+  }
+}

@@ -49,6 +49,9 @@ const DevicesPage = lazy(() =>
 const ProfilePage = lazy(() =>
   import('../pages/Settings/ProfilePage.js').then((m) => ({ default: m.ProfilePage }))
 );
+const ImportAccountPage = lazy(() =>
+  import('../pages/Settings/ImportAccountPage.js').then((m) => ({ default: m.ImportAccountPage }))
+);
 
 const SuspenseWrapper = ({ children }: { children: React.ReactNode }) => (
   <Suspense fallback={<Loader />}>{children}</Suspense>
@@ -141,6 +144,7 @@ export const router = createHashRouter([
       { path: '/activity', element: <Activity /> },
       { path: '/settings', element: <Settings /> },
       { path: '/settings/profile', element: <ProfilePage /> },
+      { path: '/settings/import-account', element: <ImportAccountPage /> },
       { path: '/settings/language', element: <LanguagePage /> },
       { path: '/settings/notifications', element: <NotificationsPage /> },
       { path: '/networks', element: <Networks /> },

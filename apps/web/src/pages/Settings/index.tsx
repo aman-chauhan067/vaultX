@@ -3,16 +3,16 @@ import { BackButton } from '../../components/index.js';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Moon, Sun, Globe, Shield, CreditCard, Bell, Smartphone, Key } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { useActiveWallet, useSettings } from '../../hooks/index.js';
 import { useComingSoon } from '../../providers/ComingSoonProvider.js';
-import { useTheme } from '../../theme/index.js';
 
 export default function Settings() {
   const navigate = useNavigate();
   const activeWallet = useActiveWallet();
+  const { t } = useTranslation();
   const { showComingSoon } = useComingSoon();
-  const { theme, setTheme } = useTheme();
-  const { displayName, language } = useSettings();
+  const { displayName, language, theme, setTheme } = useSettings();
   // We'll dispatch a custom toast event since we are auditing toasts
   const cycleTheme = () => {
     let nextTheme: 'light' | 'dark' | 'system' = 'dark';
@@ -58,7 +58,7 @@ export default function Settings() {
           justifyContent: 'space-between',
           alignItems: 'center',
           padding: '2rem 0',
-          borderBottom: '1px solid rgba(255,255,255,0.05)'
+          borderBottom: '1px solid var(--color-border-secondary)'
         }}
       >
         <BackButton />
@@ -90,7 +90,7 @@ export default function Settings() {
               marginBottom: '4rem'
             }}
           >
-            Settings
+            {t('settings_index.title')}
           </div>
         </motion.div>
 
@@ -106,16 +106,16 @@ export default function Settings() {
                 fontSize: '0.75rem',
                 textTransform: 'uppercase',
                 letterSpacing: '0.1em',
-                color: '#56565C',
+                color: 'var(--color-text-muted)',
                 paddingLeft: '1rem'
               }}
             >
-              Account
+              {t('settings_index.account')}
             </span>
             <motion.div
               variants={itemVariants}
               style={{
-                background: 'rgba(255,255,255,0.03)',
+                background: 'var(--color-surface)',
                 borderRadius: '16px',
                 overflow: 'hidden'
               }}
@@ -125,7 +125,7 @@ export default function Settings() {
                   display: 'flex',
                   alignItems: 'center',
                   padding: '1.5rem',
-                  borderBottom: '1px solid rgba(255,255,255,0.05)'
+                  borderBottom: '1px solid var(--glass-border-light)'
                 }}
               >
                 <div
@@ -148,7 +148,7 @@ export default function Settings() {
                   <span
                     style={{
                       fontSize: '0.875rem',
-                      color: '#8A8A93',
+                      color: 'var(--color-text-secondary)',
                       fontFamily: 'var(--font-mono)'
                     }}
                   >
@@ -160,12 +160,12 @@ export default function Settings() {
                   style={{
                     padding: '0.5rem 1rem',
                     borderRadius: '100px',
-                    background: 'rgba(255,255,255,0.1)',
+                    background: 'var(--color-border-primary)',
                     fontSize: '0.75rem',
                     cursor: 'pointer'
                   }}
                 >
-                  Edit
+                  {t('settings_index.edit_profile')}
                 </div>
               </div>
             </motion.div>
@@ -177,16 +177,16 @@ export default function Settings() {
                 fontSize: '0.75rem',
                 textTransform: 'uppercase',
                 letterSpacing: '0.1em',
-                color: '#56565C',
+                color: 'var(--color-text-muted)',
                 paddingLeft: '1rem'
               }}
             >
-              Preferences
+              {t('settings_index.preferences')}
             </span>
             <motion.div
               variants={itemVariants}
               style={{
-                background: 'rgba(255,255,255,0.03)',
+                background: 'var(--color-surface)',
                 borderRadius: '16px',
                 overflow: 'hidden'
               }}
@@ -197,16 +197,20 @@ export default function Settings() {
                   display: 'flex',
                   alignItems: 'center',
                   padding: '1.5rem',
-                  borderBottom: '1px solid rgba(255,255,255,0.05)',
+                  borderBottom: '1px solid var(--glass-border-light)',
                   cursor: 'pointer',
                   transition: 'background 0.3s'
                 }}
                 onMouseOver={(e) =>
-                  (e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.02)')
+                  (e.currentTarget.style.backgroundColor = 'var(--color-surface)')
                 }
                 onMouseOut={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
               >
-                <Globe size={24} color="#8A8A93" style={{ marginRight: '1.5rem' }} />
+                <Globe
+                  size={24}
+                  color="var(--color-text-secondary)"
+                  style={{ marginRight: '1.5rem' }}
+                />
                 <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
                   <span style={{ fontSize: '1.125rem', fontWeight: 400 }}>
                     Networks & Custom RPCs
@@ -220,20 +224,24 @@ export default function Settings() {
                   display: 'flex',
                   alignItems: 'center',
                   padding: '1.5rem',
-                  borderBottom: '1px solid rgba(255,255,255,0.05)',
+                  borderBottom: '1px solid var(--glass-border-light)',
                   cursor: 'pointer',
                   transition: 'background 0.3s'
                 }}
                 onMouseOver={(e) =>
-                  (e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.02)')
+                  (e.currentTarget.style.backgroundColor = 'var(--color-surface)')
                 }
                 onMouseOut={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
               >
-                <Globe size={24} color="#8A8A93" style={{ marginRight: '1.5rem' }} />
+                <Globe
+                  size={24}
+                  color="var(--color-text-secondary)"
+                  style={{ marginRight: '1.5rem' }}
+                />
                 <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
                   <span style={{ fontSize: '1.125rem', fontWeight: 400 }}>Language & Region</span>
                 </div>
-                <span style={{ color: '#8A8A93', fontSize: '1rem' }}>
+                <span style={{ color: 'var(--color-text-secondary)', fontSize: '1rem' }}>
                   {language.split(' (')[0]}
                 </span>
               </div>
@@ -244,24 +252,38 @@ export default function Settings() {
                   display: 'flex',
                   alignItems: 'center',
                   padding: '1.5rem',
-                  borderBottom: '1px solid rgba(255,255,255,0.05)',
+                  borderBottom: '1px solid var(--glass-border-light)',
                   cursor: 'pointer',
                   transition: 'background 0.3s'
                 }}
                 onMouseOver={(e) =>
-                  (e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.02)')
+                  (e.currentTarget.style.backgroundColor = 'var(--color-surface)')
                 }
                 onMouseOut={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
               >
                 {theme === 'dark' ? (
-                  <Moon size={24} color="#8A8A93" style={{ marginRight: '1.5rem' }} />
+                  <Moon
+                    size={24}
+                    color="var(--color-text-secondary)"
+                    style={{ marginRight: '1.5rem' }}
+                  />
                 ) : (
-                  <Sun size={24} color="#8A8A93" style={{ marginRight: '1.5rem' }} />
+                  <Sun
+                    size={24}
+                    color="var(--color-text-secondary)"
+                    style={{ marginRight: '1.5rem' }}
+                  />
                 )}
                 <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
                   <span style={{ fontSize: '1.125rem', fontWeight: 400 }}>Appearance</span>
                 </div>
-                <span style={{ color: '#8A8A93', fontSize: '1rem', textTransform: 'capitalize' }}>
+                <span
+                  style={{
+                    color: 'var(--color-text-secondary)',
+                    fontSize: '1rem',
+                    textTransform: 'capitalize'
+                  }}
+                >
                   {theme}
                 </span>
               </div>
@@ -276,11 +298,15 @@ export default function Settings() {
                   transition: 'background 0.3s'
                 }}
                 onMouseOver={(e) =>
-                  (e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.02)')
+                  (e.currentTarget.style.backgroundColor = 'var(--color-surface)')
                 }
                 onMouseOut={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
               >
-                <Bell size={24} color="#8A8A93" style={{ marginRight: '1.5rem' }} />
+                <Bell
+                  size={24}
+                  color="var(--color-text-secondary)"
+                  style={{ marginRight: '1.5rem' }}
+                />
                 <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
                   <span style={{ fontSize: '1.125rem', fontWeight: 400 }}>Notifications</span>
                 </div>
@@ -294,16 +320,16 @@ export default function Settings() {
                 fontSize: '0.75rem',
                 textTransform: 'uppercase',
                 letterSpacing: '0.1em',
-                color: '#56565C',
+                color: 'var(--color-text-muted)',
                 paddingLeft: '1rem'
               }}
             >
-              Security
+              {t('settings_index.security')}
             </span>
             <motion.div
               variants={itemVariants}
               style={{
-                background: 'rgba(255,255,255,0.03)',
+                background: 'var(--color-surface)',
                 borderRadius: '16px',
                 overflow: 'hidden'
               }}
@@ -314,16 +340,20 @@ export default function Settings() {
                   display: 'flex',
                   alignItems: 'center',
                   padding: '1.5rem',
-                  borderBottom: '1px solid rgba(255,255,255,0.05)',
+                  borderBottom: '1px solid var(--glass-border-light)',
                   cursor: 'pointer',
                   transition: 'background 0.3s'
                 }}
                 onMouseOver={(e) =>
-                  (e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.02)')
+                  (e.currentTarget.style.backgroundColor = 'var(--color-surface)')
                 }
                 onMouseOut={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
               >
-                <Shield size={24} color="#8A8A93" style={{ marginRight: '1.5rem' }} />
+                <Shield
+                  size={24}
+                  color="var(--color-text-secondary)"
+                  style={{ marginRight: '1.5rem' }}
+                />
                 <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
                   <span style={{ fontSize: '1.125rem', fontWeight: 400 }}>Security Center</span>
                 </div>
@@ -335,16 +365,20 @@ export default function Settings() {
                   display: 'flex',
                   alignItems: 'center',
                   padding: '1.5rem',
-                  borderBottom: '1px solid rgba(255,255,255,0.05)',
+                  borderBottom: '1px solid var(--glass-border-light)',
                   cursor: 'pointer',
                   transition: 'background 0.3s'
                 }}
                 onMouseOver={(e) =>
-                  (e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.02)')
+                  (e.currentTarget.style.backgroundColor = 'var(--color-surface)')
                 }
                 onMouseOut={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
               >
-                <Key size={24} color="#8A8A93" style={{ marginRight: '1.5rem' }} />
+                <Key
+                  size={24}
+                  color="var(--color-text-secondary)"
+                  style={{ marginRight: '1.5rem' }}
+                />
                 <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
                   <span style={{ fontSize: '1.125rem', fontWeight: 400 }}>Recovery Phrase</span>
                 </div>
@@ -360,11 +394,15 @@ export default function Settings() {
                   transition: 'background 0.3s'
                 }}
                 onMouseOver={(e) =>
-                  (e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.02)')
+                  (e.currentTarget.style.backgroundColor = 'var(--color-surface)')
                 }
                 onMouseOut={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
               >
-                <Smartphone size={24} color="#8A8A93" style={{ marginRight: '1.5rem' }} />
+                <Smartphone
+                  size={24}
+                  color="var(--color-text-secondary)"
+                  style={{ marginRight: '1.5rem' }}
+                />
                 <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
                   <span style={{ fontSize: '1.125rem', fontWeight: 400 }}>Connected Devices</span>
                 </div>

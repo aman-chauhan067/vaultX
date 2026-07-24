@@ -217,7 +217,7 @@ export default function Send() {
           justifyContent: 'space-between',
           alignItems: 'center',
           padding: '2rem 0',
-          borderBottom: '1px solid rgba(255,255,255,0.05)'
+          borderBottom: '1px solid var(--glass-border-light)'
         }}
       >
         <BackButton
@@ -235,7 +235,7 @@ export default function Send() {
             fontSize: '0.75rem',
             textTransform: 'uppercase',
             letterSpacing: '0.1em',
-            color: '#52525b'
+            color: 'var(--color-text-secondary)'
           }}
         >
           Transfer {token.symbol}
@@ -274,7 +274,7 @@ export default function Send() {
                   fontSize: '0.75rem',
                   textTransform: 'uppercase',
                   letterSpacing: '0.2em',
-                  color: '#52525b'
+                  color: 'var(--color-text-secondary)'
                 }}
               >
                 Destination
@@ -302,7 +302,7 @@ export default function Send() {
                   transition: 'border-color 0.3s'
                 }}
                 onFocus={(e) => {
-                  if (!error) e.currentTarget.style.borderBottomColor = '#ffffff';
+                  if (!error) e.currentTarget.style.borderBottomColor = 'var(--color-text-primary)';
                 }}
                 onBlur={(e) => {
                   if (!error) e.currentTarget.style.borderBottomColor = 'rgba(255,255,255,0.2)';
@@ -318,7 +318,11 @@ export default function Send() {
                   height: '60px'
                 }}
               >
-                {error && <span style={{ color: '#ef4444', fontSize: '0.875rem' }}>{error}</span>}
+                {error && (
+                  <span style={{ color: 'var(--color-danger)', fontSize: '0.875rem' }}>
+                    {error}
+                  </span>
+                )}
                 <div
                   onClick={() => validateRecipient() && setStage('amount')}
                   style={{
@@ -329,8 +333,8 @@ export default function Send() {
                     gap: '0.75rem',
                     padding: '1rem 3rem',
                     borderRadius: '100px',
-                    backgroundColor: '#ffffff',
-                    color: '#000000',
+                    backgroundColor: 'var(--color-text-primary)',
+                    color: 'var(--color-bg-primary)',
                     cursor: 'pointer',
                     fontSize: '0.875rem',
                     textTransform: 'uppercase',
@@ -369,7 +373,7 @@ export default function Send() {
                   fontSize: '0.75rem',
                   textTransform: 'uppercase',
                   letterSpacing: '0.2em',
-                  color: '#52525b'
+                  color: 'var(--color-text-secondary)'
                 }}
               >
                 Send Amount
@@ -411,7 +415,7 @@ export default function Send() {
                 <span
                   style={{
                     fontSize: 'clamp(2rem, 5vw, 4rem)',
-                    color: '#52525b',
+                    color: 'var(--color-text-secondary)',
                     fontWeight: 300,
                     flexShrink: 0
                   }}
@@ -431,7 +435,7 @@ export default function Send() {
                 }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
-                  <span style={{ fontSize: '0.875rem', color: '#52525b' }}>
+                  <span style={{ fontSize: '0.875rem', color: 'var(--color-text-secondary)' }}>
                     Available: {token.formattedBalance} {token.symbol}
                   </span>
                   <span
@@ -452,7 +456,7 @@ export default function Send() {
                       fontSize: '0.75rem',
                       textTransform: 'uppercase',
                       letterSpacing: '0.1em',
-                      color: '#a1a1aa',
+                      color: 'var(--color-text-muted)',
                       cursor: 'pointer',
                       borderBottom: '1px solid #a1a1aa'
                     }}
@@ -460,7 +464,11 @@ export default function Send() {
                     Max
                   </span>
                 </div>
-                {error && <span style={{ color: '#ef4444', fontSize: '0.875rem' }}>{error}</span>}
+                {error && (
+                  <span style={{ color: 'var(--color-danger)', fontSize: '0.875rem' }}>
+                    {error}
+                  </span>
+                )}
 
                 <div
                   onClick={handleReview}
@@ -472,8 +480,8 @@ export default function Send() {
                     gap: '0.75rem',
                     padding: '1rem 3rem',
                     borderRadius: '100px',
-                    backgroundColor: '#ffffff',
-                    color: '#000000',
+                    backgroundColor: 'var(--color-text-primary)',
+                    color: 'var(--color-bg-primary)',
                     cursor: 'pointer',
                     fontSize: '0.875rem',
                     textTransform: 'uppercase',
@@ -510,7 +518,7 @@ export default function Send() {
                     fontSize: '0.75rem',
                     textTransform: 'uppercase',
                     letterSpacing: '0.2em',
-                    color: '#52525b'
+                    color: 'var(--color-text-secondary)'
                   }}
                 >
                   Send
@@ -525,11 +533,11 @@ export default function Send() {
                   style={{
                     display: 'flex',
                     justifyContent: 'space-between',
-                    borderBottom: '1px solid rgba(255,255,255,0.1)',
+                    borderBottom: '1px solid var(--glass-border)',
                     paddingBottom: '1rem'
                   }}
                 >
-                  <span style={{ fontSize: '0.875rem', color: '#a1a1aa' }}>To</span>
+                  <span style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)' }}>To</span>
                   <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.875rem' }}>
                     {recipient}
                   </span>
@@ -538,22 +546,26 @@ export default function Send() {
                   style={{
                     display: 'flex',
                     justifyContent: 'space-between',
-                    borderBottom: '1px solid rgba(255,255,255,0.1)',
+                    borderBottom: '1px solid var(--glass-border)',
                     paddingBottom: '1rem'
                   }}
                 >
-                  <span style={{ fontSize: '0.875rem', color: '#a1a1aa' }}>Network</span>
+                  <span style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)' }}>
+                    Network
+                  </span>
                   <span style={{ fontSize: '0.875rem' }}>{activeNetwork?.name}</span>
                 </div>
                 <div
                   style={{
                     display: 'flex',
                     justifyContent: 'space-between',
-                    borderBottom: '1px solid rgba(255,255,255,0.1)',
+                    borderBottom: '1px solid var(--glass-border)',
                     paddingBottom: '1rem'
                   }}
                 >
-                  <span style={{ fontSize: '0.875rem', color: '#a1a1aa' }}>Network Fee</span>
+                  <span style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)' }}>
+                    Network Fee
+                  </span>
                   <span style={{ fontSize: '0.875rem' }}>
                     ~{formatEther(gasFee)} {activeNetwork?.currency.symbol}
                   </span>
@@ -580,8 +592,8 @@ export default function Send() {
                   gap: '0.75rem',
                   padding: '1rem 4rem',
                   borderRadius: '100px',
-                  backgroundColor: '#ffffff',
-                  color: '#000000',
+                  backgroundColor: 'var(--color-text-primary)',
+                  color: 'var(--color-bg-primary)',
                   cursor: 'pointer',
                   fontSize: '0.875rem',
                   textTransform: 'uppercase',
@@ -619,12 +631,12 @@ export default function Send() {
                   width: 64,
                   height: 64,
                   borderRadius: '50%',
-                  border: '2px solid rgba(255,255,255,0.1)',
-                  borderTopColor: '#ffffff'
+                  border: '2px solid var(--glass-border)',
+                  borderTopColor: 'var(--color-text-primary)'
                 }}
               />
               <div style={{ fontSize: '1.25rem', fontWeight: 300 }}>Submitting transaction...</div>
-              <div style={{ fontSize: '0.875rem', color: '#52525b' }}>
+              <div style={{ fontSize: '0.875rem', color: 'var(--color-text-secondary)' }}>
                 Please wait while the transaction is broadcast to the network.
               </div>
             </motion.div>
@@ -651,14 +663,16 @@ export default function Send() {
                 <div style={{ fontSize: 'clamp(2rem, 5vw, 3rem)', fontWeight: 300 }}>
                   Transaction Submitted
                 </div>
-                <div style={{ fontSize: '1.25rem', color: '#a1a1aa', fontWeight: 300 }}>
+                <div
+                  style={{ fontSize: '1.25rem', color: 'var(--color-text-muted)', fontWeight: 300 }}
+                >
                   {amount} {token.symbol} sent
                 </div>
                 {txHash && (
                   <span
                     style={{
                       fontSize: '0.875rem',
-                      color: '#52525b',
+                      color: 'var(--color-text-secondary)',
                       fontFamily: 'var(--font-mono)'
                     }}
                   >
@@ -671,7 +685,7 @@ export default function Send() {
                 style={{
                   padding: '1rem 3rem',
                   borderRadius: '100px',
-                  backgroundColor: 'rgba(255,255,255,0.1)',
+                  backgroundColor: 'var(--color-border-primary)',
                   color: 'var(--color-text-primary)',
                   cursor: 'pointer',
                   fontSize: '0.875rem',
@@ -683,7 +697,7 @@ export default function Send() {
                   (e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.2)')
                 }
                 onMouseOut={(e) =>
-                  (e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.1)')
+                  (e.currentTarget.style.backgroundColor = 'var(--color-border-primary)')
                 }
               >
                 View Activity
@@ -707,10 +721,10 @@ export default function Send() {
                 textAlign: 'center'
               }}
             >
-              <XCircle size={64} color="#ef4444" />
+              <XCircle size={64} color="var(--color-danger)" />
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                 <div style={{ fontSize: '2rem', fontWeight: 300 }}>Transaction Failed</div>
-                <span style={{ fontSize: '1rem', color: '#ef4444', maxWidth: '400px' }}>
+                <span style={{ fontSize: '1rem', color: 'var(--color-danger)', maxWidth: '400px' }}>
                   {error}
                 </span>
               </div>
@@ -720,7 +734,7 @@ export default function Send() {
                   style={{
                     padding: '1rem 3rem',
                     borderRadius: '100px',
-                    backgroundColor: 'rgba(255,255,255,0.1)',
+                    backgroundColor: 'var(--color-border-primary)',
                     color: 'var(--color-text-primary)',
                     cursor: 'pointer',
                     fontSize: '0.875rem',
@@ -732,7 +746,7 @@ export default function Send() {
                     (e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.2)')
                   }
                   onMouseOut={(e) =>
-                    (e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.1)')
+                    (e.currentTarget.style.backgroundColor = 'var(--color-border-primary)')
                   }
                 >
                   Try Again
@@ -742,15 +756,15 @@ export default function Send() {
                   style={{
                     padding: '1rem 3rem',
                     borderRadius: '100px',
-                    color: '#8A8A93',
+                    color: 'var(--color-text-secondary)',
                     cursor: 'pointer',
                     fontSize: '0.875rem',
                     textTransform: 'uppercase',
                     letterSpacing: '0.1em',
                     transition: 'color 0.3s'
                   }}
-                  onMouseOver={(e) => (e.currentTarget.style.color = '#ffffff')}
-                  onMouseOut={(e) => (e.currentTarget.style.color = '#8A8A93')}
+                  onMouseOver={(e) => (e.currentTarget.style.color = 'var(--color-text-primary)')}
+                  onMouseOut={(e) => (e.currentTarget.style.color = 'var(--color-text-secondary)')}
                 >
                   Go Home
                 </div>

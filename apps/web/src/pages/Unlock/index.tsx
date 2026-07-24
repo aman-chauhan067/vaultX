@@ -84,7 +84,7 @@ export default function Unlock() {
         }}
       >
         <div style={{ marginBottom: '4rem' }}>
-          <Logo size="lg" variant="light" />
+          <Logo size="lg" variant="dark" />
         </div>
 
         <form
@@ -112,7 +112,7 @@ export default function Unlock() {
                   : '1px solid rgba(255,255,255,0.2)',
               padding: '1rem 2.5rem',
               fontSize: '1.5rem',
-              color: isSuccess ? '#34C759' : '#ffffff',
+              color: isSuccess ? 'var(--color-success)' : 'var(--color-text-primary)',
               outline: 'none',
               textAlign: 'center',
               transition: 'border-color 0.3s, opacity 0.3s, color 0.3s, box-shadow 0.3s',
@@ -122,8 +122,8 @@ export default function Unlock() {
             }}
             onFocus={(e) => {
               if (!error && !isSuccess) {
-                e.currentTarget.style.borderBottomColor = '#ffffff';
-                e.currentTarget.style.boxShadow = '0 4px 12px rgba(255,255,255,0.02)';
+                e.currentTarget.style.borderBottomColor = 'var(--color-text-primary)';
+                e.currentTarget.style.boxShadow = '0 4px 12px var(--color-surface)';
               }
             }}
             onBlur={(e) => {
@@ -179,7 +179,7 @@ export default function Unlock() {
                   right: '12px',
                   top: '50%',
                   transform: 'translateY(-50%)',
-                  color: '#34C759',
+                  color: 'var(--color-success)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center'
@@ -218,7 +218,7 @@ export default function Unlock() {
                 height: 16,
                 borderRadius: '50%',
                 border: '2px solid rgba(255,255,255,0.2)',
-                borderTopColor: '#ffffff',
+                borderTopColor: 'var(--color-text-primary)',
                 animation: 'spin 1s linear infinite'
               }}
             />

@@ -12,8 +12,8 @@ export function ChangePasswordPage() {
 
   const inputStyle: React.CSSProperties = {
     width: '100%',
-    background: 'rgba(255,255,255,0.04)',
-    border: '1px solid rgba(255,255,255,0.08)',
+    background: 'var(--glass-border-light)',
+    border: '1px solid var(--glass-border)',
     borderRadius: '12px',
     padding: '1rem 3rem 1rem 1rem',
     color: '#6b7280',
@@ -28,7 +28,7 @@ export function ChangePasswordPage() {
     fontSize: '0.75rem',
     textTransform: 'uppercase',
     letterSpacing: '0.1em',
-    color: '#52525b',
+    color: 'var(--color-text-secondary)',
     marginBottom: '0.5rem'
   };
 
@@ -52,7 +52,7 @@ export function ChangePasswordPage() {
           justifyContent: 'space-between',
           alignItems: 'center',
           padding: '2rem 0',
-          borderBottom: '1px solid rgba(255,255,255,0.05)'
+          borderBottom: '1px solid var(--glass-border-light)'
         }}
       >
         <BackButton />
@@ -61,7 +61,7 @@ export function ChangePasswordPage() {
             fontSize: '0.75rem',
             textTransform: 'uppercase',
             letterSpacing: '0.1em',
-            color: '#52525b'
+            color: 'var(--color-text-secondary)'
           }}
         >
           Authentication
@@ -95,7 +95,7 @@ export function ChangePasswordPage() {
                   display: 'flex'
                 }}
               >
-                <Key size={22} color="#3B82F6" />
+                <Key size={22} color="var(--color-info)" />
               </div>
               <h1
                 style={{
@@ -108,7 +108,14 @@ export function ChangePasswordPage() {
                 Change Password
               </h1>
             </div>
-            <p style={{ color: '#52525b', fontSize: '0.9rem', lineHeight: 1.6, margin: 0 }}>
+            <p
+              style={{
+                color: 'var(--color-text-secondary)',
+                fontSize: '0.9rem',
+                lineHeight: 1.6,
+                margin: 0
+              }}
+            >
               Your vault password is used to derive your AES-GCM encryption key. For security, this
               flow is temporarily disabled pending an additional audit of the key derivation
               re-encryption logic.
@@ -127,7 +134,7 @@ export function ChangePasswordPage() {
               borderRadius: '12px'
             }}
           >
-            <ShieldCheck size={16} color="#3B82F6" />
+            <ShieldCheck size={16} color="var(--color-info)" />
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.125rem' }}>
               <span
                 style={{
@@ -138,7 +145,7 @@ export function ChangePasswordPage() {
               >
                 Password Change Restricted
               </span>
-              <span style={{ fontSize: '0.75rem', color: '#52525b' }}>
+              <span style={{ fontSize: '0.75rem', color: 'var(--color-text-secondary)' }}>
                 Available in v1.1 · Security audit in progress
               </span>
             </div>
@@ -149,21 +156,31 @@ export function ChangePasswordPage() {
             <div
               style={{
                 padding: '1.5rem',
-                background: 'rgba(255,255,255,0.02)',
+                background: 'var(--color-surface)',
                 borderRadius: '16px',
-                border: '1px solid rgba(255,255,255,0.05)',
+                border: '1px solid var(--glass-border-light)',
                 display: 'flex',
                 gap: '1.25rem'
               }}
             >
-              <Lock size={24} color="#8A8A93" style={{ flexShrink: 0, marginTop: '2px' }} />
+              <Lock
+                size={24}
+                color="var(--color-text-secondary)"
+                style={{ flexShrink: 0, marginTop: '2px' }}
+              />
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                 <span
                   style={{ fontSize: '1rem', color: 'var(--color-text-primary)', fontWeight: 500 }}
                 >
                   How Password Encryption Works
                 </span>
-                <span style={{ fontSize: '0.875rem', color: '#8A8A93', lineHeight: 1.6 }}>
+                <span
+                  style={{
+                    fontSize: '0.875rem',
+                    color: 'var(--color-text-secondary)',
+                    lineHeight: 1.6
+                  }}
+                >
                   Your password is never stored by VaultX. Instead, it is passed through Argon2 to
                   derive a strong AES-GCM encryption key. This key encrypts your recovery phrase and
                   private keys locally on your device.
@@ -174,21 +191,31 @@ export function ChangePasswordPage() {
             <div
               style={{
                 padding: '1.5rem',
-                background: 'rgba(255,255,255,0.02)',
+                background: 'var(--color-surface)',
                 borderRadius: '16px',
-                border: '1px solid rgba(255,255,255,0.05)',
+                border: '1px solid var(--glass-border-light)',
                 display: 'flex',
                 gap: '1.25rem'
               }}
             >
-              <Key size={24} color="#8A8A93" style={{ flexShrink: 0, marginTop: '2px' }} />
+              <Key
+                size={24}
+                color="var(--color-text-secondary)"
+                style={{ flexShrink: 0, marginTop: '2px' }}
+              />
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                 <span
                   style={{ fontSize: '1rem', color: 'var(--color-text-primary)', fontWeight: 500 }}
                 >
                   Why Rotation Requires Migration
                 </span>
-                <span style={{ fontSize: '0.875rem', color: '#8A8A93', lineHeight: 1.6 }}>
+                <span
+                  style={{
+                    fontSize: '0.875rem',
+                    color: 'var(--color-text-secondary)',
+                    lineHeight: 1.6
+                  }}
+                >
                   Changing your password requires decrypting your entire vault with the old key, and
                   re-encrypting it with a new key derived from the new password. This process must
                   be entirely fault-tolerant to prevent data loss.

@@ -18,7 +18,7 @@ function Toggle({ enabled = false, disabled = true }: ToggleProps) {
         height: '24px',
         borderRadius: '100px',
         background: enabled ? 'rgba(245,158,11,0.3)' : 'rgba(255,255,255,0.06)',
-        border: `1px solid ${enabled ? 'rgba(245,158,11,0.4)' : 'rgba(255,255,255,0.1)'}`,
+        border: `1px solid ${enabled ? 'rgba(245,158,11,0.4)' : 'var(--color-border-primary)'}`,
         position: 'relative',
         cursor: disabled ? 'not-allowed' : 'pointer',
         opacity: disabled ? 0.5 : 1,
@@ -34,7 +34,7 @@ function Toggle({ enabled = false, disabled = true }: ToggleProps) {
           width: '18px',
           height: '18px',
           borderRadius: '50%',
-          background: enabled ? '#F59E0B' : '#3a3a3f',
+          background: enabled ? 'var(--color-warning)' : 'var(--color-surface-hover)',
           transition: 'left 0.2s ease'
         }}
       />
@@ -67,15 +67,19 @@ function ToggleRow({
         alignItems: 'center',
         justifyContent: 'space-between',
         padding: '1.25rem 1.5rem',
-        background: 'rgba(255,255,255,0.02)',
+        background: 'var(--color-surface)',
         borderRadius: '12px',
-        border: '1px solid rgba(255,255,255,0.05)',
+        border: '1px solid var(--glass-border-light)',
         cursor: disabled ? 'not-allowed' : 'pointer'
       }}
     >
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
         <span style={{ fontSize: '1rem', fontWeight: 400 }}>{label}</span>
-        {sublabel && <span style={{ fontSize: '0.75rem', color: '#52525b' }}>{sublabel}</span>}
+        {sublabel && (
+          <span style={{ fontSize: '0.75rem', color: 'var(--color-text-secondary)' }}>
+            {sublabel}
+          </span>
+        )}
       </div>
       <Toggle enabled={enabled} disabled={disabled} />
     </div>
@@ -115,7 +119,7 @@ export function NotificationsPage() {
           justifyContent: 'space-between',
           alignItems: 'center',
           padding: '2rem 0',
-          borderBottom: '1px solid rgba(255,255,255,0.05)'
+          borderBottom: '1px solid var(--glass-border-light)'
         }}
       >
         <BackButton />
@@ -124,7 +128,7 @@ export function NotificationsPage() {
             fontSize: '0.75rem',
             textTransform: 'uppercase',
             letterSpacing: '0.1em',
-            color: '#52525b'
+            color: 'var(--color-text-secondary)'
           }}
         >
           Preferences
@@ -161,7 +165,7 @@ export function NotificationsPage() {
                   justifyContent: 'center'
                 }}
               >
-                <Bell size={22} color="#F59E0B" />
+                <Bell size={22} color="var(--color-warning)" />
               </div>
               <h1
                 style={{
@@ -174,7 +178,14 @@ export function NotificationsPage() {
                 Notifications
               </h1>
             </div>
-            <p style={{ color: '#52525b', fontSize: '0.9rem', lineHeight: 1.6, margin: 0 }}>
+            <p
+              style={{
+                color: 'var(--color-text-secondary)',
+                fontSize: '0.9rem',
+                lineHeight: 1.6,
+                margin: 0
+              }}
+            >
               Control how VaultX notifies you about transactions, security events, and updates.
             </p>
           </div>
@@ -186,7 +197,7 @@ export function NotificationsPage() {
                 fontSize: '0.75rem',
                 textTransform: 'uppercase',
                 letterSpacing: '0.1em',
-                color: '#52525b',
+                color: 'var(--color-text-secondary)',
                 paddingLeft: '0.25rem'
               }}
             >
@@ -221,7 +232,7 @@ export function NotificationsPage() {
                 fontSize: '0.75rem',
                 textTransform: 'uppercase',
                 letterSpacing: '0.1em',
-                color: '#52525b',
+                color: 'var(--color-text-secondary)',
                 paddingLeft: '0.25rem'
               }}
             >
@@ -250,7 +261,7 @@ export function NotificationsPage() {
                 fontSize: '0.75rem',
                 textTransform: 'uppercase',
                 letterSpacing: '0.1em',
-                color: '#52525b',
+                color: 'var(--color-text-secondary)',
                 paddingLeft: '0.25rem'
               }}
             >
@@ -285,8 +296,19 @@ export function NotificationsPage() {
               marginTop: '0.5rem'
             }}
           >
-            <Info size={18} color="#F59E0B" style={{ flexShrink: 0, marginTop: '0.125rem' }} />
-            <p style={{ margin: 0, fontSize: '0.8125rem', color: '#8A8A93', lineHeight: 1.5 }}>
+            <Info
+              size={18}
+              color="var(--color-warning)"
+              style={{ flexShrink: 0, marginTop: '0.125rem' }}
+            />
+            <p
+              style={{
+                margin: 0,
+                fontSize: '0.8125rem',
+                color: 'var(--color-text-secondary)',
+                lineHeight: 1.5
+              }}
+            >
               Notifications require a background service worker connection. This integration is
               being tested to ensure reliable delivery across Chrome, Firefox, and Edge. Available
               in v1.2.

@@ -27,7 +27,7 @@ export function TwoFactorPage() {
           justifyContent: 'space-between',
           alignItems: 'center',
           padding: '2rem 0',
-          borderBottom: '1px solid rgba(255,255,255,0.05)'
+          borderBottom: '1px solid var(--glass-border-light)'
         }}
       >
         <BackButton />
@@ -36,7 +36,7 @@ export function TwoFactorPage() {
             fontSize: '0.75rem',
             textTransform: 'uppercase',
             letterSpacing: '0.1em',
-            color: '#52525b'
+            color: 'var(--color-text-secondary)'
           }}
         >
           Authentication
@@ -70,7 +70,7 @@ export function TwoFactorPage() {
                   display: 'flex'
                 }}
               >
-                <Smartphone size={22} color="#A855F7" />
+                <Smartphone size={22} color="var(--color-accent)" />
               </div>
               <h1
                 style={{
@@ -83,7 +83,14 @@ export function TwoFactorPage() {
                 Two-Factor Authentication
               </h1>
             </div>
-            <p style={{ color: '#52525b', fontSize: '0.9rem', lineHeight: 1.6, margin: 0 }}>
+            <p
+              style={{
+                color: 'var(--color-text-secondary)',
+                fontSize: '0.9rem',
+                lineHeight: 1.6,
+                margin: 0
+              }}
+            >
               Add a second layer of protection to your vault. VaultX will support both authenticator
               apps (TOTP) and hardware security keys (FIDO2).
             </p>
@@ -101,7 +108,7 @@ export function TwoFactorPage() {
               borderRadius: '12px'
             }}
           >
-            <Clock size={16} color="#A855F7" />
+            <Clock size={16} color="var(--color-accent)" />
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.125rem' }}>
               <span
                 style={{
@@ -112,7 +119,7 @@ export function TwoFactorPage() {
               >
                 2FA Not Yet Configured
               </span>
-              <span style={{ fontSize: '0.75rem', color: '#52525b' }}>
+              <span style={{ fontSize: '0.75rem', color: 'var(--color-text-secondary)' }}>
                 TOTP and FIDO2 support available in v1.2
               </span>
             </div>
@@ -125,7 +132,7 @@ export function TwoFactorPage() {
                 fontSize: '0.75rem',
                 textTransform: 'uppercase',
                 letterSpacing: '0.1em',
-                color: '#52525b'
+                color: 'var(--color-text-secondary)'
               }}
             >
               Available Methods
@@ -134,19 +141,25 @@ export function TwoFactorPage() {
             <div
               style={{
                 padding: '1.5rem',
-                background: 'rgba(255,255,255,0.02)',
+                background: 'var(--color-surface)',
                 borderRadius: '16px',
-                border: '1px solid rgba(255,255,255,0.05)',
+                border: '1px solid var(--glass-border-light)',
                 display: 'flex',
                 alignItems: 'center',
                 gap: '1.25rem',
                 opacity: 0.7
               }}
             >
-              <QrCode size={28} color="#8A8A93" />
+              <QrCode size={28} color="var(--color-text-secondary)" />
               <div style={{ flex: 1 }}>
                 <div style={{ fontSize: '1rem', fontWeight: 400 }}>Authenticator App</div>
-                <div style={{ fontSize: '0.75rem', color: '#52525b', marginTop: '0.25rem' }}>
+                <div
+                  style={{
+                    fontSize: '0.75rem',
+                    color: 'var(--color-text-secondary)',
+                    marginTop: '0.25rem'
+                  }}
+                >
                   Google Authenticator, Authy, 1Password — TOTP (RFC 6238)
                 </div>
               </div>
@@ -156,7 +169,7 @@ export function TwoFactorPage() {
                   padding: '0.25rem 0.625rem',
                   background: 'rgba(255,255,255,0.06)',
                   borderRadius: '100px',
-                  color: '#52525b',
+                  color: 'var(--color-text-secondary)',
                   whiteSpace: 'nowrap'
                 }}
               >
@@ -167,19 +180,25 @@ export function TwoFactorPage() {
             <div
               style={{
                 padding: '1.5rem',
-                background: 'rgba(255,255,255,0.02)',
+                background: 'var(--color-surface)',
                 borderRadius: '16px',
-                border: '1px solid rgba(255,255,255,0.05)',
+                border: '1px solid var(--glass-border-light)',
                 display: 'flex',
                 alignItems: 'center',
                 gap: '1.25rem',
                 opacity: 0.7
               }}
             >
-              <Key size={28} color="#8A8A93" />
+              <Key size={28} color="var(--color-text-secondary)" />
               <div style={{ flex: 1 }}>
                 <div style={{ fontSize: '1rem', fontWeight: 400 }}>Hardware Security Key</div>
-                <div style={{ fontSize: '0.75rem', color: '#52525b', marginTop: '0.25rem' }}>
+                <div
+                  style={{
+                    fontSize: '0.75rem',
+                    color: 'var(--color-text-secondary)',
+                    marginTop: '0.25rem'
+                  }}
+                >
                   YubiKey, Google Titan — FIDO2/WebAuthn
                 </div>
               </div>
@@ -189,7 +208,7 @@ export function TwoFactorPage() {
                   padding: '0.25rem 0.625rem',
                   background: 'rgba(255,255,255,0.06)',
                   borderRadius: '100px',
-                  color: '#52525b',
+                  color: 'var(--color-text-secondary)',
                   whiteSpace: 'nowrap'
                 }}
               >

@@ -1,6 +1,7 @@
 import React from 'react';
 import clsx from 'clsx';
 import { motion } from 'framer-motion';
+import { useSettings } from '../../hooks/index.js';
 
 export interface LogoProps {
   size?: 'sm' | 'md' | 'lg' | 'xl';
@@ -15,6 +16,20 @@ export const Logo: React.FC<LogoProps> = ({
   withText = true,
   className
 }) => {
+  const { theme } = useSettings();
+  const isLight =
+    theme === 'light' ||
+    (theme === 'system' && window.matchMedia('(prefers-color-scheme: light)').matches);
+
+  const logoSrc =
+    variant === 'light'
+      ? '/logolight.png'
+      : variant === 'dark'
+        ? '/logo.png'
+        : isLight
+          ? '/logolight.png'
+          : '/logo.png';
+
   // Size mapping
   const iconSizes = {
     sm: 16,
@@ -42,7 +57,7 @@ export const Logo: React.FC<LogoProps> = ({
       }}
     >
       <motion.img
-        src="/logo.png"
+        src={logoSrc}
         alt="VaultX Logo"
         className="vaultx-logo-icon"
         style={{

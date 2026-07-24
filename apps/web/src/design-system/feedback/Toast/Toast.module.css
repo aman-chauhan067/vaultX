@@ -14,13 +14,13 @@
   display: flex;
   align-items: center;
   gap: var(--space-3);
-  background: rgba(10, 10, 15, 0.85);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--glass-bg-heavy);
+  border: 1px solid var(--glass-border);
   padding: var(--space-3) var(--space-4);
   border-radius: 50px;
   box-shadow:
     0 4px 30px rgba(0, 0, 0, 0.5),
-    inset 0 0 20px rgba(255, 255, 255, 0.05);
+    inset 0 0 20px var(--glass-border-light);
   min-width: 250px;
   max-width: 400px;
   backdrop-filter: blur(12px);
@@ -33,12 +33,12 @@
   0% {
     box-shadow:
       0 4px 30px rgba(0, 0, 0, 0.5),
-      inset 0 0 10px rgba(255, 255, 255, 0.02);
+      inset 0 0 10px var(--color-surface);
   }
   100% {
     box-shadow:
       0 4px 30px rgba(0, 0, 0, 0.5),
-      inset 0 0 25px rgba(255, 255, 255, 0.1);
+      inset 0 0 25px var(--glass-border);
   }
 }
 
@@ -113,6 +113,6 @@
 }
 
 .closeButton:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--glass-border);
   color: var(--color-text-primary);
 }

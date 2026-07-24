@@ -13,9 +13,9 @@
 }
 
 .neutral {
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--glass-border-light);
   color: var(--color-text-secondary);
-  border-color: rgba(255, 255, 255, 0.1);
+  border-color: var(--glass-border);
 }
 .success {
   background: var(--color-success-bg);

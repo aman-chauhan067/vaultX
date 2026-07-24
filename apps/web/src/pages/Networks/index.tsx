@@ -1,12 +1,11 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { PageLayout } from '../../layout/index.js';
 import { Button, Card, Badge, Input, useToast } from '../../design-system/index.js';
-import { Globe, Plus, Search, CheckCircle2, XCircle, Clock, Trash2 } from 'lucide-react';
+import { Search, CheckCircle2, XCircle, Clock, Trash2, Plus } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useNetwork } from '../../hooks/index.js';
 import { BackButton } from '../../components/index.js';
-import { VaultXService } from '../../services/VaultXService.js';
-import { VaultXProviderAdapter } from '../../services/VaultXProviderAdapter.js';
+import { CryptoIcon } from '../../components/CryptoIcon.js';
 
 export default function Networks() {
   const navigate = useNavigate();
@@ -26,7 +25,6 @@ export default function Networks() {
   const [switchingChainId, setSwitchingChainId] = useState<number | null>(null);
   const [scrollTop, setScrollTop] = useState(0);
 
-  // Status simulation for visual requirements (in a real app, this would ping RPCs)
   const [rpcStatus, setRpcStatus] = useState<
     Record<number, { latency: number; sync: string; status: 'connected' | 'disconnected' }>
   >({});
@@ -35,7 +33,7 @@ export default function Networks() {
     const statuses: any = {};
     supportedNetworks.forEach((net) => {
       statuses[net.chainId] = {
-        latency: Math.floor(Math.random() * 200) + 20, // Simulated 20-220ms
+        latency: Math.floor(Math.random() * 200) + 20,
         sync: 'Just now',
         status: 'connected'
       };
@@ -92,13 +90,10 @@ export default function Networks() {
   const filteredNetworks = useMemo(() => {
     let result = supportedNetworks;
 
-    // Filter
     if (filterType === 'Mainnets') result = result.filter((n) => !n.isTestnet);
     if (filterType === 'Testnets') result = result.filter((n) => n.isTestnet);
-    // Assuming custom ones don't have blockExplorerUrls by default or similar heuristic (simplified here)
     if (filterType === 'Custom') result = result.filter((n) => !n.explorer);
 
-    // Search
     if (searchQuery) {
       const q = searchQuery.toLowerCase();
       result = result.filter(
@@ -109,7 +104,6 @@ export default function Networks() {
       );
     }
 
-    // Pin active network to top
     const active = result.find((n) => n.chainId === activeChainId);
     const others = result.filter((n) => n.chainId !== activeChainId);
     return active ? [active, ...others] : others;
@@ -131,7 +125,6 @@ export default function Networks() {
           height: 'calc(100vh - 180px)'
         }}
       >
-        {/* Search and Filters */}
         <div
           style={{
             display: 'flex',
@@ -161,7 +154,7 @@ export default function Networks() {
               style={{
                 width: '100%',
                 padding: '10px 10px 10px 40px',
-                background: 'rgba(255,255,255,0.05)',
+                background: 'var(--color-border-secondary)',
                 border: 'none',
                 borderRadius: 'var(--radius-md)',
                 color: 'white',
@@ -254,7 +247,6 @@ export default function Networks() {
             flex: 1,
             overflowY: 'auto',
             paddingRight: '10px',
-            paddingBottom: '20vh',
             position: 'relative'
           }}
         >
@@ -263,7 +255,6 @@ export default function Networks() {
             const isActive = activeChainId === net.chainId;
             const isSwitching = switchingChainId === net.chainId;
 
-            // Mathematically calculate fade position based on index to prevent layout-thrashing bugs when switching networks
             const startFade = index * 160;
             const distance = 160;
 
@@ -291,61 +282,33 @@ export default function Networks() {
                 }}
               >
                 <Card
-                  padding="lg"
+                  padding="md"
                   style={{
                     display: 'flex',
                     flexDirection: 'column',
                     gap: 'var(--space-3)',
                     border: isActive
-                      ? '1px solid rgba(52, 199, 89, 0.5)'
-                      : '1px solid rgba(255,255,255,0.08)',
-                    background: 'rgba(24, 24, 27, 0.75)',
+                      ? '1px solid rgba(52, 199, 89, 0.4)'
+                      : '1px solid var(--glass-border-light)',
+                    background: 'var(--glass-bg)',
                     backdropFilter: 'blur(24px)',
                     WebkitBackdropFilter: 'blur(24px)',
-                    transition: 'all 0.3s ease',
+                    transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
                     boxShadow: isActive
-                      ? 'inset 0 0 15px rgba(52, 199, 89, 0.15), 0 8px 30px rgba(0,0,0,0.5)'
-                      : '0 8px 30px rgba(0,0,0,0.5)'
-                  }}
-                  onMouseOver={(e) => {
-                    e.currentTarget.style.boxShadow = isActive
-                      ? 'inset 0 0 15px rgba(52, 199, 89, 0.15), 0 8px 30px rgba(0,0,0,0.8)'
-                      : '0 0 30px rgba(255,255,255,0.08), 0 8px 30px rgba(0,0,0,0.8)';
-                  }}
-                  onMouseOut={(e) => {
-                    e.currentTarget.style.boxShadow = isActive
-                      ? 'inset 0 0 15px rgba(52, 199, 89, 0.15), 0 8px 30px rgba(0,0,0,0.5)'
-                      : '0 8px 30px rgba(0,0,0,0.5)';
+                      ? 'inset 0 0 15px rgba(52, 199, 89, 0.1), 0 4px 15px rgba(0,0,0,0.1)'
+                      : '0 4px 15px rgba(0,0,0,0.05)',
+                    borderRadius: '20px'
                   }}
                 >
                   <div
                     style={{
                       display: 'flex',
-                      alignItems: 'flex-start',
+                      alignItems: 'center',
                       justifyContent: 'space-between'
                     }}
                   >
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-4)' }}>
-                      <div
-                        style={{
-                          flexShrink: 0,
-                          width: 48,
-                          height: 48,
-                          borderRadius: 'var(--radius-full)',
-                          background: 'rgba(255,255,255,0.05)',
-                          border: '1px solid rgba(255,255,255,0.1)',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          fontSize: '0.85rem',
-                          fontWeight: 700,
-                          letterSpacing: '0.05em',
-                          color: 'var(--color-text-primary)',
-                          boxShadow: 'inset 0 4px 10px rgba(0,0,0,0.5)'
-                        }}
-                      >
-                        {(net.currency?.symbol || 'ETH').substring(0, 4).toUpperCase()}
-                      </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)' }}>
+                      <CryptoIcon symbol={net.currency?.symbol || 'ETH'} size={40} />
                       <div>
                         <div
                           style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}
@@ -375,19 +338,6 @@ export default function Networks() {
                           <span>ID: {net.chainId}</span>
                           <span>•</span>
                           <span>Token: {net.currency?.symbol || 'ETH'}</span>
-                          {net.explorer && (
-                            <>
-                              <span>•</span>
-                              <a
-                                href={net.explorer}
-                                target="_blank"
-                                rel="noreferrer"
-                                style={{ color: 'var(--color-brand)', textDecoration: 'none' }}
-                              >
-                                Explorer ↗
-                              </a>
-                            </>
-                          )}
                         </div>
                       </div>
                     </div>
@@ -424,9 +374,7 @@ export default function Networks() {
                     style={{
                       display: 'flex',
                       gap: 'var(--space-4)',
-                      padding: 'var(--space-2) var(--space-3)',
-                      background: 'rgba(0,0,0,0.2)',
-                      borderRadius: 'var(--radius-md)',
+                      paddingTop: 'var(--space-2)',
                       fontSize: 'var(--text-xs)',
                       color: 'var(--color-text-secondary)'
                     }}
@@ -451,6 +399,9 @@ export default function Networks() {
               </div>
             );
           })}
+
+          <div style={{ height: 'calc(100vh - 280px)', flexShrink: 0 }} />
+
           {filteredNetworks.length === 0 && (
             <div
               style={{

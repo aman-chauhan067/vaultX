@@ -49,21 +49,6 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     }
   }, []);
 
-  useEffect(() => {
-    const root = document.documentElement;
-    if (theme === 'light') {
-      root.classList.add('light-theme');
-    } else if (theme === 'dark') {
-      root.classList.remove('light-theme');
-    } else {
-      if (window.matchMedia('(prefers-color-scheme: light)').matches) {
-        root.classList.add('light-theme');
-      } else {
-        root.classList.remove('light-theme');
-      }
-    }
-  }, [theme]);
-
   const saveSettings = (updates: any) => {
     try {
       const current = localStorage.getItem('vaultx_settings');

@@ -1,13 +1,13 @@
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useTheme } from '../../theme/index.js';
+import { useSettings } from '../../hooks/index.js';
 import { Moon, Sun, Monitor, Lock as LockIcon, Wallet, ChevronDown, Copy } from 'lucide-react';
 import { useToast } from '../../design-system/index.js';
 import { useWallet, useNetwork, useActiveWallet } from '../../hooks/index.js';
 import styles from './Header.module.css';
 
 export const Header: React.FC = () => {
-  const { theme, setTheme } = useTheme();
+  const { theme, setTheme } = useSettings();
   const { lock, isLocked } = useWallet();
   const { supportedNetworks, activeChainId } = useNetwork();
   const activeWallet = useActiveWallet();
@@ -18,6 +18,10 @@ export const Header: React.FC = () => {
   const activeNetwork = supportedNetworks.find((n) => n.chainId === activeChainId);
   const routeName = location.pathname.split('/')[1] || 'dashboard';
   const pageTitle = routeName.charAt(0).toUpperCase() + routeName.slice(1);
+
+  const isLight =
+    theme === 'light' ||
+    (theme === 'system' && window.matchMedia('(prefers-color-scheme: light)').matches);
 
   const cycleTheme = () => {
     let next: 'light' | 'dark' | 'system' = 'dark';
@@ -52,7 +56,7 @@ export const Header: React.FC = () => {
       >
         <div className={styles.mobileLogo}>
           <img
-            src="/logo.png"
+            src={isLight ? '/logolight.png' : '/logo.png'}
             alt="VaultX Logo"
             style={{ width: '150%', height: '150%', objectFit: 'contain' }}
           />

@@ -91,7 +91,7 @@ export default function Receive() {
           justifyContent: 'space-between',
           alignItems: 'center',
           padding: '2rem 0',
-          borderBottom: '1px solid rgba(255,255,255,0.05)'
+          borderBottom: '1px solid var(--glass-border-light)'
         }}
       >
         <BackButton label="Cancel" onClick={handleCancel} />
@@ -100,7 +100,7 @@ export default function Receive() {
             fontSize: '0.75rem',
             textTransform: 'uppercase',
             letterSpacing: '0.1em',
-            color: '#52525b'
+            color: 'var(--color-text-secondary)'
           }}
         >
           Receive {activeNetwork?.name}
@@ -129,12 +129,12 @@ export default function Receive() {
               style={{
                 width: 'clamp(280px, 40vw, 400px)',
                 height: 'clamp(280px, 40vw, 400px)',
-                background: '#ffffff',
+                background: 'var(--color-text-primary)',
                 padding: '2rem',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                boxShadow: '0 20px 60px rgba(255,255,255,0.05)'
+                boxShadow: '0 20px 60px var(--glass-border-light)'
               }}
             >
               {address ? (
@@ -146,7 +146,7 @@ export default function Receive() {
                   includeMargin={false}
                 />
               ) : (
-                <QrCode size="100%" strokeWidth={1.5} color="#000000" />
+                <QrCode size="100%" strokeWidth={1.5} color="var(--color-bg-primary)" />
               )}
             </div>
           </motion.div>
@@ -168,7 +168,7 @@ export default function Receive() {
                 fontSize: '0.75rem',
                 textTransform: 'uppercase',
                 letterSpacing: '0.2em',
-                color: '#52525b'
+                color: 'var(--color-text-secondary)'
               }}
             >
               Public Address
@@ -186,7 +186,7 @@ export default function Receive() {
                 fontWeight: 300,
                 wordBreak: 'break-all',
                 cursor: 'pointer',
-                color: copied ? '#4ade80' : '#ffffff',
+                color: copied ? '#4ade80' : 'var(--color-text-primary)',
                 transition: 'color 0.3s',
                 outline: 'none',
                 border: 'none',
@@ -207,13 +207,13 @@ export default function Receive() {
                   fontSize: '0.875rem',
                   textTransform: 'uppercase',
                   letterSpacing: '0.1em',
-                  color: copied ? '#4ade80' : '#52525b',
+                  color: copied ? '#4ade80' : 'var(--color-text-secondary)',
                   transition: 'color 0.3s'
                 }}
               >
                 {copied ? 'Address Copied' : 'Click address to copy'}
               </span>
-              <span style={{ color: '#52525b' }}>|</span>
+              <span style={{ color: 'var(--color-text-secondary)' }}>|</span>
               <button
                 onClick={handleShare}
                 style={{

@@ -2,24 +2,26 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Globe, Check, ChevronRight, Info } from 'lucide-react';
-
+import { useTranslation } from 'react-i18next';
 import { useSettings } from '../../hooks/index.js';
 import { BackButton } from '../../components/index.js';
 
 interface LanguageItem {
   name: string;
   nativeName: string;
+  code: string;
 }
 
 const ALL_LANGUAGES: LanguageItem[] = [
-  { name: 'English (US)', nativeName: 'English (US)' },
-  { name: 'Español', nativeName: 'Spanish' },
-  { name: 'Français', nativeName: 'French' },
-  { name: 'Deutsch', nativeName: 'German' },
-  { name: '中文', nativeName: 'Chinese Simplified' },
-  { name: '日本語', nativeName: 'Japanese' },
-  { name: '한국어', nativeName: 'Korean' },
-  { name: 'Português', nativeName: 'Portuguese' }
+  { name: 'English (US)', nativeName: 'English (US)', code: 'en' },
+  { name: 'Español', nativeName: 'Spanish', code: 'es' },
+  { name: 'Français', nativeName: 'French', code: 'fr' },
+  { name: 'Deutsch', nativeName: 'German', code: 'de' },
+  { name: '中文', nativeName: 'Chinese Simplified', code: 'zh' },
+  { name: '日本語', nativeName: 'Japanese', code: 'ja' },
+  { name: '한국어', nativeName: 'Korean', code: 'ko' },
+  { name: 'Português', nativeName: 'Portuguese', code: 'pt' },
+  { name: 'हिन्दी', nativeName: 'Hindi', code: 'hi' }
 ];
 
 const CURRENCIES = ['USD', 'EUR', 'GBP'];
@@ -28,6 +30,7 @@ const NUMBER_FORMATS = ['1,234.56', '1.234,56'];
 
 export function LanguagePage() {
   const navigate = useNavigate();
+  const { t, i18n } = useTranslation();
   const {
     language,
     setLanguage,
@@ -60,7 +63,7 @@ export function LanguagePage() {
           justifyContent: 'space-between',
           alignItems: 'center',
           padding: '2rem 0',
-          borderBottom: '1px solid rgba(255,255,255,0.05)'
+          borderBottom: '1px solid var(--glass-border-light)'
         }}
       >
         <BackButton />
@@ -69,10 +72,10 @@ export function LanguagePage() {
             fontSize: '0.75rem',
             textTransform: 'uppercase',
             letterSpacing: '0.1em',
-            color: '#52525b'
+            color: 'var(--color-text-muted)'
           }}
         >
-          Preferences
+          {t('settings.preferences')}
         </span>
       </motion.div>
 
@@ -106,7 +109,7 @@ export function LanguagePage() {
                   justifyContent: 'center'
                 }}
               >
-                <Globe size={22} color="#34C759" />
+                <Globe size={22} color="var(--color-success)" />
               </div>
               <h1
                 style={{
@@ -116,12 +119,18 @@ export function LanguagePage() {
                   margin: 0
                 }}
               >
-                Language &amp; Region
+                {t('settings.language_region')}
               </h1>
             </div>
-            <p style={{ color: '#52525b', fontSize: '0.9rem', lineHeight: 1.6, margin: 0 }}>
-              Choose your preferred language. VaultX will display all interface text in the selected
-              language.
+            <p
+              style={{
+                color: 'var(--color-text-secondary)',
+                fontSize: '0.9rem',
+                lineHeight: 1.6,
+                margin: 0
+              }}
+            >
+              {t('settings.language_desc')}
             </p>
           </div>
 
@@ -135,29 +144,29 @@ export function LanguagePage() {
                   fontSize: '0.75rem',
                   textTransform: 'uppercase',
                   letterSpacing: '0.1em',
-                  color: '#52525b'
+                  color: 'var(--color-text-muted)'
                 }}
               >
-                Language
+                {t('settings.language')}
               </span>
               <span
                 style={{
                   fontSize: '0.75rem',
-                  color: '#3B82F6',
+                  color: 'var(--color-info)',
                   display: 'flex',
                   alignItems: 'center',
                   gap: '0.25rem'
                 }}
               >
-                <Info size={12} /> Language packs coming in v1.1
+                <Info size={12} /> Full translations coming in v1.1
               </span>
             </div>
 
             <div
               style={{
-                background: 'rgba(255, 255, 255, 0.02)',
+                background: 'var(--color-surface)',
                 borderRadius: '16px',
-                border: '1px solid rgba(255, 255, 255, 0.05)',
+                border: '1px solid var(--color-border-secondary)',
                 overflow: 'hidden'
               }}
             >
@@ -168,6 +177,7 @@ export function LanguagePage() {
                     key={lang.name}
                     onClick={() => {
                       setLanguage(lang.name);
+                      i18n.changeLanguage(lang.code);
                       const evt = new CustomEvent('toast', {
                         detail: { type: 'success', message: 'Language updated' }
                       });
@@ -180,15 +190,15 @@ export function LanguagePage() {
                       padding: '1rem 1.5rem',
                       borderBottom:
                         index !== ALL_LANGUAGES.length - 1
-                          ? '1px solid rgba(255, 255, 255, 0.04)'
+                          ? '1px solid var(--color-border-secondary)'
                           : 'none',
                       cursor: 'pointer',
-                      background: isActive ? 'rgba(52, 199, 89, 0.04)' : 'transparent',
+                      background: isActive ? 'var(--color-success-bg)' : 'transparent',
                       transition: 'background 0.2s'
                     }}
                     onMouseOver={(e) => {
                       if (!isActive)
-                        e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.03)';
+                        e.currentTarget.style.backgroundColor = 'var(--color-surface-hover)';
                     }}
                     onMouseOut={(e) => {
                       if (!isActive) e.currentTarget.style.backgroundColor = 'transparent';
@@ -207,7 +217,7 @@ export function LanguagePage() {
                           flexShrink: 0
                         }}
                       >
-                        {isActive && <Check size={14} color="#34C759" />}
+                        {isActive && <Check size={14} color="var(--color-success)" />}
                       </div>
                       <span
                         style={{
@@ -218,7 +228,7 @@ export function LanguagePage() {
                       >
                         {lang.name}
                       </span>
-                      <span style={{ fontSize: '0.85rem', color: '#52525b' }}>
+                      <span style={{ fontSize: '0.85rem', color: 'var(--color-text-secondary)' }}>
                         ({lang.nativeName})
                       </span>
                     </div>
@@ -235,17 +245,17 @@ export function LanguagePage() {
                 fontSize: '0.75rem',
                 textTransform: 'uppercase',
                 letterSpacing: '0.1em',
-                color: '#52525b'
+                color: 'var(--color-text-muted)'
               }}
             >
-              Region
+              {t('settings.currency')}
             </span>
 
             <div
               style={{
-                background: 'rgba(255, 255, 255, 0.02)',
+                background: 'var(--color-surface)',
                 borderRadius: '16px',
-                border: '1px solid rgba(255, 255, 255, 0.05)',
+                border: '1px solid var(--color-border-secondary)',
                 overflow: 'hidden'
               }}
             >
@@ -282,8 +292,14 @@ export function LanguagePage() {
                     justifyContent: 'space-between',
                     padding: '1.25rem 1.5rem',
                     borderBottom:
-                      index !== arr.length - 1 ? '1px solid rgba(255, 255, 255, 0.04)' : 'none',
+                      index !== arr.length - 1 ? '1px solid var(--color-border-secondary)' : 'none',
                     cursor: 'pointer'
+                  }}
+                  onMouseOver={(e) => {
+                    e.currentTarget.style.backgroundColor = 'var(--color-surface-hover)';
+                  }}
+                  onMouseOut={(e) => {
+                    e.currentTarget.style.backgroundColor = 'transparent';
                   }}
                 >
                   <span
@@ -298,14 +314,14 @@ export function LanguagePage() {
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                     <span
                       style={{
-                        color: '#8A8A93',
+                        color: 'var(--color-text-secondary)',
                         fontSize: '0.875rem',
                         fontFamily: 'var(--font-mono, monospace)'
                       }}
                     >
                       {setting.value}
                     </span>
-                    <ChevronRight size={16} color="#52525b" />
+                    <ChevronRight size={16} color="var(--color-text-muted)" />
                   </div>
                 </div>
               ))}

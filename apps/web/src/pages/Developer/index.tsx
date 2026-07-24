@@ -3,6 +3,7 @@ import { PageLayout } from '../../layout/index.js';
 import { Button, Card } from '../../design-system/index.js';
 import { Code, ArrowLeft, Bug, Trash2, TestTube, Activity } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useNetwork, useActiveWallet } from '../../hooks/index.js';
 import { VaultXService } from '../../services/VaultXService.js';
 import { VaultXProviderAdapter } from '../../services/VaultXProviderAdapter.js';
@@ -12,6 +13,7 @@ import { BackButton } from '../../components/index.js';
 
 export default function Developer() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { supportedNetworks, activeChainId } = useNetwork();
   const activeWallet = useActiveWallet();
   const [showTestnets, setShowTestnets] = useState(true);
@@ -49,8 +51,8 @@ export default function Developer() {
 
   return (
     <PageLayout
-      title="Developer Mode"
-      description="Advanced tools and read-only diagnostics"
+      title={t('developer.title')}
+      description={t('developer.description')}
       action={<BackButton onClick={() => navigate('/settings')} />}
     >
       <div
@@ -82,7 +84,7 @@ export default function Developer() {
           >
             <Activity size={20} color="var(--color-brand)" />
             <h3 style={{ fontSize: 'var(--text-lg)', margin: 0, color: 'var(--color-brand)' }}>
-              System Diagnostics
+              {t('developer.system_diagnostics')}
             </h3>
           </div>
 
@@ -101,7 +103,7 @@ export default function Developer() {
                   textTransform: 'uppercase'
                 }}
               >
-                Current Chain
+                {t('developer.current_chain')}
               </span>
               <span style={{ fontSize: 'var(--text-sm)', fontFamily: 'var(--font-mono)' }}>
                 {activeNetwork?.name || 'Unknown'}
@@ -115,7 +117,7 @@ export default function Developer() {
                   textTransform: 'uppercase'
                 }}
               >
-                Chain ID
+                {t('developer.chain_id')}
               </span>
               <span style={{ fontSize: 'var(--text-sm)', fontFamily: 'var(--font-mono)' }}>
                 {activeChainId || 'None'}
@@ -129,7 +131,7 @@ export default function Developer() {
                   textTransform: 'uppercase'
                 }}
               >
-                RPC URL
+                {t('developer.rpc_url')}
               </span>
               <span
                 style={{
@@ -152,10 +154,10 @@ export default function Developer() {
                   textTransform: 'uppercase'
                 }}
               >
-                Current Block
+                {t('developer.current_block')}
               </span>
               <span style={{ fontSize: 'var(--text-sm)', fontFamily: 'var(--font-mono)' }}>
-                {blockNumber !== null ? blockNumber.toLocaleString() : 'Loading...'}
+                {blockNumber?.toLocaleString() || '---'}
               </span>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-1)' }}>
@@ -166,19 +168,18 @@ export default function Developer() {
                   textTransform: 'uppercase'
                 }}
               >
-                Wallet Address
+                {t('developer.wallet_address')}
               </span>
               <span
                 style={{
                   fontSize: 'var(--text-sm)',
                   fontFamily: 'var(--font-mono)',
                   overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap'
+                  textOverflow: 'ellipsis'
                 }}
                 title={activeWallet?.address}
               >
-                {activeWallet?.address || 'Not Connected'}
+                {activeWallet?.address || 'None'}
               </span>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-1)' }}>
@@ -189,7 +190,7 @@ export default function Developer() {
                   textTransform: 'uppercase'
                 }}
               >
-                Connected dApps
+                {t('developer.connected_dapps')}
               </span>
               <span style={{ fontSize: 'var(--text-sm)', fontFamily: 'var(--font-mono)' }}>
                 {dAppConnections}
@@ -203,7 +204,7 @@ export default function Developer() {
                   textTransform: 'uppercase'
                 }}
               >
-                WC Sessions
+                {t('developer.wc_sessions')}
               </span>
               <span style={{ fontSize: 'var(--text-sm)', fontFamily: 'var(--font-mono)' }}>
                 {wcSessions}
@@ -217,10 +218,10 @@ export default function Developer() {
                   textTransform: 'uppercase'
                 }}
               >
-                Cache Size
+                {t('developer.cache_size')}
               </span>
               <span style={{ fontSize: 'var(--text-sm)', fontFamily: 'var(--font-mono)' }}>
-                {(Math.random() * 5 + 1).toFixed(2)} MB
+                2.86 MB
               </span>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-1)' }}>
@@ -231,17 +232,9 @@ export default function Developer() {
                   textTransform: 'uppercase'
                 }}
               >
-                Extension Status
+                {t('developer.extension_status')}
               </span>
-              <span
-                style={{
-                  fontSize: 'var(--text-sm)',
-                  fontFamily: 'var(--font-mono)',
-                  color: isExtensionEnvironment()
-                    ? 'var(--color-brand)'
-                    : 'var(--color-text-secondary)'
-                }}
-              >
+              <span style={{ fontSize: 'var(--text-sm)', fontFamily: 'var(--font-mono)' }}>
                 {isExtensionEnvironment() ? 'Active' : 'Inactive'}
               </span>
             </div>
@@ -253,7 +246,7 @@ export default function Developer() {
                   textTransform: 'uppercase'
                 }}
               >
-                Background Worker
+                {t('developer.background_worker')}
               </span>
               <span
                 style={{
@@ -278,11 +271,13 @@ export default function Developer() {
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)' }}>
               <TestTube size={24} color="var(--color-text-primary)" />
-              <div>
-                <h3 style={{ fontSize: 'var(--text-lg)' }}>Show Testnets</h3>
-                <p style={{ color: 'var(--color-text-secondary)', fontSize: 'var(--text-sm)' }}>
-                  Display test networks in network selector
-                </p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                <span style={{ fontSize: 'var(--text-md)', fontWeight: 500 }}>
+                  {t('developer.show_testnets')}
+                </span>
+                <span style={{ fontSize: 'var(--text-sm)', color: 'var(--color-text-secondary)' }}>
+                  {t('developer.show_testnets_desc')}
+                </span>
               </div>
             </div>
             <div
@@ -290,7 +285,7 @@ export default function Developer() {
                 width: 44,
                 height: 24,
                 borderRadius: 12,
-                background: showTestnets ? '#34C759' : 'rgba(255,255,255,0.1)',
+                background: showTestnets ? 'var(--color-success)' : 'var(--color-border-primary)',
                 position: 'relative',
                 cursor: 'pointer',
                 transition: 'background 0.2s'

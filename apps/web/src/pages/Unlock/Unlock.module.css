@@ -14,7 +14,7 @@
   width: 100%;
   max-width: 480px;
   background-color: var(--color-surface);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--glass-border-light);
   border-radius: var(--radius-xl); /* 24px */
   padding: 48px;
   box-shadow: var(--shadow-high);
@@ -85,7 +85,7 @@
 .footer {
   margin-top: var(--space-8);
   padding-top: var(--space-6);
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  border-top: 1px solid var(--glass-border-light);
   display: flex;
   justify-content: space-between;
   align-items: center;

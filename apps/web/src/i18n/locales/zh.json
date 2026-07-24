@@ -1,0 +1,80 @@
+{
+  "sidebar": {
+    "dashboard": "仪表板",
+    "portfolio": "投资组合",
+    "activity": "活动",
+    "settings": "设置",
+    "security": "安全",
+    "developer": "开发者"
+  },
+  "settings": {
+    "preferences": "偏好",
+    "language_region": "语言与地区",
+    "language_desc": "选择您偏好的语言。",
+    "language": "语言",
+    "currency": "货币",
+    "date_format": "日期格式",
+    "number_format": "数字格式"
+  },
+  "developer": {
+    "title": "开发者模式",
+    "description": "高级工具",
+    "system_diagnostics": "系统诊断",
+    "current_chain": "当前链",
+    "chain_id": "链ID",
+    "rpc_url": "RPC URL",
+    "current_block": "当前区块",
+    "wallet_address": "钱包地址",
+    "connected_dapps": "已连接dApps",
+    "wc_sessions": "WC会话",
+    "cache_size": "缓存",
+    "extension_status": "状态",
+    "background_worker": "后台",
+    "show_testnets": "显示测试网",
+    "show_testnets_desc": "显示测试网"
+  },
+  "dashboard": {
+    "total_balance": "总余额",
+    "portfolio": "投资组合",
+    "recent_activity": "近期活动",
+    "unknown_network": "未知网络",
+    "no_transactions": "无交易"
+  },
+  "settings_index": {
+    "title": "设置",
+    "account": "账户",
+    "edit_profile": "个人资料",
+    "preferences": "偏好",
+    "language": "语言",
+    "appearance": "外观",
+    "security": "安全",
+    "security_desc": "密码, 2FA",
+    "connected_apps": "已连接应用",
+    "connected_apps_desc": "管理dApp",
+    "notifications": "通知",
+    "notifications_desc": "提醒",
+    "devices": "设备",
+    "devices_desc": "管理会话"
+  },
+  "portfolio": {
+    "title": "投资组合",
+    "tokens": "代币",
+    "nfts": "NFT",
+    "balance": "余额",
+    "price": "价格",
+    "value": "价值",
+    "no_tokens": "没有代币",
+    "no_nfts": "没有NFT"
+  },
+  "activity": {
+    "title": "活动",
+    "all": "全部",
+    "sent": "已发送",
+    "received": "已接收",
+    "pending": "待处理",
+    "no_activity": "没有活动",
+    "status": "状态",
+    "amount": "金额",
+    "date": "日期"
+  }
+}
