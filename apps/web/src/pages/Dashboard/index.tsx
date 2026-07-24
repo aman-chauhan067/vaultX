@@ -49,65 +49,7 @@ export default function Dashboard() {
         flexDirection: 'column'
       }}
     >
-      {/* Top Nav - Level 4 Metadata */}
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1 }}
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          padding: '2rem 0',
-          borderBottom: '1px solid var(--glass-border-light)'
-        }}
-      >
-        <div
-          style={{
-            fontFamily: 'var(--font-brand)',
-            fontSize: '1.25rem',
-            fontWeight: 700,
-            letterSpacing: '0.05em'
-          }}
-        >
-          V.X
-        </div>
-        <div
-          style={{
-            display: 'flex',
-            gap: '2rem',
-            fontSize: '0.75rem',
-            textTransform: 'uppercase',
-            letterSpacing: '0.1em',
-            color: 'var(--color-text-muted)'
-          }}
-        >
-          <span
-            onClick={() => navigate('/networks')}
-            style={{
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.25rem',
-              transition: 'color 0.3s'
-            }}
-            onMouseOver={(e) => (e.currentTarget.style.color = 'var(--color-text-primary)')}
-            onMouseOut={(e) => (e.currentTarget.style.color = 'var(--color-text-muted)')}
-          >
-            {activeNetwork?.name || t('dashboard.unknown_network')} <ArrowUpRight size={12} />
-          </span>
-          <span
-            onClick={() => navigate('/settings')}
-            style={{ cursor: 'pointer', transition: 'color 0.3s' }}
-            onMouseOver={(e) => (e.currentTarget.style.color = 'var(--color-text-primary)')}
-            onMouseOut={(e) => (e.currentTarget.style.color = 'var(--color-text-muted)')}
-          >
-            {activeWallet?.address
-              ? `${activeWallet.address.slice(0, 6)}...${activeWallet.address.slice(-4)}`
-              : ''}
-          </span>
-        </div>
-      </motion.div>
+      {/* Top Nav is handled globally by Layout/Header.tsx */}
 
       <motion.div
         variants={containerVariants}
