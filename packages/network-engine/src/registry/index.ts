@@ -22,9 +22,9 @@ export const CHAIN_REGISTRY: Record<number, ChainConfig> = {
     chainId: 11155111,
     name: 'Sepolia',
     rpcUrls: [
-      'https://rpc.ankr.com/eth_sepolia',
-      'https://ethereum-sepolia-rpc.publicnode.com',
-      'https://rpc.sepolia.org'
+      'https://eth-sepolia.g.alchemy.com/v2/demo',
+      'https://1rpc.io/sepolia',
+      'https://ethereum-sepolia-rpc.publicnode.com'
     ],
     currency: { name: 'Sepolia Ether', symbol: 'SEP', decimals: 18 },
     explorer: 'https://sepolia.etherscan.io',
