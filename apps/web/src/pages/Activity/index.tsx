@@ -93,7 +93,7 @@ export default function Activity() {
               marginBottom: '6rem'
             }}
           >
-            {t('activity.no_activity')}
+            {t('activity.title')}
           </div>
         </motion.div>
 
@@ -186,6 +186,14 @@ export default function Activity() {
                   <motion.div
                     key={`pending-${tx.hash || i}`}
                     variants={itemVariants}
+                    onClick={() => {
+                      const txChainId = tx.request.chainId;
+                      const txNetwork =
+                        supportedNetworks.find((n) => n.chainId === txChainId) || activeNetwork;
+                      if (tx.hash && txNetwork?.explorer) {
+                        window.open(`${txNetwork.explorer}/tx/${tx.hash}`, '_blank');
+                      }
+                    }}
                     style={{
                       display: 'flex',
                       alignItems: 'center',
@@ -193,6 +201,7 @@ export default function Activity() {
                       margin: '0 -1.5rem',
                       borderRadius: '16px',
                       borderBottom: '1px solid var(--glass-border-light)',
+                      cursor: 'pointer',
                       transition: 'all 0.3s ease'
                     }}
                     onMouseOver={(e) => {
@@ -275,9 +284,12 @@ export default function Activity() {
                     key={`history-${tx.receipt?.transactionHash || i}`}
                     variants={itemVariants}
                     onClick={() => {
-                      if (tx.receipt?.transactionHash && activeNetwork?.explorer) {
+                      const txChainId = tx.request.chainId;
+                      const txNetwork =
+                        supportedNetworks.find((n) => n.chainId === txChainId) || activeNetwork;
+                      if (tx.receipt?.transactionHash && txNetwork?.explorer) {
                         window.open(
-                          `${activeNetwork.explorer}/tx/${tx.receipt.transactionHash}`,
+                          `${txNetwork.explorer}/tx/${tx.receipt.transactionHash}`,
                           '_blank'
                         );
                       }
