@@ -189,8 +189,19 @@ export default function Activity() {
                     style={{
                       display: 'flex',
                       alignItems: 'center',
-                      padding: '2rem 0',
-                      borderBottom: '1px solid var(--glass-border-light)'
+                      padding: '2rem 1.5rem',
+                      margin: '0 -1.5rem',
+                      borderRadius: '16px',
+                      borderBottom: '1px solid var(--glass-border-light)',
+                      transition: 'all 0.3s ease'
+                    }}
+                    onMouseOver={(e) => {
+                      e.currentTarget.style.backgroundColor = 'var(--color-surface)';
+                      e.currentTarget.style.borderColor = 'transparent';
+                    }}
+                    onMouseOut={(e) => {
+                      e.currentTarget.style.backgroundColor = 'transparent';
+                      e.currentTarget.style.borderColor = 'var(--glass-border-light)';
                     }}
                   >
                     <div style={{ flex: 1, display: 'flex', alignItems: 'baseline', gap: '2rem' }}>
@@ -274,15 +285,21 @@ export default function Activity() {
                     style={{
                       display: 'flex',
                       alignItems: 'center',
-                      padding: '2rem 0',
+                      padding: '2rem 1.5rem',
+                      margin: '0 -1.5rem',
+                      borderRadius: '16px',
                       borderBottom: '1px solid var(--glass-border-light)',
                       cursor: 'pointer',
-                      transition: 'background 0.3s'
+                      transition: 'all 0.3s ease'
                     }}
-                    onMouseOver={(e) =>
-                      (e.currentTarget.style.backgroundColor = 'var(--color-surface)')
-                    }
-                    onMouseOut={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
+                    onMouseOver={(e) => {
+                      e.currentTarget.style.backgroundColor = 'var(--color-surface)';
+                      e.currentTarget.style.borderColor = 'transparent';
+                    }}
+                    onMouseOut={(e) => {
+                      e.currentTarget.style.backgroundColor = 'transparent';
+                      e.currentTarget.style.borderColor = 'var(--glass-border-light)';
+                    }}
                   >
                     <div style={{ flex: 1, display: 'flex', alignItems: 'baseline', gap: '2rem' }}>
                       <span
