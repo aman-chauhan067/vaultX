@@ -10,7 +10,11 @@ export const CHAIN_REGISTRY: Record<number, ChainConfig> = {
   1: {
     chainId: 1,
     name: 'Ethereum Mainnet',
-    rpcUrls: ['https://eth.llamarpc.com', 'https://cloudflare-eth.com'],
+    rpcUrls: [
+      'https://eth.drpc.org',
+      'https://ethereum-rpc.publicnode.com',
+      'https://rpc.ankr.com/eth'
+    ],
     currency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
     explorer: 'https://etherscan.io',
     icon: 'https://cryptologos.cc/logos/ethereum-eth-logo.svg',

@@ -26,6 +26,7 @@ export const NetworkProvider: React.FC<{ children: React.ReactNode }> = ({ child
       const targetChain = persisted ? parseInt(persisted, 10) : 1;
       if (networkEngine.getActiveChainId() !== targetChain) {
         networkEngine.switchChain(targetChain);
+        setActiveChainId(targetChain);
       } else {
         setActiveChainId(targetChain);
       }
@@ -33,6 +34,7 @@ export const NetworkProvider: React.FC<{ children: React.ReactNode }> = ({ child
       console.error('Failed to initialize persisted chain', err);
       if (networkEngine.getActiveChainId() !== 1) {
         networkEngine.switchChain(1);
+        setActiveChainId(1);
       }
     }
   }, [networkEngine]);
