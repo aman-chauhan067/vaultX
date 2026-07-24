@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { PageLayout } from '../../layout/index.js';
 import { Button, Card, Badge, Input, useToast } from '../../design-system/index.js';
-import { Search, CheckCircle2, XCircle, Clock, Trash2, Plus } from 'lucide-react';
+import { Search, CheckCircle2, XCircle, Clock, Trash2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useNetwork } from '../../hooks/index.js';
 import { BackButton } from '../../components/index.js';
@@ -175,22 +175,24 @@ export default function Networks() {
             {['All', 'Mainnets', 'Testnets', 'Custom'].map((f) => (
               <Badge
                 key={f}
-                variant={filterType === f ? 'brand' : 'neutral'}
+                variant={filterType === f && !showAdd ? 'brand' : 'neutral'}
                 style={{ cursor: 'pointer' }}
-                onClick={() => setFilterType(f as any)}
+                onClick={() => {
+                  setFilterType(f as any);
+                  setShowAdd(false);
+                }}
               >
                 {f}
               </Badge>
             ))}
+            <Badge
+              variant={showAdd ? 'brand' : 'neutral'}
+              style={{ cursor: 'pointer' }}
+              onClick={() => setShowAdd(!showAdd)}
+            >
+              + ADD
+            </Badge>
           </div>
-          <Button
-            variant="primary"
-            size="sm"
-            leftIcon={<Plus size={16} />}
-            onClick={() => setShowAdd(!showAdd)}
-          >
-            Add
-          </Button>
         </div>
 
         {showAdd && (
