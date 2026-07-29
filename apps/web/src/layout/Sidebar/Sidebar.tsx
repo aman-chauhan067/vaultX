@@ -12,7 +12,6 @@ import {
 } from 'lucide-react';
 import { useSettings } from '../../hooks/index.js';
 import { useTranslation } from 'react-i18next';
-import { VaultXLogoSVG } from '../../components/Logo/VaultXLogoSVG.js';
 import styles from './Sidebar.module.css';
 
 export const Sidebar: React.FC = () => {
@@ -29,11 +28,19 @@ export const Sidebar: React.FC = () => {
     { path: '/developer', label: t('sidebar.developer'), icon: TerminalSquare }
   ];
 
+  const isLight =
+    theme === 'light' ||
+    (theme === 'system' && window.matchMedia('(prefers-color-scheme: light)').matches);
+
   return (
     <aside className={styles.sidebar}>
       <div className={styles.brand}>
         <div className={styles.logo}>
-          <VaultXLogoSVG size={28} />
+          <img
+            src={isLight ? '/logolight.png' : '/logo.png'}
+            alt="VaultX Logo"
+            style={{ width: '150%', height: '150%', objectFit: 'contain' }}
+          />
         </div>
         <span className={styles.brandName}>VaultX</span>
       </div>

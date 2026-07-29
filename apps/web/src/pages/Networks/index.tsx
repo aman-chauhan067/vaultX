@@ -26,6 +26,13 @@ export default function Networks() {
   const [scrollTop, setScrollTop] = useState(0);
   const listRef = useRef<HTMLDivElement>(null);
 
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   const [rpcStatus, setRpcStatus] = useState<
     Record<number, { latency: number; sync: string; status: 'connected' | 'disconnected' }>
   >({});
@@ -128,19 +135,20 @@ export default function Networks() {
           display: 'flex',
           flexDirection: 'column',
           gap: 'var(--space-4)',
-          width: '100%',
           maxWidth: '800px',
           margin: '0 auto',
-          height: 'calc(100vh - 180px)',
-          boxSizing: 'border-box'
+          height: isMobile ? 'auto' : 'calc(100vh - 180px)',
+          minHeight: isMobile ? '100%' : 'auto',
+          paddingBottom: isMobile ? '120px' : '0' // Extra padding for mobile tab bar if needed
         }}
       >
         <div
           style={{
             display: 'flex',
-            flexWrap: 'wrap',
+            flexDirection: isMobile ? 'column' : 'row',
+            flexWrap: isMobile ? 'nowrap' : 'wrap',
             gap: 'var(--space-4)',
-            alignItems: 'center',
+            alignItems: isMobile ? 'stretch' : 'center',
             background: 'var(--color-surface)',
             padding: 'var(--space-3)',
             borderRadius: 'var(--radius-lg)'
@@ -173,12 +181,22 @@ export default function Networks() {
               }}
             />
           </div>
-          <div style={{ display: 'flex', gap: 'var(--space-2)' }}>
+          <div
+            style={{
+              display: 'flex',
+              gap: 'var(--space-2)',
+              overflowX: 'auto',
+              paddingBottom: isMobile ? 'var(--space-2)' : '0',
+              WebkitOverflowScrolling: 'touch',
+              scrollbarWidth: 'none',
+              msOverflowStyle: 'none'
+            }}
+          >
             {['All', 'Mainnets', 'Testnets', 'Custom'].map((f) => (
               <Badge
                 key={f}
                 variant={filterType === f && !showAdd ? 'brand' : 'neutral'}
-                style={{ cursor: 'pointer' }}
+                style={{ cursor: 'pointer', whiteSpace: 'nowrap' }}
                 onClick={() => {
                   setFilterType(f as any);
                   setShowAdd(false);
@@ -189,7 +207,7 @@ export default function Networks() {
             ))}
             <Badge
               variant={showAdd ? 'brand' : 'neutral'}
-              style={{ cursor: 'pointer' }}
+              style={{ cursor: 'pointer', whiteSpace: 'nowrap' }}
               onClick={() => setShowAdd(!showAdd)}
             >
               + ADD
@@ -259,8 +277,8 @@ export default function Networks() {
             flexDirection: 'column',
             gap: 'var(--space-3)',
             flex: 1,
-            overflowY: 'auto',
-            padding: '0',
+            overflowY: isMobile ? 'visible' : 'auto',
+            padding: '0 4px',
             position: 'relative'
           }}
         >
@@ -275,7 +293,7 @@ export default function Networks() {
             let opacity = 1;
             let scale = 1;
 
-            if (scrollTop > startFade) {
+            if (!isMobile && scrollTop > startFade) {
               const progress = Math.min((scrollTop - startFade) / distance, 1);
               opacity = 1 - progress;
               scale = 1 - progress * 0.05;
@@ -286,7 +304,7 @@ export default function Networks() {
                 id={`network-card-${net.chainId}`}
                 key={net.chainId}
                 style={{
-                  position: 'sticky',
+                  position: isMobile ? 'static' : 'sticky',
                   top: 0,
                   zIndex: index,
                   opacity,
@@ -365,9 +383,7 @@ export default function Networks() {
                             display: 'flex',
                             gap: 'var(--space-3)',
                             alignItems: 'center',
-                            flexWrap: 'wrap',
-                            wordBreak: 'break-word',
-                            minWidth: 0
+                            flexWrap: 'wrap'
                           }}
                         >
                           <span>ID: {net.chainId}</span>
@@ -380,7 +396,7 @@ export default function Networks() {
                     <div style={{ display: 'flex', gap: 'var(--space-2)' }}>
                       {isActive ? (
                         <Button variant="outline" size="sm" disabled>
-                          Connected
+                          {isMobile ? 'Active' : 'Connected'}
                         </Button>
                       ) : (
                         <Button
@@ -389,7 +405,7 @@ export default function Networks() {
                           onClick={() => handleSwitch(net.chainId)}
                           disabled={switchingChainId !== null}
                         >
-                          {isSwitching ? 'Switching...' : 'Switch'}
+                          {isSwitching ? '...' : 'Switch'}
                         </Button>
                       )}
                       {net.isCustom && (
@@ -405,38 +421,40 @@ export default function Networks() {
                     </div>
                   </div>
 
-                  <div
-                    style={{
-                      display: 'flex',
-                      flexWrap: 'wrap',
-                      gap: 'var(--space-4)',
-                      paddingTop: 'var(--space-2)',
-                      fontSize: 'var(--text-xs)',
-                      color: 'var(--color-text-secondary)'
-                    }}
-                  >
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-1)' }}>
-                      {status?.status === 'connected' ? (
-                        <CheckCircle2 size={12} color="var(--color-brand)" />
-                      ) : (
-                        <XCircle size={12} color="var(--color-danger)" />
-                      )}
-                      RPC: {status?.status === 'connected' ? 'Connected' : 'Offline'}
+                  {!isMobile && (
+                    <div
+                      style={{
+                        display: 'flex',
+                        flexWrap: 'wrap',
+                        gap: 'var(--space-4)',
+                        paddingTop: 'var(--space-2)',
+                        fontSize: 'var(--text-xs)',
+                        color: 'var(--color-text-secondary)'
+                      }}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-1)' }}>
+                        {status?.status === 'connected' ? (
+                          <CheckCircle2 size={12} color="var(--color-brand)" />
+                        ) : (
+                          <XCircle size={12} color="var(--color-danger)" />
+                        )}
+                        RPC: {status?.status === 'connected' ? 'Connected' : 'Offline'}
+                      </div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-1)' }}>
+                        <Clock size={12} />
+                        Latency: {status?.latency || 0}ms
+                      </div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-1)' }}>
+                        Last Sync: {status?.sync || 'Never'}
+                      </div>
                     </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-1)' }}>
-                      <Clock size={12} />
-                      Latency: {status?.latency || 0}ms
-                    </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-1)' }}>
-                      Last Sync: {status?.sync || 'Never'}
-                    </div>
-                  </div>
+                  )}
                 </Card>
               </div>
             );
           })}
 
-          <div style={{ height: 'calc(100vh - 280px)', flexShrink: 0 }} />
+          {!isMobile && <div style={{ height: 'calc(100vh - 280px)', flexShrink: 0 }} />}
 
           {filteredNetworks.length === 0 && (
             <div

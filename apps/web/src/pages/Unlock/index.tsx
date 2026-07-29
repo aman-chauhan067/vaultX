@@ -84,7 +84,7 @@ export default function Unlock() {
         }}
       >
         <div style={{ marginBottom: '4rem' }}>
-          <Logo size="lg" />
+          <Logo size="lg" variant="dark" />
         </div>
 
         <form

@@ -3,9 +3,7 @@
   display: flex;
   flex-direction: column-reverse; /* Sidebar at bottom on mobile */
   height: 100dvh;
-  width: 100%;
-  max-width: 100%;
-  box-sizing: border-box;
+  width: 100vw;
   overflow: hidden;
   background: transparent;
 }
@@ -16,10 +14,6 @@
   flex: 1;
   min-width: 0;
   min-height: 0;
-  width: 100%;
-  max-width: 100%;
-  box-sizing: border-box;
-  overflow-x: hidden;
   position: relative;
 }
 

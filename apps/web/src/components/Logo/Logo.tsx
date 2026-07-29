@@ -1,21 +1,41 @@
 import React from 'react';
 import clsx from 'clsx';
 import { motion } from 'framer-motion';
-import { VaultXLogoSVG } from './VaultXLogoSVG.js';
+import { useSettings } from '../../hooks/index.js';
 
 export interface LogoProps {
   size?: 'sm' | 'md' | 'lg' | 'xl';
+  variant?: 'light' | 'dark' | 'auto';
   withText?: boolean;
   className?: string;
 }
 
-export const Logo: React.FC<LogoProps> = ({ size = 'md', withText = true, className }) => {
+export const Logo: React.FC<LogoProps> = ({
+  size = 'md',
+  variant = 'auto',
+  withText = true,
+  className
+}) => {
+  const { theme } = useSettings();
+  const isLight =
+    theme === 'light' ||
+    (theme === 'system' && window.matchMedia('(prefers-color-scheme: light)').matches);
+
+  const logoSrc =
+    variant === 'light'
+      ? '/logolight.png'
+      : variant === 'dark'
+        ? '/logo.png'
+        : isLight
+          ? '/logolight.png'
+          : '/logo.png';
+
   // Size mapping
   const iconSizes = {
-    sm: 20,
-    md: 28,
-    lg: 36,
-    xl: 52
+    sm: 16,
+    md: 24,
+    lg: 32,
+    xl: 48
   };
 
   const textSizes = {
@@ -36,17 +56,22 @@ export const Logo: React.FC<LogoProps> = ({ size = 'md', withText = true, classN
         gap: size === 'sm' ? '8px' : '12px'
       }}
     >
-      <motion.div
+      <motion.img
+        src={logoSrc}
+        alt="VaultX Logo"
         className="vaultx-logo-icon"
+        style={{
+          width: iconSize * 1.5,
+          height: iconSize * 1.5,
+          objectFit: 'contain',
+          flexShrink: 0
+        }}
         whileHover={{
           filter: 'drop-shadow(0 0 8px rgba(255, 255, 255, 0.3))',
-          scale: 1.08
+          scale: 1.05
         }}
         transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-        style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-      >
-        <VaultXLogoSVG size={iconSize} />
-      </motion.div>
+      />
 
       {withText && (
         <span

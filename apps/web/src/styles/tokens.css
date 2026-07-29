@@ -108,12 +108,6 @@
   --glass-border: rgba(255, 255, 255, 0.08);
   --glass-border-light: rgba(255, 255, 255, 0.04);
   --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.8);
-
-  /* SVG Logo Tokens (Dark) */
-  --logo-fill-outer: rgba(255, 255, 255, 0.06);
-  --logo-stroke: rgba(255, 255, 255, 0.2);
-  --logo-v-color: #ffffff;
-  --logo-v-highlight: rgba(255, 255, 255, 0.35);
 }
 
 /* Light Theme Overrides */
@@ -156,10 +150,4 @@
   --glass-border: rgba(0, 0, 0, 0.1);
   --glass-border-light: rgba(0, 0, 0, 0.05);
   --glass-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
-
-  /* SVG Logo Tokens (Light) */
-  --logo-fill-outer: rgba(0, 0, 0, 0.05);
-  --logo-stroke: rgba(0, 0, 0, 0.18);
-  --logo-v-color: #111113;
-  --logo-v-highlight: rgba(0, 0, 0, 0.25);
 }
