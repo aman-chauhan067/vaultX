@@ -457,8 +457,8 @@ export default function Portfolio() {
               lineHeight: 1
             }}
           >
-            {portfolio?.totalAssetsValueUsd
-              ? `$${portfolio.totalAssetsValueUsd.toFixed(2)}`
+            {portfolio?.totalAssetsValueFiat
+              ? `$${portfolio.totalAssetsValueFiat.toFixed(2)}`
               : '$0.00'}
           </div>
         </div>
