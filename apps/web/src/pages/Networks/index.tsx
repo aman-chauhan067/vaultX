@@ -137,9 +137,10 @@ export default function Networks() {
           gap: 'var(--space-4)',
           maxWidth: '800px',
           margin: '0 auto',
+          width: '100%',
           height: isMobile ? 'auto' : 'calc(100vh - 180px)',
           minHeight: isMobile ? '100%' : 'auto',
-          paddingBottom: isMobile ? '120px' : '0' // Extra padding for mobile tab bar if needed
+          paddingBottom: isMobile ? '100px' : '0'
         }}
       >
         <div
@@ -186,6 +187,8 @@ export default function Networks() {
               display: 'flex',
               gap: 'var(--space-2)',
               overflowX: 'auto',
+              width: '100%',
+              maxWidth: '100%',
               paddingBottom: isMobile ? 'var(--space-2)' : '0',
               WebkitOverflowScrolling: 'touch',
               scrollbarWidth: 'none',
@@ -339,22 +342,26 @@ export default function Networks() {
                   <div
                     style={{
                       display: 'flex',
-                      alignItems: 'center',
+                      alignItems: isMobile ? 'flex-start' : 'center',
                       justifyContent: 'space-between',
-                      flexWrap: 'wrap',
+                      flexWrap: isMobile ? 'nowrap' : 'wrap',
                       gap: 'var(--space-3)'
                     }}
                   >
                     <div
                       style={{
                         display: 'flex',
-                        alignItems: 'center',
+                        alignItems: isMobile ? 'flex-start' : 'center',
                         gap: 'var(--space-3)',
-                        flexWrap: 'wrap'
+                        flexWrap: isMobile ? 'nowrap' : 'wrap',
+                        flex: 1,
+                        minWidth: 0
                       }}
                     >
-                      <CryptoIcon symbol={net.currency?.symbol || 'ETH'} size={40} />
-                      <div>
+                      <div style={{ flexShrink: 0 }}>
+                        <CryptoIcon symbol={net.currency?.symbol || 'ETH'} size={40} />
+                      </div>
+                      <div style={{ flex: 1, minWidth: 0 }}>
                         <div
                           style={{
                             display: 'flex',
@@ -367,7 +374,10 @@ export default function Networks() {
                             style={{
                               margin: 0,
                               fontSize: 'var(--text-md)',
-                              fontWeight: 'var(--font-weight-medium)'
+                              fontWeight: 'var(--font-weight-medium)',
+                              whiteSpace: isMobile ? 'nowrap' : 'normal',
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis'
                             }}
                           >
                             {net.name}
@@ -381,19 +391,22 @@ export default function Networks() {
                             fontSize: 'var(--text-xs)',
                             marginTop: 'var(--space-1)',
                             display: 'flex',
-                            gap: 'var(--space-3)',
+                            gap: 'var(--space-2)',
                             alignItems: 'center',
-                            flexWrap: 'wrap'
+                            flexWrap: 'wrap',
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis'
                           }}
                         >
                           <span>ID: {net.chainId}</span>
-                          <span>•</span>
-                          <span>Token: {net.currency?.symbol || 'ETH'}</span>
+                          {!isMobile && <span>•</span>}
+                          {!isMobile && <span>Token: {net.currency?.symbol || 'ETH'}</span>}
                         </div>
                       </div>
                     </div>
 
-                    <div style={{ display: 'flex', gap: 'var(--space-2)' }}>
+                    <div style={{ display: 'flex', gap: 'var(--space-2)', flexShrink: 0 }}>
                       {isActive ? (
                         <Button variant="outline" size="sm" disabled>
                           {isMobile ? 'Active' : 'Connected'}
