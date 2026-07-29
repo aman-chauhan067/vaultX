@@ -6,9 +6,16 @@
   justify-content: space-between;
   padding: max(env(safe-area-inset-top), 12px) var(--space-4) 12px;
   border-bottom: 1px solid var(--glass-border-light);
-  background: rgba(17, 11, 56, 0.6);
+  background: var(--glass-bg);
   backdrop-filter: blur(24px);
   z-index: var(--z-index-sticky);
+}
+
+:global(.light-theme) .header {
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(24px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 1px 15px rgba(0, 0, 0, 0.03);
 }
 
 .mobileBrand {
@@ -73,8 +80,8 @@
   align-items: center;
   gap: var(--space-2);
   padding: 8px 16px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid var(--glass-border-light);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-primary);
   border-radius: var(--radius-pill);
   font-size: 14px;
   font-weight: 600;
@@ -84,7 +91,7 @@
 }
 
 .accountPill:hover {
-  background: rgba(255, 255, 255, 0.06);
+  background: var(--color-surface-hover);
   transform: translateY(-1px);
 }
 
@@ -95,15 +102,15 @@
   width: 40px;
   height: 40px;
   border-radius: var(--radius-pill);
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid var(--glass-border-light);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-primary);
   color: var(--color-text-secondary);
   cursor: pointer;
   transition: all var(--motion-duration-fast) var(--motion-curve-default);
 }
 
 .iconBtn:hover {
-  background: rgba(255, 255, 255, 0.06);
+  background: var(--color-surface-hover);
   color: var(--color-text-primary);
   transform: translateY(-1px);
 }
@@ -139,9 +146,9 @@
     font-weight: 500;
     color: var(--color-text-secondary);
     padding: 8px 16px;
-    background: rgba(255, 255, 255, 0.03);
+    background: var(--color-surface);
     border-radius: var(--radius-pill);
-    border: 1px solid var(--glass-border-light);
+    border: 1px solid var(--color-border-primary);
   }
 
   .indicator {

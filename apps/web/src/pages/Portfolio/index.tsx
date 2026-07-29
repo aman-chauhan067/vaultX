@@ -1,7 +1,17 @@
 import React, { useState, useMemo } from 'react';
-import { BackButton } from '../../components/index.js';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { PageLayout } from '../../layout/index.js';
+import {
+  Card,
+  Button,
+  Badge,
+  Skeleton,
+  Tabs,
+  SearchBar,
+  GlassCard,
+  EmptyState
+} from '../../design-system/index.js';
 import {
   usePortfolio,
   useNFTs,
@@ -9,369 +19,457 @@ import {
   useActiveWallet,
   useNetwork
 } from '../../hooks/index.js';
-import { formatUnits } from '@vaultx/network-engine';
-import {} from 'lucide-react';
-import { AnimatedNumber } from '../../components/AnimatedNumber.js';
-import { useTranslation } from 'react-i18next';
+import { RefreshCw, ArrowRight, Coins, Image as ImageIcon, SearchX } from 'lucide-react';
 
 export default function Portfolio() {
   const navigate = useNavigate();
   const activeWallet = useActiveWallet();
-  const { t } = useTranslation();
   const { activeChainId, supportedNetworks } = useNetwork();
   const { data: stats, isLoading: isStatsLoading } = useNetworkStats(activeWallet?.address);
-  const { portfolio } = usePortfolio();
+  const {
+    portfolio,
+    isLoading: isPortfolioLoading,
+    error: portfolioError,
+    refreshPortfolio
+  } = usePortfolio();
 
-  const { collections } = useNFTs();
-  const [activeView, setActiveView] = useState<'tokens' | 'nfts'>('tokens');
+  const {
+    collections,
+    searchQuery: nftSearchQuery,
+    setSearchQuery: setNftSearchQuery,
+    isLoading: isNftLoading,
+    error: nftError,
+    refreshNFTs,
+    loadMore,
+    hasMore
+  } = useNFTs();
 
+  const [tokenSearchQuery, setTokenSearchQuery] = useState('');
   const activeNetwork = supportedNetworks.find((n) => n.chainId === activeChainId);
 
   const formatBalance = (bal: string) => {
     const num = parseFloat(bal);
     if (isNaN(num)) return '0.00';
-    return num.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 4 });
+    return num.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 6 });
   };
 
-  const tokens = useMemo(() => {
+  const filteredTokens = useMemo(() => {
     if (!portfolio) return [];
-    return [...portfolio.tokens].sort(
-      (a, b) => Number(b.formattedBalance) - Number(a.formattedBalance)
-    );
-  }, [portfolio]);
+    if (!tokenSearchQuery)
+      return portfolio.tokens.sort(
+        (a, b) => Number(b.formattedBalance) - Number(a.formattedBalance)
+      );
 
-  const nftsCount = collections.reduce((acc, c) => acc + c.nfts.length, 0);
+    const lowerQ = tokenSearchQuery.toLowerCase();
+    return portfolio.tokens
+      .filter(
+        (t) =>
+          t.name.toLowerCase().includes(lowerQ) ||
+          t.symbol.toLowerCase().includes(lowerQ) ||
+          t.address.toLowerCase().includes(lowerQ)
+      )
+      .sort((a, b) => Number(b.formattedBalance) - Number(a.formattedBalance));
+  }, [portfolio, tokenSearchQuery]);
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    show: { opacity: 1, transition: { staggerChildren: 0.1 } }
+  const handleRefresh = (isNft: boolean) => {
+    if (!isNft) {
+      refreshPortfolio();
+    } else {
+      refreshNFTs();
+    }
   };
 
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.8 } }
-  };
-
-  return (
-    <div
-      style={{
-        minHeight: '100vh',
-        backgroundColor: 'var(--color-bg-primary)',
-        color: 'var(--color-text-primary)',
-        padding: '0 5vw',
-        display: 'flex',
-        flexDirection: 'column'
-      }}
+  const TokenTab = () => (
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -10 }}
+      style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}
     >
-      {/* Top Nav - Level 4 Metadata */}
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1 }}
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          padding: '2rem 0',
-          borderBottom: '1px solid var(--glass-border-light)'
-        }}
-      >
-        <BackButton />
-        <div
-          style={{
-            display: 'flex',
-            gap: '2rem',
-            fontSize: '0.75rem',
-            textTransform: 'uppercase',
-            letterSpacing: '0.1em'
-          }}
+      <div style={{ display: 'flex', gap: 'var(--space-2)' }}>
+        <SearchBar
+          placeholder="Search tokens..."
+          value={tokenSearchQuery}
+          onChange={(e) => setTokenSearchQuery(e.target.value)}
+          style={{ flex: 1 }}
+        />
+        <Button
+          variant="outline"
+          onClick={() => handleRefresh(false)}
+          disabled={isPortfolioLoading}
+          aria-label="Refresh Tokens"
         >
-          <span
-            onClick={() => setActiveView('tokens')}
-            style={{
-              cursor: 'pointer',
-              color:
-                activeView === 'tokens'
-                  ? 'var(--color-text-primary)'
-                  : 'var(--color-text-secondary)',
-              transition: 'color 0.3s'
-            }}
-          >
-            {t('portfolio.tokens')}
-          </span>
-          <span
-            onClick={() => setActiveView('nfts')}
-            style={{
-              cursor: 'pointer',
-              color:
-                activeView === 'nfts' ? 'var(--color-text-primary)' : 'var(--color-text-secondary)',
-              transition: 'color 0.3s'
-            }}
-          >
-            {t('portfolio.nfts')}
-          </span>
+          <RefreshCw
+            size={18}
+            style={{ animation: isPortfolioLoading ? 'spin 1s linear infinite' : 'none' }}
+          />
+        </Button>
+      </div>
+
+      {portfolioError && (
+        <Badge variant="error" style={{ padding: 'var(--space-3)' }}>
+          Error: {portfolioError}
+        </Badge>
+      )}
+
+      {isPortfolioLoading && !portfolio ? (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
+          {[1, 2, 3].map((i) => (
+            <Skeleton
+              key={i}
+              width="100%"
+              height={72}
+              style={{ borderRadius: 'var(--radius-lg)' }}
+            />
+          ))}
         </div>
-      </motion.div>
-
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', marginTop: '10vh' }}>
-        {/* Level 1: Context Header (Total Value / Count) */}
-        <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8 }}
-        >
-          <span
-            style={{
-              fontSize: '0.875rem',
-              textTransform: 'uppercase',
-              letterSpacing: '0.2em',
-              color: 'var(--color-text-secondary)',
-              display: 'block',
-              marginBottom: '1rem'
-            }}
+      ) : (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
+          {/* Native Token Card */}
+          <Card
+            padding="md"
+            interactive
+            onClick={() => navigate('/token/native')}
+            style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-4)' }}
           >
-            {activeView === 'tokens' ? 'Net Liquidity' : 'Collection Size'}
-          </span>
-          <div
-            style={{
-              fontSize: 'clamp(3rem, 8vw, 5rem)',
-              fontWeight: 300,
-              lineHeight: 1,
-              letterSpacing: '-0.02em',
-              marginBottom: '6rem'
-            }}
-          >
-            {activeView === 'tokens' ? (
-              portfolio?.totalAssetsValueFiat ? (
-                <AnimatedNumber
-                  prefix="$"
-                  value={portfolio.totalAssetsValueFiat}
-                  minDecimals={2}
-                  maxDecimals={2}
-                />
-              ) : (
-                '$0.00'
-              )
-            ) : (
-              <AnimatedNumber value={nftsCount} minDecimals={0} maxDecimals={0} />
-            )}
-          </div>
-        </motion.div>
-
-        {/* Level 2: The Data List (No Cards) */}
-        {activeView === 'tokens' && (
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            animate="show"
-            style={{ display: 'flex', flexDirection: 'column' }}
-          >
-            {/* Native Asset */}
-            <motion.div
-              variants={itemVariants}
-              onClick={() => navigate('/token/native')}
+            <div
               style={{
+                width: 40,
+                height: 40,
+                borderRadius: 'var(--radius-pill)',
+                background: 'var(--color-surface-hover)',
                 display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'baseline',
-                padding: '2rem 0',
-                borderTop: '1px solid var(--glass-border)',
-                cursor: 'pointer'
+                alignItems: 'center',
+                justifyContent: 'center'
               }}
             >
-              <div style={{ display: 'flex', alignItems: 'baseline', gap: '2rem' }}>
-                <span style={{ fontSize: 'clamp(2rem, 5vw, 3rem)', fontWeight: 300 }}>
-                  {activeNetwork?.name || 'Ethereum'}
-                </span>
-                <span
+              <Coins size={20} color="var(--color-text-secondary)" />
+            </div>
+            <div style={{ flex: 1 }}>
+              <div style={{ fontWeight: 'var(--font-weight-medium)', fontSize: 'var(--text-sm)' }}>
+                {activeNetwork?.name || 'Ethereum'}
+              </div>
+              <div style={{ fontSize: 'var(--text-xs)', color: 'var(--color-text-muted)' }}>
+                {activeNetwork?.currency.symbol || 'ETH'}
+              </div>
+            </div>
+            <div
+              style={{
+                textAlign: 'right',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 'var(--space-3)'
+              }}
+            >
+              <div>
+                <div
+                  style={{ fontWeight: 'var(--font-weight-medium)', fontSize: 'var(--text-sm)' }}
+                >
+                  {isStatsLoading ? '---' : formatBalance(stats?.balance || '0')}
+                </div>
+              </div>
+              <ArrowRight size={18} color="var(--color-text-muted)" />
+            </div>
+          </Card>
+
+          {/* ERC20 Tokens */}
+          {filteredTokens.map((token) => (
+            <Card
+              key={token.address}
+              padding="md"
+              interactive
+              onClick={() => navigate(`/token/${token.address}`)}
+              style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-4)' }}
+            >
+              <div
+                style={{
+                  width: 40,
+                  height: 40,
+                  borderRadius: 'var(--radius-pill)',
+                  background: 'var(--color-surface-hover)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
+              >
+                <Coins size={20} color="var(--color-text-secondary)" />
+              </div>
+              <div
+                style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}
+              >
+                <div>
+                  <div
+                    style={{
+                      fontWeight: 'var(--font-weight-medium)',
+                      fontSize: 'var(--text-sm)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 'var(--space-2)'
+                    }}
+                  >
+                    {token.name}
+                    {token.verified && <Badge variant="brand">Verified</Badge>}
+                  </div>
+                  <div style={{ fontSize: 'var(--text-xs)', color: 'var(--color-text-muted)' }}>
+                    {token.symbol}
+                  </div>
+                </div>
+              </div>
+              <div
+                style={{
+                  textAlign: 'right',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 'var(--space-3)'
+                }}
+              >
+                <div>
+                  <div
+                    style={{ fontWeight: 'var(--font-weight-medium)', fontSize: 'var(--text-sm)' }}
+                  >
+                    {Number(token.formattedBalance) > 0
+                      ? formatBalance(token.formattedBalance)
+                      : '0.00'}
+                  </div>
+                </div>
+                <ArrowRight size={18} color="var(--color-text-muted)" />
+              </div>
+            </Card>
+          ))}
+
+          {filteredTokens.length === 0 && portfolio?.tokens.length !== 0 && (
+            <EmptyState
+              icon={<SearchX size={32} />}
+              title="No tokens found"
+              description="No tokens match your search criteria."
+            />
+          )}
+        </div>
+      )}
+    </motion.div>
+  );
+
+  const sortedCollections = useMemo(() => {
+    return [...collections];
+  }, [collections]);
+
+  const NFTTab = () => (
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -10 }}
+      style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}
+    >
+      <div style={{ display: 'flex', gap: 'var(--space-2)' }}>
+        <SearchBar
+          placeholder="Search NFTs..."
+          value={nftSearchQuery}
+          onChange={(e) => setNftSearchQuery(e.target.value)}
+          style={{ flex: 1 }}
+        />
+        <Button
+          variant="outline"
+          onClick={() => handleRefresh(true)}
+          disabled={isNftLoading}
+          aria-label="Refresh NFTs"
+        >
+          <RefreshCw
+            size={18}
+            style={{ animation: isNftLoading ? 'spin 1s linear infinite' : 'none' }}
+          />
+        </Button>
+      </div>
+
+      {nftError && (
+        <Badge variant="error" style={{ padding: 'var(--space-3)' }}>
+          Error: {nftError}
+        </Badge>
+      )}
+
+      {isNftLoading && sortedCollections.length === 0 ? (
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))',
+            gap: 'var(--space-3)'
+          }}
+        >
+          {[1, 2, 3, 4].map((i) => (
+            <Skeleton
+              key={i}
+              width="100%"
+              height={180}
+              style={{ borderRadius: 'var(--radius-lg)' }}
+            />
+          ))}
+        </div>
+      ) : (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-6)' }}>
+          {sortedCollections.map((col) => (
+            <div
+              key={col.contractAddress}
+              style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
+                <h3
                   style={{
-                    fontSize: '0.875rem',
-                    color: 'var(--color-text-secondary)',
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.1em'
+                    fontSize: 'var(--text-lg)',
+                    margin: 0,
+                    fontWeight: 'var(--font-weight-medium)'
                   }}
                 >
-                  {activeNetwork?.currency.symbol || 'ETH'}
-                </span>
+                  {col.name}
+                </h3>
+                <Badge variant="neutral">{col.nfts.length}</Badge>
               </div>
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
-                <span style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)', fontWeight: 300 }}>
-                  {isStatsLoading ? (
-                    '---'
-                  ) : (
-                    <AnimatedNumber
-                      value={parseFloat(stats?.balance || '0')}
-                      minDecimals={2}
-                      maxDecimals={4}
-                    />
-                  )}
-                </span>
-              </div>
-            </motion.div>
 
-            {/* ERC20 Assets */}
-            {tokens.map((token, i) => (
-              <motion.div
-                key={token.address}
-                variants={itemVariants}
-                onClick={() => navigate(`/token/${token.address}`)}
+              <div
                 style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'baseline',
-                  padding: '2rem 0',
-                  borderTop: '1px solid var(--glass-border-light)',
-                  borderBottom:
-                    i === tokens.length - 1 ? '1px solid var(--glass-border-light)' : 'none',
-                  cursor: 'pointer'
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))',
+                  gap: 'var(--space-3)'
                 }}
               >
-                <div style={{ display: 'flex', alignItems: 'baseline', gap: '2rem' }}>
-                  <span style={{ fontSize: 'clamp(2rem, 5vw, 3rem)', fontWeight: 300 }}>
-                    {token.name}
-                  </span>
-                  <span
-                    style={{
-                      fontSize: '0.875rem',
-                      color: 'var(--color-text-secondary)',
-                      textTransform: 'uppercase',
-                      letterSpacing: '0.1em'
-                    }}
-                  >
-                    {token.symbol}
-                  </span>
-                </div>
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
-                  <span style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)', fontWeight: 300 }}>
-                    {Number(token.formattedBalance) > 0 ? (
-                      <AnimatedNumber
-                        value={parseFloat(token.formattedBalance)}
-                        minDecimals={2}
-                        maxDecimals={4}
-                      />
-                    ) : (
-                      '0.00'
-                    )}
-                  </span>
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
-        )}
-
-        {activeView === 'nfts' && (
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            animate="show"
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 320px), 1fr))',
-              gap: '4rem',
-              paddingBottom: '4rem'
-            }}
-          >
-            {collections.length === 0 ? (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8 }}
-                style={{
-                  gridColumn: '1 / -1',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  gap: '2rem',
-                  padding: '8vh 0',
-                  textAlign: 'center'
-                }}
-              >
-                <div style={{ fontSize: '4rem', opacity: 0.2 }}>◇</div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                  <span
-                    style={{
-                      fontSize: '1.5rem',
-                      fontWeight: 300,
-                      color: 'var(--color-text-primary)'
-                    }}
-                  >
-                    No collectibles found
-                  </span>
-                  <span
-                    style={{
-                      fontSize: '0.875rem',
-                      color: 'var(--color-text-secondary)',
-                      maxWidth: '320px'
-                    }}
-                  >
-                    NFTs and collectibles held by this wallet will appear here.
-                  </span>
-                </div>
-              </motion.div>
-            ) : (
-              collections.map((col) =>
-                col.nfts.map((nft) => (
-                  <motion.div
+                {col.nfts.map((nft) => (
+                  <GlassCard
                     key={`${nft.contractAddress}-${nft.tokenId}`}
-                    variants={itemVariants}
+                    interactive
+                    padding="none"
                     onClick={() =>
                       navigate(`/nft/${nft.chainId}/${nft.contractAddress}/${nft.tokenId}`)
                     }
-                    style={{ cursor: 'pointer', display: 'flex', flexDirection: 'column' }}
+                    style={{ overflow: 'hidden', display: 'flex', flexDirection: 'column' }}
                   >
                     <div
                       style={{
+                        position: 'relative',
                         width: '100%',
                         aspectRatio: '1',
-                        backgroundColor: 'var(--color-bg-secondary)',
-                        position: 'relative',
-                        overflow: 'hidden'
+                        background: 'var(--color-surface)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
                       }}
                     >
                       {nft.image ? (
                         <img
                           src={nft.image}
-                          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                           alt={nft.name}
-                        />
-                      ) : (
-                        <div
-                          style={{
-                            width: '100%',
-                            height: '100%',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            color: 'var(--color-text-secondary)',
-                            fontSize: '0.875rem',
-                            textTransform: 'uppercase',
-                            letterSpacing: '0.1em'
+                          loading="lazy"
+                          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).style.display = 'none';
+                            (e.target as HTMLImageElement).nextElementSibling?.removeAttribute(
+                              'style'
+                            );
                           }}
-                        >
-                          No preview
-                        </div>
-                      )}
+                        />
+                      ) : null}
+                      <div
+                        style={{
+                          display: nft.image ? 'none' : 'flex',
+                          color: 'var(--color-text-muted)'
+                        }}
+                      >
+                        <ImageIcon size={32} />
+                      </div>
                     </div>
                     <div
                       style={{
-                        marginTop: '1.5rem',
+                        padding: 'var(--space-2)',
                         display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'baseline'
+                        flexDirection: 'column',
+                        gap: 'var(--space-1)'
                       }}
                     >
-                      <span style={{ fontSize: '1.25rem', fontWeight: 300 }}>{nft.name}</span>
-                      <span style={{ fontSize: '0.875rem', color: 'var(--color-text-secondary)' }}>
-                        #{nft.tokenId}
+                      <span
+                        style={{
+                          fontWeight: 'var(--font-weight-medium)',
+                          fontSize: 'var(--text-xs)',
+                          whiteSpace: 'nowrap',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis'
+                        }}
+                      >
+                        {nft.name}
                       </span>
+                      <div
+                        style={{
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          alignItems: 'center'
+                        }}
+                      >
+                        <span
+                          style={{
+                            fontSize: 'var(--text-xs)',
+                            color: 'var(--color-text-secondary)'
+                          }}
+                        >
+                          #{nft.tokenId}
+                        </span>
+                        {nft.balance && nft.standard === 'ERC1155' && (
+                          <Badge variant="brand">x{nft.balance}</Badge>
+                        )}
+                      </div>
                     </div>
-                  </motion.div>
-                ))
-              )
-            )}
-          </motion.div>
-        )}
+                  </GlassCard>
+                ))}
+              </div>
+            </div>
+          ))}
+
+          {sortedCollections.length === 0 && (
+            <EmptyState
+              icon={<ImageIcon size={32} />}
+              title="No NFTs found"
+              description="Your NFT collection will appear here."
+            />
+          )}
+
+          {hasMore && (
+            <Button variant="outline" fullWidth onClick={loadMore}>
+              Load More
+            </Button>
+          )}
+        </div>
+      )}
+    </motion.div>
+  );
+
+  return (
+    <PageLayout title="Portfolio" description="Manage your assets">
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
+        <div
+          style={{
+            padding: 'var(--space-8) 0 var(--space-4) 0',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 'var(--space-2)'
+          }}
+        >
+          <span style={{ color: 'var(--color-text-secondary)', fontSize: '18px' }}>Net Worth</span>
+          <div
+            style={{
+              fontSize: 'clamp(56px, 8vw, 80px)',
+              fontWeight: 'var(--font-weight-bold)',
+              letterSpacing: '-0.04em',
+              lineHeight: 1
+            }}
+          >
+            {portfolio?.totalAssetsValueFiat
+              ? `$${portfolio.totalAssetsValueFiat.toFixed(2)}`
+              : '$0.00'}
+          </div>
+        </div>
+
+        <Tabs
+          tabs={[
+            { id: 'tokens', label: 'Tokens', content: <TokenTab /> },
+            { id: 'nfts', label: 'NFTs', content: <NFTTab /> }
+          ]}
+        />
       </div>
-    </div>
+    </PageLayout>
   );
 }

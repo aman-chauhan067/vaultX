@@ -128,9 +128,11 @@ export default function Networks() {
           display: 'flex',
           flexDirection: 'column',
           gap: 'var(--space-4)',
+          width: '100%',
           maxWidth: '800px',
           margin: '0 auto',
-          height: 'calc(100vh - 180px)'
+          height: 'calc(100vh - 180px)',
+          boxSizing: 'border-box'
         }}
       >
         <div
@@ -258,7 +260,7 @@ export default function Networks() {
             gap: 'var(--space-3)',
             flex: 1,
             overflowY: 'auto',
-            paddingRight: '10px',
+            padding: '0',
             position: 'relative'
           }}
         >
@@ -290,7 +292,9 @@ export default function Networks() {
                   opacity,
                   transform: `scale(${scale})`,
                   transformOrigin: 'top center',
-                  flexShrink: 0
+                  flexShrink: 0,
+                  width: '100%',
+                  boxSizing: 'border-box'
                 }}
               >
                 <Card
@@ -309,21 +313,37 @@ export default function Networks() {
                     boxShadow: isActive
                       ? 'inset 0 0 15px rgba(52, 199, 89, 0.1), 0 4px 15px rgba(0,0,0,0.1)'
                       : '0 4px 15px rgba(0,0,0,0.05)',
-                    borderRadius: '20px'
+                    borderRadius: '20px',
+                    width: '100%',
+                    boxSizing: 'border-box'
                   }}
                 >
                   <div
                     style={{
                       display: 'flex',
                       alignItems: 'center',
-                      justifyContent: 'space-between'
+                      justifyContent: 'space-between',
+                      flexWrap: 'wrap',
+                      gap: 'var(--space-3)'
                     }}
                   >
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)' }}>
+                    <div
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 'var(--space-3)',
+                        flexWrap: 'wrap'
+                      }}
+                    >
                       <CryptoIcon symbol={net.currency?.symbol || 'ETH'} size={40} />
                       <div>
                         <div
-                          style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: 'var(--space-2)',
+                            flexWrap: 'wrap'
+                          }}
                         >
                           <h3
                             style={{
@@ -344,7 +364,10 @@ export default function Networks() {
                             marginTop: 'var(--space-1)',
                             display: 'flex',
                             gap: 'var(--space-3)',
-                            alignItems: 'center'
+                            alignItems: 'center',
+                            flexWrap: 'wrap',
+                            wordBreak: 'break-word',
+                            minWidth: 0
                           }}
                         >
                           <span>ID: {net.chainId}</span>
@@ -385,6 +408,7 @@ export default function Networks() {
                   <div
                     style={{
                       display: 'flex',
+                      flexWrap: 'wrap',
                       gap: 'var(--space-4)',
                       paddingTop: 'var(--space-2)',
                       fontSize: 'var(--text-xs)',
