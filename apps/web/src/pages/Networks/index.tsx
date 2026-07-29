@@ -140,7 +140,7 @@ export default function Networks() {
           width: '100%',
           height: isMobile ? 'auto' : 'calc(100vh - 180px)',
           minHeight: isMobile ? '100%' : 'auto',
-          paddingBottom: isMobile ? '100px' : '0'
+          paddingBottom: isMobile ? '160px' : '0'
         }}
       >
         <div
@@ -152,10 +152,12 @@ export default function Networks() {
             alignItems: isMobile ? 'stretch' : 'center',
             background: 'var(--color-surface)',
             padding: 'var(--space-3)',
-            borderRadius: 'var(--radius-lg)'
+            borderRadius: 'var(--radius-lg)',
+            width: '100%',
+            overflow: 'hidden'
           }}
         >
-          <div style={{ flex: 1, position: 'relative' }}>
+          <div style={{ flex: 1, position: 'relative', width: '100%' }}>
             <Search
               size={18}
               color="var(--color-text-secondary)"
@@ -339,128 +341,221 @@ export default function Networks() {
                     boxSizing: 'border-box'
                   }}
                 >
-                  <div
-                    style={{
-                      display: 'flex',
-                      alignItems: isMobile ? 'flex-start' : 'center',
-                      justifyContent: 'space-between',
-                      flexWrap: isMobile ? 'nowrap' : 'wrap',
-                      gap: 'var(--space-3)'
-                    }}
-                  >
+                  {isMobile ? (
+                    // MOBILE SPECIFIC CARD LAYOUT
                     <div
-                      style={{
-                        display: 'flex',
-                        alignItems: isMobile ? 'flex-start' : 'center',
-                        gap: 'var(--space-3)',
-                        flexWrap: isMobile ? 'nowrap' : 'wrap',
-                        flex: 1,
-                        minWidth: 0
-                      }}
+                      style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-2)' }}
                     >
-                      <div style={{ flexShrink: 0 }}>
-                        <CryptoIcon symbol={net.currency?.symbol || 'ETH'} size={40} />
-                      </div>
-                      <div style={{ flex: 1, minWidth: 0 }}>
+                      <div
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          gap: 'var(--space-2)'
+                        }}
+                      >
                         <div
                           style={{
                             display: 'flex',
                             alignItems: 'center',
                             gap: 'var(--space-2)',
-                            flexWrap: 'wrap'
+                            flex: 1,
+                            minWidth: 0
                           }}
                         >
+                          <CryptoIcon symbol={net.currency?.symbol || 'ETH'} size={32} />
                           <h3
                             style={{
                               margin: 0,
                               fontSize: 'var(--text-md)',
                               fontWeight: 'var(--font-weight-medium)',
-                              whiteSpace: isMobile ? 'nowrap' : 'normal',
+                              whiteSpace: 'nowrap',
                               overflow: 'hidden',
                               textOverflow: 'ellipsis'
                             }}
                           >
                             {net.name}
                           </h3>
-                          {net.isTestnet && <Badge variant="neutral">Testnet</Badge>}
-                          {isActive && <Badge variant="brand">Active</Badge>}
                         </div>
+                        <div style={{ display: 'flex', gap: 'var(--space-2)', flexShrink: 0 }}>
+                          {isActive ? (
+                            <Button variant="outline" size="sm" disabled>
+                              ACTIVE
+                            </Button>
+                          ) : (
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => handleSwitch(net.chainId)}
+                              disabled={switchingChainId !== null}
+                            >
+                              {isSwitching ? '...' : 'SWITCH'}
+                            </Button>
+                          )}
+                          {net.isCustom && (
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => removeNetwork(net.chainId)}
+                              style={{ color: 'var(--color-danger)' }}
+                            >
+                              <Trash2 size={16} />
+                            </Button>
+                          )}
+                        </div>
+                      </div>
+                      <div
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: 'var(--space-2)',
+                          flexWrap: 'wrap',
+                          fontSize: '11px',
+                          color: 'var(--color-text-secondary)',
+                          paddingLeft: '40px' // Align with text next to the 32px icon
+                        }}
+                      >
+                        {net.isTestnet && (
+                          <Badge variant="neutral" style={{ padding: '2px 6px', fontSize: '10px' }}>
+                            Testnet
+                          </Badge>
+                        )}
+                        <span>ID: {net.chainId}</span>
+                        <span>•</span>
+                        <span>{net.currency?.symbol || 'ETH'}</span>
+                      </div>
+                    </div>
+                  ) : (
+                    // DESKTOP SPECIFIC CARD LAYOUT
+                    <>
+                      <div
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          flexWrap: 'wrap',
+                          gap: 'var(--space-3)'
+                        }}
+                      >
                         <div
                           style={{
-                            color: 'var(--color-text-secondary)',
-                            fontSize: 'var(--text-xs)',
-                            marginTop: 'var(--space-1)',
                             display: 'flex',
-                            gap: 'var(--space-2)',
                             alignItems: 'center',
+                            gap: 'var(--space-3)',
                             flexWrap: 'wrap',
-                            whiteSpace: 'nowrap',
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis'
+                            flex: 1,
+                            minWidth: 0
                           }}
                         >
-                          <span>ID: {net.chainId}</span>
-                          {!isMobile && <span>•</span>}
-                          {!isMobile && <span>Token: {net.currency?.symbol || 'ETH'}</span>}
+                          <div style={{ flexShrink: 0 }}>
+                            <CryptoIcon symbol={net.currency?.symbol || 'ETH'} size={40} />
+                          </div>
+                          <div style={{ flex: 1, minWidth: 0 }}>
+                            <div
+                              style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: 'var(--space-2)',
+                                flexWrap: 'wrap'
+                              }}
+                            >
+                              <h3
+                                style={{
+                                  margin: 0,
+                                  fontSize: 'var(--text-md)',
+                                  fontWeight: 'var(--font-weight-medium)',
+                                  whiteSpace: 'normal',
+                                  overflow: 'hidden',
+                                  textOverflow: 'ellipsis'
+                                }}
+                              >
+                                {net.name}
+                              </h3>
+                              {net.isTestnet && <Badge variant="neutral">Testnet</Badge>}
+                              {isActive && <Badge variant="brand">Active</Badge>}
+                            </div>
+                            <div
+                              style={{
+                                color: 'var(--color-text-secondary)',
+                                fontSize: 'var(--text-xs)',
+                                marginTop: 'var(--space-1)',
+                                display: 'flex',
+                                gap: 'var(--space-2)',
+                                alignItems: 'center',
+                                flexWrap: 'wrap',
+                                whiteSpace: 'nowrap',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis'
+                              }}
+                            >
+                              <span>ID: {net.chainId}</span>
+                              <span>•</span>
+                              <span>Token: {net.currency?.symbol || 'ETH'}</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div style={{ display: 'flex', gap: 'var(--space-2)', flexShrink: 0 }}>
+                          {isActive ? (
+                            <Button variant="outline" size="sm" disabled>
+                              Connected
+                            </Button>
+                          ) : (
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => handleSwitch(net.chainId)}
+                              disabled={switchingChainId !== null}
+                            >
+                              {isSwitching ? '...' : 'Switch'}
+                            </Button>
+                          )}
+                          {net.isCustom && (
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => removeNetwork(net.chainId)}
+                              style={{ color: 'var(--color-danger)' }}
+                            >
+                              <Trash2 size={16} />
+                            </Button>
+                          )}
                         </div>
                       </div>
-                    </div>
 
-                    <div style={{ display: 'flex', gap: 'var(--space-2)', flexShrink: 0 }}>
-                      {isActive ? (
-                        <Button variant="outline" size="sm" disabled>
-                          {isMobile ? 'Active' : 'Connected'}
-                        </Button>
-                      ) : (
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleSwitch(net.chainId)}
-                          disabled={switchingChainId !== null}
+                      <div
+                        style={{
+                          display: 'flex',
+                          flexWrap: 'wrap',
+                          gap: 'var(--space-4)',
+                          paddingTop: 'var(--space-2)',
+                          fontSize: 'var(--text-xs)',
+                          color: 'var(--color-text-secondary)'
+                        }}
+                      >
+                        <div
+                          style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-1)' }}
                         >
-                          {isSwitching ? '...' : 'Switch'}
-                        </Button>
-                      )}
-                      {net.isCustom && (
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => removeNetwork(net.chainId)}
-                          style={{ color: 'var(--color-danger)' }}
+                          {status?.status === 'connected' ? (
+                            <CheckCircle2 size={12} color="var(--color-brand)" />
+                          ) : (
+                            <XCircle size={12} color="var(--color-danger)" />
+                          )}
+                          RPC: {status?.status === 'connected' ? 'Connected' : 'Offline'}
+                        </div>
+                        <div
+                          style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-1)' }}
                         >
-                          <Trash2 size={16} />
-                        </Button>
-                      )}
-                    </div>
-                  </div>
-
-                  {!isMobile && (
-                    <div
-                      style={{
-                        display: 'flex',
-                        flexWrap: 'wrap',
-                        gap: 'var(--space-4)',
-                        paddingTop: 'var(--space-2)',
-                        fontSize: 'var(--text-xs)',
-                        color: 'var(--color-text-secondary)'
-                      }}
-                    >
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-1)' }}>
-                        {status?.status === 'connected' ? (
-                          <CheckCircle2 size={12} color="var(--color-brand)" />
-                        ) : (
-                          <XCircle size={12} color="var(--color-danger)" />
-                        )}
-                        RPC: {status?.status === 'connected' ? 'Connected' : 'Offline'}
+                          <Clock size={12} />
+                          Latency: {status?.latency || 0}ms
+                        </div>
+                        <div
+                          style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-1)' }}
+                        >
+                          Last Sync: {status?.sync || 'Never'}
+                        </div>
                       </div>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-1)' }}>
-                        <Clock size={12} />
-                        Latency: {status?.latency || 0}ms
-                      </div>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-1)' }}>
-                        Last Sync: {status?.sync || 'Never'}
-                      </div>
-                    </div>
+                    </>
                   )}
                 </Card>
               </div>
