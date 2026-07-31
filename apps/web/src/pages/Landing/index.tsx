@@ -366,7 +366,9 @@ const PhysicsUnbreakableText = () => {
           {text1.map((char, i) => (
             <motion.div
               key={`t1-${i}`}
-              ref={(el) => (charRefs.current[i] = el)}
+              ref={(el) => {
+                charRefs.current[i] = el;
+              }}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -383,7 +385,9 @@ const PhysicsUnbreakableText = () => {
           {text2.map((char, i) => (
             <motion.div
               key={`t2-${i}`}
-              ref={(el) => (charRefs.current[text1.length + i] = el)}
+              ref={(el) => {
+                charRefs.current[text1.length + i] = el;
+              }}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
